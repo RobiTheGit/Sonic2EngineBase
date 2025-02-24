@@ -51,7 +51,7 @@ useFullWaterTables = 0
 ; Including SMPS2ASM so we can edit music
 SonicDriverVer = 2
 use_s2_samples = 1
-	include "_smps2asm_inc.asm"
+	include "sound/code/_smps2asm_inc.asm"
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ; start of ROM
 
@@ -443,7 +443,7 @@ MainGameLoop:
 	include	"objects/CoreObj/Monitors.asm"
 	include	"objects/TitlescreenObj_0E_0F_C9.asm"
 	include	"objects/Titlecards_GameOver.asm"
-	include "LevelOrder.asm"
+	include "level/data/LevelOrder.asm"
 	include	"objects/CoreObj/Spikes.asm"
 	include	"objects/UnusedBreakableObjects.asm"
 	include	"misc/SpriteRendering.asm"
@@ -574,7 +574,7 @@ MainGameLoop:
 	include "level/data/CollisionData.asm"
 	include "level/data/Layouts.asm"
 	include	"level/data/AnimatedTilesArt.asm"
-	include	"PlayerArtMaps.asm"
+	include	"objects/Players/PlayerArtMaps.asm"
 	include	"mappings/EnigmaMaps.asm"
 	include	"level/ObjectArt.asm"
 	include	"art/Save Menu/LoadMapsData.asm"
