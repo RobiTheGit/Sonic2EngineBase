@@ -1,7 +1,4 @@
 ; Sonic the Hedgehog 2 disassembled binary
-;
-;	REMEMBER TO ACTUALLY FINISH SPLITTING THE FILES
-;
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ; ASSEMBLY OPTIONS:
 ;
