@@ -78,7 +78,7 @@ End_of_level_PSG3:
 End_of_level_DAC:
 	dc.b	dSnare, $03, dSnare, dKick, $06, dKick, dSnare, $03, dSnare, dKick, $06, dKick
 	dc.b	dSnare, $03, dSnare, dHiTimpani, dHiTimpani, dVLowTimpani, dVLowTimpani, $03, dVLowTimpani, dVLowTimpani, dSnare, $09
-	dc.b	$33
+	dc.b	dCrash, $33
 	smpsStop
 
 End_of_level_Voices:
