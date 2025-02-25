@@ -191,7 +191,7 @@ SaveScreen_MainLoop:
 ; ---------------------------------------------------------------------------
 
 .flashwhite:
-		move.w	#$EEE,(a0)+
+	;	move.w	#$EEE,(a0)+
 		dbf	d0,.flashwhite
 
 .exitsfx:
@@ -420,17 +420,17 @@ loc_CA16:
 		moveq	#$28,d1
 
 loc_CA2E:
-		move.w	word_CA4C(pc,d1.w),(a1)
-		move.w	word_CA4C+2(pc,d1.w),4(a1)
+		move.w	Number_Maps(pc,d1.w),(a1)
+		move.w	Number_Maps+2(pc,d1.w),4(a1)
 		andi.w	#$FF,d0
 		lsl.w	#2,d0
-		move.w	word_CA4C(pc,d0.w),2(a1)
-		move.w	word_CA4C+2(pc,d0.w),6(a1)
+		move.w	Number_Maps(pc,d0.w),2(a1)
+		move.w	Number_Maps+2(pc,d0.w),6(a1)
 		rts
 ; End of function sub_CA14
 
 ; ---------------------------------------------------------------------------
-word_CA4C:
+Number_Maps:
 		dc.w make_art_tile($49A,1,1), make_art_tile($49B,1,1)	; 0
 		dc.w make_art_tile($49C,1,1), make_art_tile($49D,1,1)	; 1
 		dc.w make_art_tile($49E,1,1), make_art_tile($49F,1,1)	; 2
@@ -668,6 +668,7 @@ loc_D1E6:
 		move.l	#loc_D1FA,(a0)
 
 loc_D1FA:
+		bsr.w	sub_C87E
 		tst.w	(Events_bg+$12).w
 		bne.s	loc_D212
 		btst	#4,(Ctrl_1_pressed).w
@@ -841,6 +842,7 @@ Obj_SaveScreen_Save_Slot:
 		bne.s	.load_emeralds
 		move.l	#Obj_SaveScreen_Emeralds,(a1)
 		move.w	a0,parent2(a1)
+		jsr	DisplaySprite
 
 .load_emeralds:
 		moveq	#0,d0
@@ -860,7 +862,7 @@ Obj_SaveScreen_Save_Slot:
 		move.b	d0,$3B(a0)
 		move.w	6(a1),d0
 		lea	(Collected_emeralds_array).w,a2
-		jsr	sub_DA1E(pc)
+		jsr	SuperEmeraldConversion(pc)
 		move.b	d1,$3C(a0)
 		move.b	d2,$3D(a0)
 		tst.b	9(a1)
@@ -992,7 +994,7 @@ Obj_SaveScreen_Save_Slot:
 		tst.w	(Events_bg+$12).w
 		bne.w	.preparechildren
 		move.b	(Ctrl_1_pressed).w,d0
-		andi.w	#$E0,d0
+		andi.w	#button_A_mask|button_C_mask|button_start_mask,d0
 		beq.w	.preparechildren
 		move.w	4(a1),(Collected_special_ring_array+2).w
 		move.b	3(a1),d0
@@ -1002,7 +1004,6 @@ Obj_SaveScreen_Save_Slot:
 		cmp.b	$3A(a0),d0
 		bhs.w	.preparechildren
 		clr.l	(Collected_special_ring_array).w
-
 .loadlevel:
 		jsr	SetLevelForSave(pc)
 	   	move.w	d0,(Current_zone_and_act).w
@@ -1015,7 +1016,7 @@ Obj_SaveScreen_Save_Slot:
 		move.b	d0,(Current_special_stage).w
 		move.w	6(a1),d0
 		lea	(Collected_emeralds_array).w,a2
-		jsr	sub_DA1E(pc)
+		jsr	SuperEmeraldConversion(pc)
 		move.b	d1,(Emerald_count).w
 		move.b	d2,(Super_emerald_count).w
 		move.l	a1,(Save_pointer).w
@@ -1140,43 +1141,43 @@ locret_D70A:
 
 ; ---------------------------------------------------------------------------
 Obj_SaveScreen_Emeralds:
-		move.b	#$40,4(a0)
-		move.w	#$829F,$A(a0)
-		move.l	#Map_SaveScreen,$C(a0)
-		move.b	#$40,7(a0)
-		move.w	#7,$16(a0)
+		move.b	#$40,render_flags(a0)
+		move.w	#make_art_tile(ArtTile_ArtKos_Save_Misc,0,1),art_tile(a0)
+		move.l	#Map_SaveScreen,mappings(a0)
+		move.b	#$40,width_pixels(a0)
+		move.w	#7,y_sub(a0)
 		movea.w	parent2(a0),a1
-		movea.l	$30(a1),a2
-		move.w	6(a2),d4
-		move.w	$10(a1),d0
-		move.w	$14(a1),d1
-		move.w	d0,$10(a0)
-		move.w	d1,$14(a0)
-		lea	$18(a0),a1
-		moveq	#$10,d2
-		moveq	#6,d3
+		movea.l	sub6_x_pos(a1),a2
+		move.w	height_pixels(a2),d4
+		move.w	x_pos(a1),d0
+		move.w	y_pos(a1),d1
+		move.w	d0,x_pos(a0)
+		move.w	d1,y_pos(a0)
+		lea	sub2_x_pos(a0),a1
+		moveq	#x_pos,d2
+		moveq	#height_pixels,d3
 
-loc_D750:
-		clr.b	5(a1)
+.loop:
+		clr.b	routine(a1)
 		moveq	#0,d6
 		rol.w	#2,d4
 		move.w	d4,d5
 		andi.w	#3,d5
-		beq.s	loc_D774
+		beq.s	.draw
 		cmpi.w	#3,d5
-		bne.s	loc_D768
+		bne.s	.loc_D768
 		moveq	#$C,d6
 
-loc_D768:
+.loc_D768:
 		add.b	d2,d6
 		move.w	d0,(a1)
 		move.w	d1,2(a1)
-		move.b	d6,5(a1)
+		move.b	d6,routine(a1)
 
-loc_D774:
+.draw:
 		addq.w	#1,d2
 		addq.w	#6,a1
-		dbf	d3,loc_D750
+		dbf	d3,.loop
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -1467,32 +1468,32 @@ locret_DA1C:
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_DA1E:
+SuperEmeraldConversion:
 		clr.b	(Emeralds_converted_flag).w
 		moveq	#0,d1
 		moveq	#0,d2
 		moveq	#6,d3
 
-loc_DA28:
+.loop:
 		rol.w	#2,d0
 		move.w	d0,d4
 		andi.w	#3,d4
 		move.b	d4,(a2)+
-		beq.s	loc_DA3E
+		beq.s	.checkifdone
 		addq.w	#1,d1
 		cmpi.w	#3,d4
-		bne.s	loc_DA3E
+		bne.s	.checkifdone
 		addq.w	#1,d2
 
-loc_DA3E:
+.checkifdone:
 		cmpi.w	#2,d4
-		blo.s	loc_DA48
+		blo.s	.restartloop
 		st	(Emeralds_converted_flag).w
 
-loc_DA48:
-		dbf	d3,loc_DA28
+.restartloop:
+		dbf	d3,.loop
 		rts
-; End of function sub_DA1E
+; End of function SuperEmeraldConversion
 
 
 ; =============== S U B R O U T I N E =======================================
