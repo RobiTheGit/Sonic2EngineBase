@@ -34,8 +34,8 @@ REM // -A gives us a small speedup
 set AS_MSGPATH=win32/as
 set USEANSI=n
 
-set debug_syms=
-set print_err=-E -q
+set debug_syms= -xx
+set print_err=-E
 set revision_override=
 set s2p2bin_args=
 
