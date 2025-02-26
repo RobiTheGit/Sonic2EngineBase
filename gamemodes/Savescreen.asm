@@ -841,8 +841,7 @@ Obj_SaveScreen_Save_Slot:
 		jsr	(Create_New_Sprite3).l
 		bne.s	.load_emeralds
 		move.l	#Obj_SaveScreen_Emeralds,(a1)
-		move.w	a0,parent2(a1)
-		jsr	DisplaySprite
+		move.w	a0,parent(a1)
 
 .load_emeralds:
 		moveq	#0,d0
@@ -976,9 +975,9 @@ Obj_SaveScreen_Save_Slot:
 		move.w	d1,$36(a0)
 		move.l	d2,d0
 		jsr	(Play_Sound_2).l
-		move.b	#$1A,$1D(a0)
+		move.b	#$1A,sub2_mapframe(a0)
 		btst	#4,(Level_frame_counter+1).w
-		beq.s	.clear1D
+		beq.s	.clearsub2_mapframe
 		bra.s	.loadspecialstagering
 ; ---------------------------------------------------------------------------
 
@@ -986,8 +985,8 @@ Obj_SaveScreen_Save_Slot:
 		tst.w	(Player_2+object_control).w
 		bne.w	.preparechildren
 
-.clear1D:
-		clr.b	$1D(a0)
+.clearsub2_mapframe:
+		clr.b	sub2_mapframe(a0)
 
 .loadspecialstagering:
 		move.w	#2,$16(a0)
@@ -1016,9 +1015,8 @@ Obj_SaveScreen_Save_Slot:
 		move.b	d0,(Current_special_stage).w
 		move.w	6(a1),d0
 		lea	(Collected_emeralds_array).w,a2
-		jsr	SuperEmeraldConversion(pc)
+;		jsr	SuperEmeraldConversion(pc)
 		move.b	d1,(Emerald_count).w
-		move.b	d2,(Super_emerald_count).w
 		move.l	a1,(Save_pointer).w
 		jsr	(Set_Lives_and_Continues).l
 		move.b	8(a1),d0
@@ -1039,7 +1037,7 @@ Obj_SaveScreen_Save_Slot:
 		move.b	9(a1),(Continue_count).w
 		st	(SRAM_mask_interrupts_flag).w
 		jsr	Write_SaveGame(pc)
-		move.b	#$C,(Game_mode).w 
+		move.b	#$C,(Game_mode).w
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
@@ -1052,7 +1050,7 @@ Obj_SaveScreen_Save_Slot:
 		move.b	(Ctrl_1_pressed).w,d0
 		andi.w	#$E0,d0
 		beq.s	.changecharacter
-		move.b	#$C,(Game_mode).w 
+		move.b	#$C,(Game_mode).w
 		clr.l	(a1)
 		clr.l	4(a1)
 		move.w	#$300,8(a1)
@@ -1094,7 +1092,7 @@ Set_ChildSprites:
 		move.w	d1,$1A(a0)
 		move.w	d0,$1E(a0)
 		move.w	d1,$20(a0)
-		cmpi.b	#$1A,$1D(a0)
+		cmpi.b	#$1A,sub2_mapframe(a0)
 		bne.s	+
 		subq.w	#8,$1A(a0)
 
@@ -1146,16 +1144,17 @@ Obj_SaveScreen_Emeralds:
 		move.l	#Map_SaveScreen,mappings(a0)
 		move.b	#$40,mainspr_width(a0)
 		move.w	#7,objoff_14(a0)
-		movea.w	parent2(a0),a1
+
+		movea.w	parent(a0),a1
 		movea.l	objoff_30(a1),a2
-		move.w	mainspr_height(a2),d4
+		move.w	6(a2),d4	;pretty sure this has to do with emerald count
 		move.w	x_pos(a1),d0
 		move.w	y_pos(a1),d1
 		move.w	d0,x_pos(a0)
 		move.w	d1,y_pos(a0)
 		lea	sub2_x_pos(a0),a1
 		moveq	#x_pos,d2
-		moveq	#mainspr_height,d3
+		moveq	#6,d3
 
 .loop:
 		clr.b	routine(a1)
@@ -1177,7 +1176,6 @@ Obj_SaveScreen_Emeralds:
 .draw:
 		addq.w	#1,d2
 		addq.w	#6,a1
-
 		dbf	d3,.loop
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
@@ -1190,17 +1188,11 @@ Obj_SaveScreen_Delete_Save:
 
 loc_D78C:
 		bra.w	loc_D7A4
-; ---------------------------------------------------------------------------
 		bra.w	loc_D7C0
-; ---------------------------------------------------------------------------
 		bra.w	loc_D7EA
-; ---------------------------------------------------------------------------
 		bra.w	loc_D884
-; ---------------------------------------------------------------------------
 		bra.w	loc_D8A4
-; ---------------------------------------------------------------------------
 		bra.w	loc_D8C4
-; ---------------------------------------------------------------------------
 
 loc_D7A4:
 		move.b	#$40,4(a0)

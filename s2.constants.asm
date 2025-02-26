@@ -35,7 +35,20 @@ respawn_index =               $48
 ; ---------------------------------------------------------------------------
 ; universally followed object conventions:
 id =			  0 ; object ID (if you change this, change insn1op and insn2op in s2.macrosetup.asm, if you still use them)
-render_flags =		  4 ; bitfield ; refer to SCHG for details
+render_flags =		  4 ; bitfield
+; Render flags. The bitfield looks like this:
+;     Bit 0 is the horizontal mirror flag. If set, the object will be flipped on its horizontal axis.
+;     Bit 1 is the vertical mirror flag.
+;     Bits 2 and 3 are the coordinate system flags. If both bits are clear, the object will be positioned by absolute screen coordinates. This is used for things like the HUD and menu options. If either bit is set, the object will be positioned by the playfield coordinates, i.e. where it is in a level.
+;     Bit 4 is the assume pixel height flag. If clear, the pixel height of each object is assumed to be 32 pixels, otherwise the y-radius of the object (byte $16 of its status table) is also taken to be its pixel height.
+;     Bit 5 is the static mappings flag. If set, this indicates that the mappings pointer for this object points directly to the pieces data for this frame, and implies that the object consists of only one sprite piece.
+;     Bit 6 is the compound sprites flag. If set, this indicates that the current object's status table also contains information about other child sprites which need to be drawn using the current object's mappings, and also signifies that certain bytes of its status table have different meanings:
+;         Byte $B is the mapping frame to display.
+;         Byte $E is the pixel width of the object.
+;         Byte $14 is the pixel height of the object.
+;         Byte $F is the number of child sprites to draw.
+;         From byte $10 onwards is the actual data for each child sprite. The format is six bytes per sprite: the first word is the base X position, the next word is the base Y position, the next byte is ignored and the last byte is the mapping frame to display.
+;     Bit 7 is the on-screen flag. It will be set if the object is on-screen, and clear otherwise
 height_pixels =		  6 ; byte
 width_pixels =		  7 ; byte
 priority =		  8 ; word ; in units of $80

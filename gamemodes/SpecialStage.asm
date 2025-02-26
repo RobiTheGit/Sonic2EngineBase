@@ -1,7 +1,3 @@
-
-
-
-
 ; ===========================================================================
 ; loc_4F64:
 SpecialStage:
@@ -196,7 +192,7 @@ SpecialStage:
 	bra.s	-
 ; ===========================================================================
 +
-	andi.b	#7,(Emerald_count).w
+;	andi.b	#7,(Emerald_count).w
 	tst.b	(SS_2p_Flag).w
 	beq.s	+
 	lea	(SS2p_RingBuffer).w,a0
@@ -217,8 +213,10 @@ SpecialStage:
 	st.b	(Perfect_rings_flag).w
 +
 	bsr.w	Pal_FadeToWhite
+	clr.w	(SRAM_mask_interrupts_flag).w
+	jsr	(SaveGame_SpecialStage).l
 	tst.w	(Two_player_mode_copy).w
-	bne.w	loc_540C
+	beq.w	loc_540C
 	move	#$2700,sr
 	lea	(VDP_control_port).l,a6
 	move.w	#$8200|(VRAM_Menu_Plane_A_Name_Table/$400),(a6)		; PNT A base: $C000
@@ -254,11 +252,9 @@ SpecialStage:
 +
 	clr.w	(Ring_count_2P).w
 +
-	move.w	(Ring_count).w,(Bonus_Countdown_1).w
-	move.w	(Ring_count_2P).w,(Bonus_Countdown_2).w
+	move.w	#0,(Bonus_Countdown_1).w
+	move.w	#0,(Bonus_Countdown_2).w
 	clr.w	(Total_Bonus_Countdown).w
-	tst.b	(Got_Emerald).w
-	beq.s	+
 	move.w	#1000,(Total_Bonus_Countdown).w
 +
 	move.b	#1,(Update_HUD_score).w
@@ -271,6 +267,7 @@ SpecialStage:
 
 	move.l	#Obj6F,(SpecialStageResults).w ; load Obj6F (special stage results) at $FFFFB800
 -
+
 	move.b	#VintID_Level,(Vint_routine).w
 	bsr.w	WaitForVint
 	jsr	(RunObjects).l
@@ -290,8 +287,14 @@ SpecialStage:
 ; ===========================================================================
 
 loc_540C:
-	move.w	#VsRSID_SS,(Results_Screen_2P).w
-	move.b	#GameModeID_2PResults,(Game_Mode).w ; => TwoPlayerResults
+	clearRAM SS_Sprite_Table_Input,SS_Sprite_Table_Input_End
+	clearRAM SS_Object_RAM,SS_Object_RAM_End
+-	move.b	#VintID_Level,(Vint_routine).w
+	bsr.w	WaitForVint
+	jsr	(RunObjects).l
+	jsr	(BuildSprites).l
+	bsr.w	RunPLC_RAM
+	move.b	#GameModeID_Level,(Game_Mode).w ; => TwoPlayerResults
 	rts
 ; ===========================================================================
 
