@@ -112,7 +112,7 @@ s3_save_screen:
 
 .loadsaveselectors:
 		move.l	(a1)+,(a0)
-		move.w	#$829F,art_tile(a0)
+		move.w	#make_art_tile(ArtTile_ArtKos_Save_Misc,0,1),art_tile(a0)
 		move.l	#Map_SaveScreen,mappings(a0)
 		move.w	(a1),x_pos(a0)
 		move.w	(a1)+,objoff_12(a0)	; copy of object's x_pos
@@ -135,7 +135,7 @@ s3_save_screen:
 		dbf	d0,.loadicons
 		lea	(ArtKos_SaveScreenS3Zone).l,a0
 		lea	(Chunk_Table).l,a1
-		jsr	(Kos_Decomp_Old).l
+		jsr	(KosDec).l
 		lea	(Chunk_Table+$2BC0).l,a0
 		lea	(Chunk_Table+$2300).l,a1
 		move.w	#$22F,d0
@@ -145,9 +145,9 @@ s3_save_screen:
 		move.l	(a0)+,(a1)+
 		dbf	d0,.loadskicons
 		lea	(ArtKos_SaveScreenSKZone).l,a0
-		jsr	(Kos_Decomp_Old).l
+		jsr	(KosDec).l
 		lea	(ArtKos_SaveScreenPortrait).l,a0
-		jsr	(Kos_Decomp_Old).l
+		jsr	(KosDec).l
 		lea	-$8C0(a1),a0
 		move.w	#$14F,d0
 
@@ -1144,18 +1144,18 @@ Obj_SaveScreen_Emeralds:
 		move.b	#$40,render_flags(a0)
 		move.w	#make_art_tile(ArtTile_ArtKos_Save_Misc,0,1),art_tile(a0)
 		move.l	#Map_SaveScreen,mappings(a0)
-		move.b	#$40,width_pixels(a0)
-		move.w	#7,y_sub(a0)
+		move.b	#$40,mainspr_width(a0)
+		move.w	#7,objoff_14(a0)
 		movea.w	parent2(a0),a1
-		movea.l	sub6_x_pos(a1),a2
-		move.w	height_pixels(a2),d4
+		movea.l	objoff_30(a1),a2
+		move.w	mainspr_height(a2),d4
 		move.w	x_pos(a1),d0
 		move.w	y_pos(a1),d1
 		move.w	d0,x_pos(a0)
 		move.w	d1,y_pos(a0)
 		lea	sub2_x_pos(a0),a1
 		moveq	#x_pos,d2
-		moveq	#height_pixels,d3
+		moveq	#mainspr_height,d3
 
 .loop:
 		clr.b	routine(a1)
@@ -1177,6 +1177,7 @@ Obj_SaveScreen_Emeralds:
 .draw:
 		addq.w	#1,d2
 		addq.w	#6,a1
+
 		dbf	d3,.loop
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
