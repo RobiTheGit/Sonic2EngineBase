@@ -1015,8 +1015,9 @@ Obj_SaveScreen_Save_Slot:
 		move.b	d0,(Current_special_stage).w
 		move.w	6(a1),d0
 		lea	(Collected_emeralds_array).w,a2
-;		jsr	SuperEmeraldConversion(pc)
+		jsr	SuperEmeraldConversion(pc)
 		move.b	d1,(Emerald_count).w
+		move.b	d2,(Super_emerald_count).w
 		move.l	a1,(Save_pointer).w
 		jsr	(Set_Lives_and_Continues).l
 		move.b	8(a1),d0
@@ -1147,14 +1148,14 @@ Obj_SaveScreen_Emeralds:
 
 		movea.w	parent(a0),a1
 		movea.l	objoff_30(a1),a2
-		move.w	6(a2),d4	;pretty sure this has to do with emerald count
+		move.w	mainspr_height(a2),d4
 		move.w	x_pos(a1),d0
 		move.w	y_pos(a1),d1
 		move.w	d0,x_pos(a0)
 		move.w	d1,y_pos(a0)
 		lea	sub2_x_pos(a0),a1
 		moveq	#x_pos,d2
-		moveq	#6,d3
+		moveq	#mainspr_height,d3
 
 .loop:
 		clr.b	routine(a1)
