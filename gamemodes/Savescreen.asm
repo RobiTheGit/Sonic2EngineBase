@@ -499,70 +499,87 @@ word_CD58:	dc.w $11
 		dc.w $C102
 		dc.w $A
 		dc.w $B
+
 		dc.l Chunk_Table
 		dc.w $C118
 		dc.w $C
 		dc.w $14
+
 		dc.l Chunk_Table
 		dc.w $C132
 		dc.w $C
 		dc.w $14
+
 		dc.l Chunk_Table
 		dc.w $C14C
 		dc.w $C
 		dc.w $14
+
 		dc.l Chunk_Table
 		dc.w $C166
 		dc.w $C
 		dc.w $14
+
 		dc.l Chunk_Table
 		dc.w $C180
 		dc.w $C
 		dc.w $14
+
 		dc.l Chunk_Table
 		dc.w $C19A
 		dc.w $C
 		dc.w $14
+
 		dc.l Chunk_Table+$104
 		dc.w $CE18
 		dc.w $C
 		dc.w $A
+
 		dc.l Chunk_Table+$104
 		dc.w $CE32
 		dc.w $C
 		dc.w $A
+
 		dc.l Chunk_Table+$104
 		dc.w $CE4C
 		dc.w $C
 		dc.w $A
+
 		dc.l Chunk_Table+$104
 		dc.w $CE66
 		dc.w $C
 		dc.w $A
+
 		dc.l Chunk_Table+$104
 		dc.w $CE80
 		dc.w $C
 		dc.w $A
+
 		dc.l Chunk_Table+$104
 		dc.w $CE9A
 		dc.w $C
 		dc.w $A
+
 		dc.l Chunk_Table
 		dc.w $C1B4
 		dc.w $C
 		dc.w $14
+
 		dc.l Chunk_Table
 		dc.w $C1CE
 		dc.w $C
 		dc.w $14
+
 		dc.l Chunk_Table+$222
 		dc.w $C1E8
 		dc.w $A
 		dc.w $B
+
 		dc.l Chunk_Table+$104
 		dc.w $CEB4
 		dc.w $C
 		dc.w $A
+
 		dc.l Chunk_Table+$104
 		dc.w $CECE
 		dc.w $C
@@ -634,6 +651,7 @@ ObjDat_SaveScreen:
 		even
 ; ---------------------------------------------------------------------------
 
+
 Obj_SaveScreen_Selector:
 		move.w	#$A8,d0
 		moveq	#0,d1
@@ -668,12 +686,11 @@ loc_D1E6:
 		move.l	#loc_D1FA,(a0)
 
 loc_D1FA:
-		bsr.w	sub_C87E
 		tst.w	(Events_bg+$12).w
 		bne.s	loc_D212
-		btst	#4,(Ctrl_1_pressed).w
+		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	loc_D212
-		move.b	#4,(Game_mode).w
+		move.b	#GameModeID_2PLevelSelect,(Game_mode).w
 		bra.w	loc_D2CE
 ; ---------------------------------------------------------------------------
 
@@ -683,7 +700,7 @@ loc_D212:
 		tst.w	$30(a0)
 		bne.s	loc_D28A
 		moveq	#0,d0
-		btst	#2,(Ctrl_1_pressed).w
+		btst	#button_left,(Ctrl_1_pressed).w
 		beq.s	loc_D254
 		tst.w	(Events_bg+$12).w
 		beq.s	loc_D238
@@ -694,25 +711,25 @@ loc_D238:
 		tst.b	(Dataselect_entry).w
 		beq.s	loc_D254
 		subq.b	#1,(Dataselect_entry).w
-		move.w	#sfx_SlotMachine,d0
+		move.w	#sfx_Switch,d0
 		tst.w	(Events_bg+$12).w
 		beq.s	loc_D24C
-		move.w	#sfx_SmallBumpers,d0
+		move.w	#sfx_Switch,d0
 
 loc_D24C:
 		jsr	(Play_Sound_2).l
 		moveq	#-8,d0
 
 loc_D254:
-		btst	#3,(Ctrl_1_pressed).w
+		btst	#button_right,(Ctrl_1_pressed).w
 		beq.s	loc_D27A
 		cmpi.b	#9,(Dataselect_entry).w
 		beq.s	loc_D27A
 		addq.b	#1,(Dataselect_entry).w
-		move.w	#sfx_SlotMachine,d0
+		move.w	#sfx_Switch,d0
 		tst.w	(Events_bg+$12).w
 		beq.s	loc_D272
-		move.w	#sfx_SmallBumpers,d0
+		move.w	#sfx_Switch,d0
 
 loc_D272:
 		jsr	(Play_Sound_2).l

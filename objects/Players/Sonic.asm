@@ -1252,6 +1252,7 @@ Sonic_DoubleJump:
 	jmp	(PlaySound).l
 
 Sonic_JumpMoves:
+	jsr	Sonic_CheckGoSuper
 	move.b	(Ctrl_1_Press_Logical).w,d0
 	andi.b	#button_A_mask,d0 ; is a jump button pressed?
 	bne.s	Sonic_DashDown
