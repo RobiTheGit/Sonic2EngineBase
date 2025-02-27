@@ -2,11 +2,11 @@
 
 REM // make sure we can write to the file s2built.bin
 REM // also make a backup to s2built.prev.bin
-IF NOT EXIST s2built.bin goto LABLNOCOPY
-IF EXIST s2built.prev.bin del s2built.prev.bin
-IF EXIST s2built.prev.bin goto LABLNOCOPY
-move /Y s2built.bin s2built.prev.bin > NUL
-IF EXIST s2built.bin goto LABLERROR3
+IF NOT EXIST RobiEngineBuilt.bin goto LABLNOCOPY
+IF EXIST RobiEngineBuilt.prev.bin del RobiEngineBuilt.prev.bin
+IF EXIST RobiEngineBuilt.prev.bin goto LABLNOCOPY
+move /Y RobiEngineBuilt.bin RobiEngineBuilt.prev.bin > NUL
+IF EXIST RobiEngineBuilt.bin goto LABLERROR3
 REM IF EXIST s2built.prev.bin copy /Y s2built.prev.bin s2built.bin
 :LABLNOCOPY
 
@@ -76,23 +76,23 @@ REM // if there were errors, there won't be any s2.p output
 IF NOT EXIST s2.p goto LABLERROR5
 
 REM // combine the assembler output into a rom
-"win32/s2p2bin" %s2p2bin_args% s2.p s2built.bin s2.h
+"win32/s2p2bin" %s2p2bin_args% s2.p RobiEngineBuilt.bin s2.h
 
 REM // fix some pointers and things that are impossible to fix from the assembler without un-splitting their data
-IF EXIST s2built.bin "win32/fixpointer" s2.h s2built.bin   off_3A294 MapRUnc_Sonic $2D 0 4   word_728C_user Obj5F_MapUnc_7240 2 2 1  
+IF EXIST RobiEngineBuilt.bin "win32/fixpointer" s2.h RobiEngineBuilt.bin   off_3A294 MapRUnc_Sonic $2D 0 4   word_728C_user Obj5F_MapUnc_7240 2 2 1
 REM // Import Labels for the error handler (this doesn't work on Raspbian at the moment)
 
-IF EXIST s2built.bin "misc/ErrorHandler/ConvertSymbol.exe" s2.lst s2built.bin -input as_lst -a
+IF EXIST RobiEngineBuilt.bin "misc/ErrorHandler/ConvertSymbol.exe" s2.lst RobiEngineBuilt.bin -input as_lst -a
 
 REM REM // fix the rom header (checksum)
-IF EXIST s2built.bin "win32/fixheader" s2built.bin
+IF EXIST RobiEngineBuilt.bin "win32/fixheader" RobiEngineBuilt.bin
 
 REM // if there were errors/warnings, a log file is produced
 IF EXIST s2.log goto LABLERROR4
 
 
 REM // done -- pause if we seem to have failed, then exit
-IF EXIST s2built.bin exit /b
+IF EXIST RobiEngineBuilt.bin exit /b
 
 pause
 
