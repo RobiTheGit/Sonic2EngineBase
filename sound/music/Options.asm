@@ -83,7 +83,7 @@ Options_PSG1:
 
 ; DAC Data
 Options_DAC:
-	dc.b	dCupCym, $0C, dSnare1, $04, $04, $04, $0C, $04, $04, $04, $0C, $04, $04
+	dc.b	dCrash, $0C, dSnare1, $04, $04, $04, $0C, $04, $04, $04, $0C, $04, $04
 	dc.b	$04, dMidTom, $06, dFloorTom, dMidTom, dFloorTom
 	smpsJump            Options_DAC
 

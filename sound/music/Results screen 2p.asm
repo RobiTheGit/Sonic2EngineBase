@@ -269,7 +269,7 @@ Results_screen_2p_DAC:
 	dc.b	dSnare3, dSnare3, $06, dSnare3, dKick2, $06, dKick2, $03, dSnare3, dSnare3, $06, dSnare3
 	dc.b	dSnare3, $03, $06, $03, $06, dClave, $06
 	smpsLoop            $00, $05, Results_screen_2p_DAC
-	dc.b	dKick2, $06, dSnare3, $06, $06, $06, $0C, $0C
+	dc.b	dCupCym, $06, dSnare3, $06, $06, $06, $0C, $0C
 	smpsJump            Results_screen_2p_DAC
 
 Results_screen_2p_Voices:
