@@ -361,26 +361,32 @@ EHZ_Loop09:
 EHZ_DAC:
 	dc.b	dKick, $0C, $20, smpsNoAttack, $14, $04, dMidTom, $08, dFloorTom, $04, dMidTom, $08
 	dc.b	dMidTom, dMidTom, dKick, dFloorTom, $04, dMidTom, dFloorTom, $08
-
 EHZ_Loop00:
+	dc.b	dCrash, $10, dSnare, dKick, dSnare
 	dc.b	dKick, $10, dSnare, dKick, dSnare
-	smpsLoop            $00, $07, EHZ_Loop00
+	dc.b	dKick, $10, dSnare, dKick, dSnare
+	dc.b	dKick, $10, dSnare, dKick, dSnare
+	dc.b	dKick, $10, dSnare, dKick, dSnare
+	dc.b	dKick, $10, dSnare, dKick, dSnare
+	dc.b	dKick, $10, dSnare, dKick, dSnare
 	dc.b	dKick, $10, dSnare, dKick, $08, dSnare, $10, $04, dSnare
-
 EHZ_Loop01:
+	dc.b	dCrash, $10, dSnare, dKick, dSnare
 	dc.b	dKick, $10, dSnare, dKick, dSnare
-	smpsLoop            $00, $03, EHZ_Loop01
+	dc.b	dKick, $10, dSnare, dKick, dSnare
 	dc.b	dKick, $10, dSnare, dKick, $08, dSnare, $10, $08
 
 EHZ_Loop02:
+	dc.b	dCrash, $10, dSnare, dKick, dSnare
 	dc.b	dKick, $10, dSnare, dKick, dSnare
-	smpsLoop            $00, $03, EHZ_Loop02
+	dc.b	dKick, $10, dSnare, dKick, dSnare
 	dc.b	dKick, $10, dSnare, dKick, dSnare, $08, $04, dSnare, dKick, $10, dSnare, dKick
 	dc.b	dSnare, dKick, dSnare, dKick, $08, dSnare, dSnare, $10
 
 EHZ_Loop03:
+	dc.b	dCrash, $10, dSnare, dKick, dSnare
 	dc.b	dKick, $10, dSnare, dKick, dSnare
-	smpsLoop            $00, $03, EHZ_Loop03
+	dc.b	dKick, $10, dSnare, dKick, dSnare
 	dc.b	dKick, $10, dSnare, dKick, $08, dSnare, dSnare, $10, dKick, $0C, dSnare, $20
 	dc.b	nRst, $04, dSnare, $10, dKick, $04, dMidTom, $08, $04, dSnare, $08, dMidTom
 	dc.b	dKick, dFloorTom, dFloorTom, dFloorTom, $04, dFloorTom
