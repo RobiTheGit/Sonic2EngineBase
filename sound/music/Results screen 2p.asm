@@ -262,11 +262,14 @@ Results_screen_2p_Jump01:
 
 ; DAC Data
 Results_screen_2p_DAC:
-	dc.b	dKick, $06, nRst, $03, dKick, dKick, $06, dMidTom, dKick, $06, nRst, $03
-	dc.b	dKick, dKick, $06, dMidTom, dKick, $06, nRst, $03, dKick, dKick, $06, dMidTom
-	dc.b	dKick, $03, $06, $03, $06, dMidTom, $06
-	smpsLoop            $00, $0A, Results_screen_2p_DAC
-	dc.b	dKick, $06, dMidTom, $06, $06, $06, $0C, $0C
+	dc.b	dCrash, $06, dKick2, $03, dSnare3, dSnare3, $06, dSnare3, dKick2, $06, dKick2, $03
+	dc.b	dSnare3, dSnare3, $06, dSnare3, dKick2, $06, dKick2, $03, dSnare3, dSnare3, $06, dSnare3
+	dc.b	dSnare3, $03, $06, $03, $06, dSnare3, $06
+	dc.b	dKick2, $06, dKick2, $03, dSnare3, dSnare3, $06, dSnare3, dKick2, $06, dKick2, $03
+	dc.b	dSnare3, dSnare3, $06, dSnare3, dKick2, $06, dKick2, $03, dSnare3, dSnare3, $06, dSnare3
+	dc.b	dSnare3, $03, $06, $03, $06, dClave, $06
+	smpsLoop            $00, $05, Results_screen_2p_DAC
+	dc.b	dKick2, $06, dSnare3, $06, $06, $06, $0C, $0C
 	smpsJump            Results_screen_2p_DAC
 
 Results_screen_2p_Voices:

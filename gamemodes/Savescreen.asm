@@ -1182,10 +1182,10 @@ Obj_SaveScreen_Emeralds:
 		andi.w	#3,d5
 		beq.s	.draw
 		cmpi.w	#3,d5
-		bne.s	.loc_D768
+		bne.s	.chgroutine
 		moveq	#$C,d6
 
-.loc_D768:
+.chgroutine:
 		add.b	d2,d6
 		move.w	d0,(a1)
 		move.w	d1,2(a1)
