@@ -2091,19 +2091,19 @@ LevelSelect_DrawIcon:
 ; ===========================================================================
 ;byte_96D8
 LevSel_IconTable:
-	dc.b   0,0	;0	EHZ
-	dc.b   7,7	;2	CPZ
-	dc.b   8,8	;4	ARZ
-	dc.b   6,6	;6	CNZ
-	dc.b   2,2	;8	HTZ
-	dc.b   5,5	;$A	MCZ
-	dc.b   4,4	;$C	OOZ
+	dc.b   0,0		;0	EHZ
+	dc.b   7,7		;2	CPZ
+	dc.b   8,8		;4	ARZ
+	dc.b   6,6		;6	CNZ
+	dc.b   2,2		;8	HTZ
+	dc.b   5,5		;$A	MCZ
+	dc.b   4,4		;$C	OOZ
 	dc.b   1,1,1	;$E	MTZ
-	dc.b   9	;$11	SCZ
-	dc.b  $A	;$12	WFZ
-	dc.b  $B	;$13	DEZ
-	dc.b  $C	;$14	Special Stage
-	dc.b  $E	;$15	Sound Test
+	dc.b   9		;$11	SCZ
+	dc.b  $A		;$12	WFZ
+	dc.b  $B		;$13	DEZ
+	dc.b  $C		;$14	Special Stage
+	dc.b  $E		;$15	Sound Test
 	even
 ;byte_96EE:
 LevSel_MarkTable:	; 4 bytes per level select entry
@@ -2201,9 +2201,11 @@ TextOptScr_SonicAndTails:	menutxt	"SONIC AND TAILS"	; byte_97EC:
 TextOptScr_SonicAlone:		menutxt	"SONIC ALONE    "	; byte_97FC:
 TextOptScr_MilesAlone:		menutxt	"MILES ALONE    "	; byte_980C:
 TextOptScr_TailsAlone:		menutxt	"TAILS ALONE    "	; byte_981C:
-TextOptScr_VsModeItems:		menutxt	"* VS MODE ITEMS *"	; byte_982C:
-TextOptScr_AllKindsItems:	menutxt	"ALL KINDS ITEMS"	; byte_983E:
-TextOptScr_TeleportOnly:	menutxt	"TELEPORT ONLY  "	; byte_984E:
+
+TextOptScr_VsModeItems:		menutxt	"WHY YOU POKING   "	; byte_982C:
+TextOptScr_AllKindsItems:	menutxt	"AROUND HERE YOU"	; byte_983E:
+TextOptScr_TeleportOnly:	menutxt	"CANT BE HERE   "	; byte_984E:
+
 TextOptScr_SoundTest:		menutxt	"*  SOUND TEST   *"	; byte_985E:
 TextOptScr_0:			menutxt	"      00       "	; byte_9870:
 
