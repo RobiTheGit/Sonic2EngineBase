@@ -57,8 +57,8 @@ TwoPlayerResults:
 	lea	(Anim_SonicMilesBG).l,a2
 	jsrto	(Dynamic_Normal).l, JmpTo_Dynamic_Normal
 	move	#$2700,sr
-	lea     (Std1PLCload).l,a2
-        jsr     SubLoopPLCentry
+	lea	(Std1PLCload).l,a2
+	   jsr	SubLoopPLCentry
 	move	#$2300,sr
 	moveq	#PalID_Menu,d0
 	bsr.w	PalLoad_ForFade
@@ -298,7 +298,7 @@ Obj21_Index:	offsetTable
 ; ---------------------------------------------------------------------------
 ; word_80D0:
 Obj21_PositionTable:
-	;      x,    y
+	;	 x,    y
 	dc.w $F0, $148
 	dc.w $F0, $130
 	dc.w $E0, $148
@@ -344,7 +344,7 @@ JmpTo4_DisplaySprite ; JmpTo
 ; sprite mappings
 ; --------------------------------------------------------------------------
 Obj21_MapUnc_8146:	BINCLUDE "mappings/sprite/obj21.bin"
-           even
+		 even
 ; ===========================================================================
 
 ; loc_819A:
@@ -917,8 +917,8 @@ dword_8732:
 	dc.l  10000
 	dc.l   1000
 	dc.l    100
-	dc.l     10
-	dc.l      1
+	dc.l	10
+	dc.l	 1
 
 	; set the character set for menu text
 	charset '@',"\27\30\31\32\33\34\35\36\37\38\39\40\41\42\43\44\45\46\47\48\49\50\51\52\53\54\55"
@@ -1018,7 +1018,7 @@ MenuScreen:
 	move.w	#$8700,(a6)		; Background palette/color: 0/0
 	move.w	#$8C81,(a6)		; H res 40 cells, no interlace, S/H disabled
 	move.w	#$9001,(a6)		; Scroll table size: 64x32
-        move.w	#$9200,(a6)		; Disable window
+	   move.w	#$9200,(a6)		; Disable window
 	clearRAM Sprite_Table_Input,Sprite_Table_Input_End
 	clearRAM Menus_Object_RAM,Menus_Object_RAM_End
 
@@ -1912,12 +1912,12 @@ LevSelControls_SwitchSide:	; not in soundtest, not up/down pressed
 	move.b	LevelSelect_SwitchTable(pc,d0.w),d0 ; set selected zone according to table
 	move.w	d0,(Level_select_zone).w
 LevSelControls_SwitchPlayerOption:
-    btst    #button_C,(Ctrl_1_Press).w    ; is C pressed?
-    beq.s    +                ; if not, branch
-    addq.w    #1,(Player_option).w        ; select next character
-    cmpi.w    #2,(Player_option).w        ; did we go over the limit?
-    bls.s    +                ; if not, branch
-    clr.w    (Player_option).w        ; reset to 0
+	btst	#button_C,(Ctrl_1_Press).w	; is C pressed?
+	beq.s	+							; if not, branch
+	addq.w	#1,(Player_option).w		; select next character
+	cmpi.w	#2,(Player_option).w		; did we go over the limit?
+	bls.s	+							; if not, branch
+	clr.w	(Player_option).w			; reset to 0
 +
 	rts
 ; ===========================================================================
@@ -2198,7 +2198,7 @@ TextOptScr_AllKindsItems:	menutxt	"AROUND HERE YOU"	; byte_983E:
 TextOptScr_TeleportOnly:	menutxt	"CANT BE HERE   "	; byte_984E:
 
 TextOptScr_SoundTest:		menutxt	"*  SOUND TEST   *"	; byte_985E:
-TextOptScr_0:				menutxt	"      00       "	; byte_9870:
+TextOptScr_0:				menutxt	"	 00	  "	; byte_9870:
 
 	charset ; reset character set
 
