@@ -324,14 +324,14 @@ Ending_Loop01:
 	dc.b	dKick, $06, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, $03, dSnare
 
 Ending_Loop02:
-	dc.b	dKick, $0C, dSnare, $09, dKick, $03, $06, $06, dSnare, $0C, dKick, $0C
+	dc.b	dCrash, $0C, dSnare, $09, dKick, $03, $06, $06, dSnare, $0C, dKick, $0C
 	dc.b	dSnare, $09, dKick, $03, $06, $06, dSnare, $06, $03, $03
 	smpsLoop            $00, $03, Ending_Loop02
 
 Ending_Loop03:
-	dc.b	dKick, $0C, dSnare, $06, dKick, $0C, dSnare, $06, $06, $03, $03
+	dc.b	dCrash, $0C, dSnare, $06, dKick, $0C, dSnare, $06, $06, $03, $03
 	smpsLoop            $00, $02, Ending_Loop03
-	dc.b	dKick, $0C, dSnare, $09, dKick, $03, $06, $06, dSnare, $0C, dKick, $30
+	dc.b	dCrash, $0C, dSnare, $09, dKick, $03, $06, $06, dSnare, $0C, dCrash, $30
 	smpsStop
 
 Ending_Call00:

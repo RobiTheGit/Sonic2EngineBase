@@ -75,7 +75,7 @@ ExtraLife_PSG3:
 ; DAC Data
 ExtraLife_DAC:
 	dc.b	dHiTimpani, $12, $06, dVLowTimpani, $09, $09, $06, dHiTimpani, $06, dLowTimpani, dHiTimpani, dLowTimpani
-	dc.b	dHiTimpani, $0C
+	dc.b	dCrash, $0C
 	smpsFade
 
 ExtraLife_Voices:

@@ -166,18 +166,18 @@ Boss_DAC:
 	dc.b	dSnare, $0C, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dMidTimpani, $0C, dVLowTimpani
 	dc.b	dMidTimpani, dVLowTimpani, dMidTimpani, dVLowTimpani, dMidTimpani, dVLowTimpani
 	smpsLoop            $00, $02, Boss_DAC
-	dc.b	dKick, $0C, dSnare, $06, dSnare
+	dc.b	dChina, $0C, dSnare, $06, dSnare
 
 Boss_Loop00:
 	dc.b	dKick, $0C, dSnare, $06, dSnare
 	smpsLoop            $00, $06, Boss_Loop00
-	dc.b	dKick, $0C, dSnare, $02, dMidTimpani, $04, dSnare, $02, dMidTimpani, $04, dVLowTimpani, $0C
+	dc.b	dChina, $0C, dSnare, $02, dMidTimpani, $04, dSnare, $02, dMidTimpani, $04, dVLowTimpani, $0C
 	dc.b	dSnare, $06, dSnare
 
 Boss_Loop01:
 	dc.b	dKick, $0C, dSnare, $06, dSnare
 	smpsLoop            $00, $05, Boss_Loop01
-	dc.b	dKick, $0C, dSnare, $02, dMidTimpani, $04, dSnare, $02, dMidTimpani, $04, dVLowTimpani, $0C
+	dc.b	dChina, $0C, dSnare, $02, dMidTimpani, $04, dSnare, $02, dMidTimpani, $04, dVLowTimpani, $0C
 	dc.b	dSnare, $02, dMidTimpani, $04, dSnare, $02, dMidTimpani, $04, dVLowTimpani, $0C, dSnare, $06
 	dc.b	dSnare
 	smpsLoop            $01, $03, Boss_Loop00
@@ -185,11 +185,11 @@ Boss_Loop01:
 Boss_Loop02:
 	dc.b	dKick, $0C, dSnare, $06, dSnare
 	smpsLoop            $00, $06, Boss_Loop02
-	dc.b	dKick, $0C, dSnare, $02, dMidTimpani, $04, dSnare, $02, dMidTimpani, $04, dVLowTimpani, $0C
+	dc.b	dChina, $0C, dSnare, $02, dMidTimpani, $04, dSnare, $02, dMidTimpani, $04, dVLowTimpani, $0C
 	dc.b	dSnare, $06, dSnare
 
 Boss_Loop03:
-	dc.b	dKick, $0C, dSnare, $06, dSnare
+	dc.b	dChina, $0C, dSnare, $06, dSnare
 	smpsLoop            $00, $03, Boss_Loop03
 
 Boss_Loop04:

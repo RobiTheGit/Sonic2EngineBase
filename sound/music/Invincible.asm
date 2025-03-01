@@ -114,10 +114,10 @@ Invincible_DAC:
 	dc.b	dSnare, $06, dSnare, dKick, dKick, dSnare, dSnare, dSnare, dSnare
 
 Invincible_Loop00:
-	dc.b	dKick, $0C, dSnare, dKick, dSnare, dKick, $0C, dSnare, dKick, dSnare, dKick, $0C
+	dc.b	dCrash, $0C, dSnare, dKick, dSnare, dKick, $0C, dSnare, dKick, dSnare, dKick, $0C
 	dc.b	dSnare, dKick, dSnare, dKick, $0C, dSnare, dKick, $04, nRst, dSnare, dSnare, $0C
 	smpsLoop            $00, $02, Invincible_Loop00
-	dc.b	dKick, $06, dSnare, $12, dKick, $0C, dSnare, dSnare, $06, dKick, $12, dKick
+	dc.b	dCrash, $06, dSnare, $12, dKick, $0C, dSnare, dSnare, $06, dKick, $12, dKick
 	dc.b	$0C, dSnare, dSnare, $06, dKick, $0C, dSnare, $06, dKick, $0C, dSnare, dSnare
 	dc.b	$04, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare, dSnare
 	smpsJump            Invincible_Loop00

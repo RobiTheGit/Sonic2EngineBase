@@ -3638,43 +3638,40 @@ idstart :=	80h
 dac_sample_metadata macro label,sampleRate
 	db	id(label),pcmLoopCounter(sampleRate+7950,181/2)	; See zWriteToDAC for an explanation of this magic number.
     endm
-  	dac_sample_metadata zDACPtr_Kick,   11025	; 81h
-	dac_sample_metadata zDACPtr_Snare,  11025	; 82h
-	dac_sample_metadata zDACPtr_Clap,   11025	; 83h
-	dac_sample_metadata zDACPtr_Scratch,15232	; 84h
-	dac_sample_metadata zDACPtr_Timpani,9550	; 85h
-	dac_sample_metadata zDACPtr_Tom,   8050		; 86h
-	dac_sample_metadata zDACPtr_Bongo, 9450	; 87h (-450 is weird, but it works)
-	dac_sample_metadata zDACPtr_Timpani,10800	; 88h
-	dac_sample_metadata zDACPtr_Timpani,9300	; 89h
-	dac_sample_metadata zDACPtr_Timpani,8050	; 8Ah
-	dac_sample_metadata zDACPtr_Timpani,4050	; 8Bh
-	dac_sample_metadata zDACPtr_Tom,   12050	; 8Ch
-	dac_sample_metadata zDACPtr_Tom,   7050	; 8Dh
-	dac_sample_metadata zDACPtr_Tom,   4050	; 8Eh
-	dac_sample_metadata zDACPtr_Bongo, 7050	; 8Fh
-	dac_sample_metadata zDACPtr_Bongo, 5050	; 90h
-	dac_sample_metadata zDACPtr_Bongo, 1800	; 91h
-	dac_sample_metadata zDACPtr_Crash,  11025	; 92h
-	dac_sample_metadata zDACPtr_Ride,   11025	; 93h
-	dac_sample_metadata zDACPtr_CupCym,  11025
-
-	dac_sample_metadata zDACPtr_Clave,  11025	; 82h
-	dac_sample_metadata zDACPtr_China,  11025
-	dac_sample_metadata zDACPtr_Rim,  11025
-	dac_sample_metadata zDACPtr_Timbale,  11025
-	dac_sample_metadata zDACPtr_Timbale,  9300
-
-	dac_sample_metadata zDACPtr_CngSlp,  11025
-	dac_sample_metadata zDACPtr_Cowbell,  11025
-	dac_sample_metadata zDACPtr_Tamb,  11025
-	dac_sample_metadata zDACPtr_Agogo,  11025
-	dac_sample_metadata zDACPtr_Agogo,  9300
-
-	dac_sample_metadata zDACPtr_Shaker,  11025
-  	dac_sample_metadata zDACPtr_Kick2,   11025	; 81h
-	dac_sample_metadata zDACPtr_Snare1,  11025	; 82h
-	dac_sample_metadata zDACPtr_Snare3,  11025	; 82h
+  	dac_sample_metadata zDACPtr_Kick,   11025	; 81h Kick (1)
+	dac_sample_metadata zDACPtr_Snare,  11025	; 82h Snare (2)
+	dac_sample_metadata zDACPtr_Clap,   11025	; 83h Clap
+	dac_sample_metadata zDACPtr_Scratch,15232	; 84h Scratch
+	dac_sample_metadata zDACPtr_Timpani,9550	; 85h VLowTimpani
+	dac_sample_metadata zDACPtr_Tom,   8050		; 86h FloorTom
+	dac_sample_metadata zDACPtr_Bongo, 9450		; 87h VLowClap (why tf are the bongos called claps?)
+	dac_sample_metadata zDACPtr_Timpani,10800	; 88h HiTimpani
+	dac_sample_metadata zDACPtr_Timpani,9300	; 89h Timpani
+	dac_sample_metadata zDACPtr_Timpani,8050	; 8Ah LowTimpani
+	dac_sample_metadata zDACPtr_Timpani,4050	; 8Bh VLowTimpani
+	dac_sample_metadata zDACPtr_Tom,   12050	; 8Ch HiTom
+	dac_sample_metadata zDACPtr_Tom,   7050		; 8Dh MidTom
+	dac_sample_metadata zDACPtr_Tom,   4050		; 8Eh LowTom
+	dac_sample_metadata zDACPtr_Bongo, 7050		; 8Fh HiClap
+	dac_sample_metadata zDACPtr_Bongo, 5050		; 90h MidClap
+	dac_sample_metadata zDACPtr_Bongo, 1800		; 91h LowClap
+	dac_sample_metadata zDACPtr_Crash,  11025	; 92h Crash
+	dac_sample_metadata zDACPtr_Ride,   11025	; 93h Ride
+	dac_sample_metadata zDACPtr_CupCym,  11025	; 94h CupCym (ride bell)
+	dac_sample_metadata zDACPtr_Clave,  11025	; 95h Clave (pronounced "claw"-"vey")
+	dac_sample_metadata zDACPtr_China,  11025	; 96h China (Chinesse Cymbal)
+	dac_sample_metadata zDACPtr_Rim,  11025		; 97h Rim (Snare Drum Rim)
+	dac_sample_metadata zDACPtr_Timbale,  11025	; 98h Timbale
+	dac_sample_metadata zDACPtr_Timbale,  8050	; 99h LowTimbale
+	dac_sample_metadata zDACPtr_CngSlp,  11025	; 9Ah CngSlp (Conga Slap)
+	dac_sample_metadata zDACPtr_Cowbell,  11025	; 9Bh Cowbell (we need more)
+	dac_sample_metadata zDACPtr_Tamb,  11025	; 9Ch Tamb (Tambourine)
+	dac_sample_metadata zDACPtr_Agogo,  11025	; 9Dh Agogo
+	dac_sample_metadata zDACPtr_Agogo,  8050	; 9Eh LowAgogo
+	dac_sample_metadata zDACPtr_Shaker,  11025	; 9Fh Shaker
+  	dac_sample_metadata zDACPtr_Kick2,   11025	; A0h Kick (2)
+	dac_sample_metadata zDACPtr_Snare1,  11025	; A1h Snare (1)
+	dac_sample_metadata zDACPtr_Snare3,  11025	; A2h Snare (3)
 zDACBanks:
 	db	zmake68kBank(SndDAC_Kick)
 	db	zmake68kBank(SndDAC_Snare)
