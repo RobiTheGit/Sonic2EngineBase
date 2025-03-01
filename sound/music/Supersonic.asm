@@ -187,17 +187,25 @@ Supersonic_PSG2:
 
 ; PSG3 Data
 Supersonic_PSG3:
-	smpsStop
+	smpsPSGform         $E7
+	dc.b	nMaxPSG, $06
+	smpsJump	Supersonic_PSG3
 
 ; DAC Data
 Supersonic_DAC:
+	dc.b	dCrash, $0C, dSnare, $06, dKick, $12, dSnare, $0C
 	dc.b	dKick, $0C, dSnare, $06, dKick, $12, dSnare, $0C
-	smpsLoop            $00, $03, Supersonic_DAC
+	dc.b	dKick, $0C, dSnare, $06, dKick, $12, dSnare, $0C
 	dc.b	dKick, $0C, dSnare, $06, dKick, $0C, dSnare, $06, $0C
 
 Supersonic_Loop00:
+	dc.b	dCrash, $0C, dSnare
 	dc.b	dKick, $0C, dSnare
-	smpsLoop            $00, $07, Supersonic_Loop00
+	dc.b	dKick, $0C, dSnare
+	dc.b	dKick, $0C, dSnare
+	dc.b	dKick, $0C, dSnare
+	dc.b	dKick, $0C, dSnare
+	dc.b	dKick, $0C, dSnare
 	dc.b	dKick, $06, dSnare, dSnare, $0C
 	smpsLoop            $01, $05, Supersonic_Loop00
 	smpsJump            Supersonic_DAC

@@ -690,7 +690,7 @@ loc_D1FA:
 		bne.s	loc_D212
 		btst	#button_B,(Ctrl_1_pressed).w
 		beq.s	loc_D212
-		move.b	#GameModeID_2PLevelSelect,(Game_mode).w
+		move.b	#GameModeID_TitleScreen,(Game_mode).w
 		bra.w	loc_D2CE
 ; ---------------------------------------------------------------------------
 
