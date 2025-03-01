@@ -633,30 +633,30 @@ loc_141AA:
 	bsr.w	DisplaySprite
 	move.b	#1,(Update_Bonus_score).w
 	moveq	#0,d0
-	tst.w	(Bonus_Countdown_1).w
-	beq.s	loc_141C6
-	addi.w	#10,d0
-	subi.w	#10,(Bonus_Countdown_1).w
+;	tst.w	(Bonus_Countdown_1).w
+;	beq.s	loc_141C6
+	add.w	(Bonus_Countdown_1).w,d0
+	clr.w	(Bonus_Countdown_1).w
 
 loc_141C6:
-	tst.w	(Bonus_Countdown_2).w
-	beq.s	loc_141D6
-	addi.w	#10,d0
-	subi.w	#10,(Bonus_Countdown_2).w
+;	tst.w	(Bonus_Countdown_2).w
+;	beq.s	loc_141D6
+	add.w	(Bonus_Countdown_2).w,d0
+	clr.w	(Bonus_Countdown_2).w
 
 loc_141D6:
-	tst.w	(Bonus_Countdown_3).w
-	beq.s	loc_141E6
-	addi.w	#10,d0
-	subi.w	#10,(Bonus_Countdown_3).w
+;	tst.w	(Bonus_Countdown_3).w
+;	beq.s	loc_141E6
+	add.w	(Bonus_Countdown_3).w,d0
+	clr.w	(Bonus_Countdown_3).w
 
 loc_141E6:
-
 	add.w	d0,(Total_Bonus_Countdown).w
 	tst.w	d0
 	bne.w	loc_14256
 	move.w	#SndID_TallyEnd,d0
 	jsr	(PlaySound).l
+
 	tst.b	(Current_Act).w
 	beq.s	+
         st	(SRAM_mask_interrupts_flag).w		; If in act 2 or Sky Sanctuary, save the game
