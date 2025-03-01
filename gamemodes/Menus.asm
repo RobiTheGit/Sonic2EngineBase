@@ -1,7 +1,3 @@
-
-
-
-
 ; ===========================================================================
 ; loc_7D50:
 TwoPlayerResults:
@@ -64,8 +60,6 @@ TwoPlayerResults:
 	lea     (Std1PLCload).l,a2
         jsr     SubLoopPLCentry
 	move	#$2300,sr
-;	moveq	#PLCID_Std1,d0
-;	bsr.w	LoadPLC2
 	moveq	#PalID_Menu,d0
 	bsr.w	PalLoad_ForFade
 	moveq	#0,d0
@@ -939,35 +933,34 @@ menutxt	macro	text
 	dc.b	strlen(text)-1
 	dc.b	text
 	endm
-Text2P_EmeraldHill:	menutxt	"EMERALD HILL"	; byte_874A:
-	rev02even
-Text2P_MysticCave:	menutxt	" MYSTIC CAVE"	; byte_8757:
-	rev02even
-Text2P_CasinoNight:	menutxt	"CASINO NIGHT"	; byte_8764:
-	rev02even
-Text2P_SpecialStage:	menutxt	"SPECIAL STAGE"	; byte_8771:
-	rev02even
-Text2P_Special:		menutxt	"   SPECIAL  "	; byte_877F:
-	rev02even
-Text2P_Zone:		menutxt	"ZONE "		; byte_878C:
-	rev02even
-Text2P_Stage:		menutxt	"STAGE"		; byte_8792:
-	rev02even
-Text2P_GameOver:	menutxt	"GAME OVER"	; byte_8798:
-	rev02even
-Text2P_TimeOver:	menutxt	"TIME OVER"
-	rev02even
-Text2P_NoGame:		menutxt	"NO GAME"	; byte_87AC:
-	rev02even
-Text2P_Tied:		menutxt	"TIED"		; byte_87B4:
-	rev02even
-Text2P_1P:		menutxt	" 1P"		; byte_87B9:
-	rev02even
-Text2P_2P:		menutxt	" 2P"		; byte_87BD:
-	rev02even
-Text2P_Blank:		menutxt	"    "		; byte_87C1:
-	rev02even
-
+Text2P_EmeraldHill:		menutxt		"EMERALD HILL"	; byte_874A:
+	even
+Text2P_MysticCave:		menutxt		" MYSTIC CAVE"	; byte_8757:
+	even
+Text2P_CasinoNight:		menutxt		"CASINO NIGHT"	; byte_8764:
+	even
+Text2P_SpecialStage:	menutxt		"SPECIAL STAGE"	; byte_8771:
+	even
+Text2P_Special:			menutxt		"   SPECIAL  "	; byte_877F:
+	even
+Text2P_Zone:			menutxt		"ZONE "		; byte_878C:
+	even
+Text2P_Stage:			menutxt		"STAGE"		; byte_8792:
+	even
+Text2P_GameOver:		menutxt		"GAME OVER"	; byte_8798:
+	even
+Text2P_TimeOver:		menutxt		"TIME OVER"
+	even
+Text2P_NoGame:			menutxt		"NO GAME"	; byte_87AC:
+	even
+Text2P_Tied:			menutxt		"TIED"		; byte_87B4:
+	even
+Text2P_1P:				menutxt		" 1P"		; byte_87B9:
+	even
+Text2P_2P:				menutxt		" 2P"		; byte_87BD:
+	even
+Text2P_Blank:			menutxt		"    "		; byte_87C1:
+	even
 	charset ; reset character set
 
 ; ------------------------------------------------------------------------
@@ -1778,28 +1771,28 @@ LevelSelect_Return:
 ; -----------------------------------------------------------------------------
 ;Misc_9454:
 LevelSelect_Order:
-	dc.w	emerald_hill_zone_act_1
-	dc.w	emerald_hill_zone_act_2	; 1
-	dc.w	chemical_plant_zone_act_1	; 2
-	dc.w	chemical_plant_zone_act_2	; 3
-	dc.w	aquatic_ruin_zone_act_1	; 4
-	dc.w	aquatic_ruin_zone_act_2	; 5
-	dc.w	casino_night_zone_act_1	; 6
-	dc.w	casino_night_zone_act_2	; 7
-	dc.w	hill_top_zone_act_1	; 8
-	dc.w	hill_top_zone_act_2	; 9
-	dc.w	mystic_cave_zone_act_1	; 10
-	dc.w	mystic_cave_zone_act_2	; 11
-	dc.w	oil_ocean_zone_act_1	; 12
-	dc.w	oil_ocean_zone_act_2	; 13
-	dc.w	metropolis_zone_act_1	; 14
-	dc.w	metropolis_zone_act_2	; 15
-	dc.w	metropolis_zone_act_3	; 16
-	dc.w	sky_chase_zone_act_1	; 17
+	dc.w	emerald_hill_zone_act_1		;  0
+	dc.w	emerald_hill_zone_act_2		;  1
+	dc.w	chemical_plant_zone_act_1	;  2
+	dc.w	chemical_plant_zone_act_2	;  3
+	dc.w	aquatic_ruin_zone_act_1		;  4
+	dc.w	aquatic_ruin_zone_act_2		;  5
+	dc.w	casino_night_zone_act_1		;  6
+	dc.w	casino_night_zone_act_2		;  7
+	dc.w	hill_top_zone_act_1			;  8
+	dc.w	hill_top_zone_act_2			;  9
+	dc.w	mystic_cave_zone_act_1		; 10
+	dc.w	mystic_cave_zone_act_2		; 11
+	dc.w	oil_ocean_zone_act_1		; 12
+	dc.w	oil_ocean_zone_act_2		; 13
+	dc.w	metropolis_zone_act_1		; 14
+	dc.w	metropolis_zone_act_2		; 15
+	dc.w	metropolis_zone_act_3		; 16
+	dc.w	sky_chase_zone_act_1		; 17
 	dc.w	wing_fortress_zone_act_1	; 18
-	dc.w	death_egg_zone_act_1	; 19
-	dc.w	$4000	; 20 - special stage
-	dc.w	$FFFF	; 21 - sound test
+	dc.w	death_egg_zone_act_1		; 19
+	dc.w	level_select_special_stage	; 20
+	dc.w	level_select_exit			; 21
 ; ===========================================================================
 
 ;loc_9480:
@@ -2159,9 +2152,7 @@ CheckCheats:	; This is called from 2 places: the options screen and the level se
 	tst.w	d2				; Test this to determine which cheat to enable
 	bne.s	+				; If not 0, branch
 	move.b	#$F,(Continue_count).w		; Give 15 continues
-	; The next line causes the bug where the OOZ music plays until reset.
-	; Remove "&$7F" to fix the bug.
-	move.b	#SndID_ContinueJingle&$7F,d0	; Play the continue jingle
+	move.b	#SndID_ContinueJingle,d0	; Play the continue jingle
 	jsrto	(PlayMusic).l, JmpTo_PlayMusic
 	bra.s	++
 ; ===========================================================================
@@ -2174,16 +2165,17 @@ CheckCheats:	; This is called from 2 places: the options screen and the level se
 +
 	rts
 ; ===========================================================================
+
 level_select_cheat:	dc.b $19, $65,   9, $17,   0	; 17th September 1965, Yuji Naka's birthdate
-	rev02even
+	even
 ; byte_97B7
 continues_cheat:	dc.b   1,   1,   2,   4,   0	; 24th November, Sonic 2's release date in the EU and US: "Sonic 2sday"
-	rev02even
+	even
 debug_cheat:		dc.b   1,   9,   9,   2,   1,   1,   2,   4,   0	; 24th November 1992, Sonic 2's release date in the EU and US: "Sonic 2sday"
-	rev02even
+	even
 ; byte_97C5
 super_sonic_cheat:	dc.b   4,   1,   2,   6,   0	; Book of Genesis, 41:26
-	rev02even
+	even
 
 	; set the character set for menu text
 	charset '@',"\27\30\31\32\33\34\35\36\37\38\39\40\41\42\43\44\45\46\47\48\49\50\51\52\53\54\55"
@@ -2192,7 +2184,6 @@ super_sonic_cheat:	dc.b   4,   1,   2,   6,   0	; Book of Genesis, 41:26
 	charset ':',$1C
 	charset '.',$1D
 	charset ' ',0
-
 	; options screen menu text
 
 TextOptScr_PlayerSelect:	menutxt	"* PLAYER SELECT *"	; byte_97CA:
@@ -2207,7 +2198,7 @@ TextOptScr_AllKindsItems:	menutxt	"AROUND HERE YOU"	; byte_983E:
 TextOptScr_TeleportOnly:	menutxt	"CANT BE HERE   "	; byte_984E:
 
 TextOptScr_SoundTest:		menutxt	"*  SOUND TEST   *"	; byte_985E:
-TextOptScr_0:			menutxt	"      00       "	; byte_9870:
+TextOptScr_0:				menutxt	"      00       "	; byte_9870:
 
 	charset ; reset character set
 
