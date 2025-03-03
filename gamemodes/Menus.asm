@@ -2083,20 +2083,35 @@ LevelSelect_DrawIcon:
 	rts
 ; ===========================================================================
 ;byte_96D8
+Icon_EHZ = 0
+Icon_CPZ = 7
+Icon_ARZ = 8
+Icon_CNZ = 6
+Icon_HTZ = 2
+Icon_MCZ = 5
+Icon_OOZ = 4
+Icon_MTZ = 1
+Icon_SCZ = 9
+Icon_WFZ = $A
+Icon_DEZ = $B
+Icon_SpecStag  = $C
+Icon_SoundTest = $E
+Icon_HPZ = 3
+Icon_X = $D
 LevSel_IconTable:
-	dc.b   0,0		;0	EHZ
-	dc.b   7,7		;2	CPZ
-	dc.b   8,8		;4	ARZ
-	dc.b   6,6		;6	CNZ
-	dc.b   2,2		;8	HTZ
-	dc.b   5,5		;$A	MCZ
-	dc.b   4,4		;$C	OOZ
-	dc.b   1,1,1		;$E	MTZ
-	dc.b   9		;$11	SCZ
-	dc.b  $A		;$12	WFZ
-	dc.b  $B		;$13	DEZ
-	dc.b  $C		;$14	Special Stage
-	dc.b  $E		;$15	Sound Test
+	dc.b   Icon_EHZ,Icon_EHZ		;0	EHZ
+	dc.b   Icon_CPZ,Icon_CPZ		;2	CPZ
+	dc.b   Icon_ARZ,Icon_ARZ		;4	ARZ
+	dc.b   Icon_CNZ,Icon_CNZ		;6	CNZ
+	dc.b   Icon_HTZ,Icon_HTZ		;8	HTZ
+	dc.b   Icon_MCZ,Icon_MCZ		;$A	MCZ
+	dc.b   Icon_OOZ,Icon_OOZ		;$C	OOZ
+	dc.b   Icon_MTZ,Icon_MTZ,Icon_MTZ	;$E	MTZ
+	dc.b   Icon_SCZ				;$11	SCZ
+	dc.b   Icon_WFZ				;$12	WFZ
+	dc.b   Icon_DEZ				;$13	DEZ
+	dc.b   Icon_SpecStag			;$14	Special Stage
+	dc.b   Icon_SoundTest			;$15	Sound Test
 	even
 ;byte_96EE:
 LevSel_MarkTable:	; 4 bytes per level select entry
