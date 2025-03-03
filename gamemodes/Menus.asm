@@ -2198,7 +2198,7 @@ TextOptScr_AllKindsItems:	menutxt	"AROUND HERE YOU"	; byte_983E:
 TextOptScr_TeleportOnly:	menutxt	"CANT BE HERE   "	; byte_984E:
 
 TextOptScr_SoundTest:		menutxt	"*  SOUND TEST   *"	; byte_985E:
-TextOptScr_0:				menutxt	"	 00	  "	; byte_9870:
+TextOptScr_0:				menutxt	"      00       "	; byte_9870:
 
 	charset ; reset character set
 

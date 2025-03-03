@@ -302,18 +302,26 @@ CNZ_DAC:
 	dc.b	dKick, $06, dKick, dKick, $04, dSnare, $02, $06
 
 CNZ_Loop00:
+	dc.b	dCrash, $06, dSnare
 	dc.b	dKick, $06, dSnare
-	smpsLoop            $00, $04, CNZ_Loop00
+	dc.b	dKick, $06, dSnare
+	dc.b	dKick, $06, dSnare
 	dc.b	dKick, $06, dSnare, dSnare, $04, $06, $06, dKick, $02, $06, $06, dSnare
 
 CNZ_Loop01:
-	dc.b	dKick, dSnare
-	smpsLoop            $00, $1C, CNZ_Loop01
+	dc.b	dCrash, $06, dSnare
+	dc.b	dKick, $06, dSnare
+	dc.b	dKick, $06, dSnare
+	dc.b	dKick, $06, dSnare
+	smpsLoop            $00, $7, CNZ_Loop01
 	dc.b	dKick, dSnare, dSnare, $04, $06, $06, dKick, $02, $06, $06, dSnare
 
 CNZ_Loop02:
-	dc.b	dKick, dSnare
-	smpsLoop            $00, $20, CNZ_Loop02
+	dc.b	dCrash, $06, dSnare
+	dc.b	dKick, $06, dSnare
+	dc.b	dKick, $06, dSnare
+	dc.b	dKick, $06, dSnare
+	smpsLoop            $00, $8, CNZ_Loop02
 	dc.b	dKick, dSnare, dKick, dSnare, dKick, dSnare, dSnare, $04, $06, $02, nRst, $28
 	dc.b	dSnare, $02, $06
 	smpsJump            CNZ_Loop00

@@ -353,10 +353,10 @@ MCZ_Jump04:
 
 ; DAC Data
 MCZ_DAC:
-	dc.b	nRst, $30, nRst, $18, dKick, $0C, $08, $04
+	dc.b	nRst, $30, nRst, $18, dSnare, $0C, $08, $04
 
 MCZ_Jump00:
-	dc.b	dKick, $08, $0C, $04, dSnare, $0C, dKick, $08, $0C, dSnare, $04, dKick
+	dc.b	dCrash, $08, dKick, $0C, $04, dSnare, $0C, dKick, $08, $0C, dSnare, $04, dKick
 	dc.b	$0C, dSnare, dKick, dKick, $08, $0C, $04, dSnare, $0C, dKick, $08, $0C
 	dc.b	dSnare, $04, dKick, $0C, dSnare, dSnare, $08, $04
 	smpsJump            MCZ_Jump00
