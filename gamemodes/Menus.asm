@@ -2091,7 +2091,7 @@ LevSel_IconTable:
 	dc.b   2,2		;8	HTZ
 	dc.b   5,5		;$A	MCZ
 	dc.b   4,4		;$C	OOZ
-	dc.b   1,1,1	;$E	MTZ
+	dc.b   1,1,1		;$E	MTZ
 	dc.b   9		;$11	SCZ
 	dc.b  $A		;$12	WFZ
 	dc.b  $B		;$13	DEZ
