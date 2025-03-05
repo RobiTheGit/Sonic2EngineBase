@@ -185,7 +185,7 @@ Level_GetBgm:
 	moveq	#0,d0
 	move.b	(Current_Zone).w,d0
 	lea_	MusicList,a1
-	tst.w	(Two_player_mode).w
+	tst.b	(Current_Act).w
 	beq.s	Level_PlayBgm
 	lea_	MusicList2,a1
 ; loc_40C8:

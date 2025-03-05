@@ -303,13 +303,13 @@ EHZ_2p_Loop02:
 
 ; DAC Data
 EHZ_2p_DAC:
-	dc.b	dMidTom, $03, dMidTom, dMidTom, $06, dLowTom, $03, dLowTom, dLowTom, $06, dFloorTom, $03
-	dc.b	dFloorTom, dFloorTom, $06, dLowTom, dFloorTom
+	dc.b	dMidTom, $03, dMidTom, dMidTom, $06, dLowTom, $03, dLowTom, dLowTom, $06, dSnare3, $03
+	dc.b	dSnare3, dSnare3, $06, dLowTom, dSnare3
 
 EHZ_2p_Loop00:
-	dc.b	dKick, dKick, dFloorTom, nRst, dKick, dKick, dFloorTom, nRst
+	dc.b	dKick, dKick, dSnare3, nRst, dKick, dKick, dSnare3, nRst
 	smpsLoop            $00, $0F, EHZ_2p_Loop00
-	dc.b	dKick, dKick, dFloorTom, nRst, dMidTom, $03, dMidTom, dMidTom, $06, dLowTom, dFloorTom
+	dc.b	dKick, dKick, dSnare3, nRst, dMidTom, $03, dMidTom, dMidTom, $06, dLowTom, dSnare3
 	smpsJump            EHZ_2p_Loop00
 
 ; PSG1 Data
