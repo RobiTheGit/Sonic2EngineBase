@@ -680,7 +680,7 @@ loc_1072:
 sndDriverInput:
 	lea	(Music_to_play&$00FFFFFF).l,a0
 	lea	(Z80_RAM+zAbsVar).l,a1 ; $A01B80
-	cmpi.b	#$80,zAbsVar.QueueToPlay-zAbsVar(a1)	; If this (zReadyFlag) isn't $80, the driver is processing a previous sound request.
+	tst.b 8(a1)
 	bne.s	loc_10C4	; So we'll wait until at least the next frame before putting anything in there.
 	move.b	0(a0),d0
 	beq.s	loc_10A4
@@ -700,6 +700,7 @@ loc_10AE:		; Check that the sound is not FE or FF
 	addi.b	#$7F,d1
 	move.b	d1,zAbsVar.StopMusic-zAbsVar(a1)
 	bra.s	loc_10C4
+	nop
 ; ---------------------------------------------------------------------------
 
 loc_10C0:

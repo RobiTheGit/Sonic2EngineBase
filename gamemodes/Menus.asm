@@ -1460,17 +1460,17 @@ OptionScreen_Controls:
 +
     cmpi.b    #1,(Options_menu_box).w
     bne.s    ++
-
-    btst    #button_A,d0
-    beq.s    +
-    addi.b    #$10,d2
-    andi.b    #$7F,d2
+	btst    #button_A,d0
+        beq.s   +
+        addi.b  #$10,d2
+        bcc.s   +
+        moveq   #0,d2
 
 +
     btst    #button_B,d0
     beq.s    +
     subi.b    #$10,d2
-    andi.b    #$7F,d2
+ ;   andi.b    #$7F,d2
 
 +
 	move.w	d2,(a1)
@@ -1479,7 +1479,7 @@ OptionScreen_Controls:
 	andi.w	#button_C_mask,d0
 	beq.s	+	; rts
 	move.w	(Sound_test_sound).w,d0
-	addi.w	#$80,d0
+	;addi.w	#$80,d0
 	jsrto	(PlayMusic).l, JmpTo_PlayMusic
 	lea	(level_select_cheat).l,a0
 	lea	(continues_cheat).l,a2
@@ -1495,7 +1495,7 @@ OptionScreen_Controls:
 ; word_917A:
 OptionScreen_Choices:
 	dc.l (3-1)<<24|(Player_option&$FFFFFF)
-	dc.l ($80-1)<<24|(Sound_test_sound&$FFFFFF)
+	dc.l $ff<<24|(Sound_test_sound&$FFFFFF)
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -1864,35 +1864,37 @@ LevSelControls_CheckLR:
 	btst	#button_left,d1
 	beq.s	+
 	subq.b	#1,d0
-	bcc.s	+
-	moveq	#$7F,d0
+;	bcc.s	+
+;	moveq	#$7F,d0
 
 +
 	btst	#button_right,d1
 	beq.s	+
 	addq.b	#1,d0
-	cmpi.w	#$80,d0
-	blo.s	+
-	moveq	#0,d0
+;	cmpi.w	#$80,d0
+;	blo.s	+
+;	moveq	#0,d0
 
 +
-	btst	#button_A,d1
-	beq.s	+
-	addi.b	#$10,d0
-	andi.b	#$7F,d0
+	btst    #button_A,d1
+        beq.s   +
+        addi.b  #$10,d0
+        bcc.s   +
+        moveq   #0,d0
+
 
 +
     btst    #button_B,d1
     beq.s    +
     subi.b    #$10,d0
-    andi.b    #$7F,d0
+;    andi.b    #$7F,d0
 
 +
 	move.w	d0,(Sound_test_sound).w
 	andi.w	#button_C_mask,d1
 	beq.s	+	; rts
 	move.w	(Sound_test_sound).w,d0
-	addi.w	#$80,d0
+	;addi.w	#$80,d0
 	jsrto	(PlayMusic).l, JmpTo_PlayMusic
 	lea	(debug_cheat).l,a0
 	lea	(super_sonic_cheat).l,a2
