@@ -1391,7 +1391,7 @@ zResumeTrack:
 ;zsub_674
 zCycleQueue:
 	ld	a,(zAbsVar.QueueToPlay)		; Check if a sound request was made zComRange+08h
-	cp	80h				; Is queue slot equal to 80h?
+	or	a				; Is queue slot equal to 80h?
 	ret	nz				; If not, return
 	ld	hl,zAbsVar.SFXToPlay		; Get address of next sound
 	ld	a,(zAbsVar.SFXPriorityVal)	; Get current SFX priority
@@ -3598,6 +3598,7 @@ zDACPtr_Snare3:		DACSize	SndDAC_Snare3
 	; First byte selects one of the DAC samples.  The number that
 	; follows it is a wait time between each nibble written to the DAC
 	; (thus higher = slower)
+	nop
 	nop
 	nop
 	nop
