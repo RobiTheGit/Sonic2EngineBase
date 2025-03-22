@@ -29,7 +29,9 @@ flip_turned =                 $2D
 spindash_counter =            $3E
 restart_countdown =           spindash_counter
 respawn_index =               $48
-;.....///////////////////////////..........respawn_index =
+peelout_flag =      $5D
+peelout_counter =   $20 ;word
+;.....///////////////////////////..........
 ; ---------------------------------------------------------------------------
 ; Object Status Table offsets (for everything between Object_RAM and Primary_Collision)
 ; ---------------------------------------------------------------------------

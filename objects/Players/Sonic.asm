@@ -323,6 +323,7 @@ Obj01_MdNormal_Checks:
 ; loc_1A2B8:
 Obj01_MdNormal:
 	bsr.w	Sonic_CheckSpindash
+	bsr.w	Sonic_CheckPeelout
 	bsr.w	Sonic_Jump
 	bsr.w	Sonic_SlopeResist
 	bsr.w	Sonic_Move
@@ -1511,7 +1512,119 @@ loc_1AD8C:
 	bsr.w	AnglePos
 	rts
 ; End of subroutine Sonic_UpdateSpindash
+Sonic_CheckPeelout:
+    tst.b   peelout_flag(a0)
+    bne.s   Sonic_UpdatePeelout
+    cmpi.b  #7,anim(a0)
+    bne.s   .return
+	move.b	(Ctrl_1_Press_Logical).w,d0
+	andi.b	#button_B_mask|button_C_mask,d0
+    beq.w   .return
+    move.b  #$22,anim(a0)
+    move.w  #$800,inertia(a0)
+    move.w  #SndID_SpindashRev,d0
+    jsr (PlaySound).l
+    addq.l  #4,sp
+    move.b  #1,peelout_flag(a0)
+    move.w  #0,peelout_counter(a0)
+    cmpi.b  #$C,air_left(a0); if he's drowning, branch to not make dust
+    bcs.s   .checkcollide
+    move.b  #2,(Sonic_Dust+anim).w
+.checkcollide
+    bsr.w   Sonic_LevelBound
+    bsr.w   AnglePos
 
+.return
+
+    rts
+; End of subroutine Sonic_CheckSpindash
+
+
+; ---------------------------------------------------------------------------
+; Subrouting to update an already-charging spindash
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+
+; loc_1AC8E:
+Sonic_UpdatePeelout:
+    move.b  (Ctrl_1_Held_Logical).w,d0
+    btst    #0,d0
+    bne.w   Sonic_ChargingPeelout
+    move.b  #1,anim(a0)
+    move.b  #0,peelout_flag(a0)
+    moveq   #0,d0
+    move.b  peelout_counter(a0),d0
+    add.w   d0,d0
+    move.w  PeeloutSpeeds(pc,d0.w),inertia(a0)
+    tst.b   (Super_Sonic_flag).w
+    beq.s   +
+    move.w  PeeloutSpeedsSuper(pc,d0.w),inertia(a0)
++
+    move.w  inertia(a0),d0
+    subi.w  #$800,d0
+    add.w   d0,d0
+    andi.w  #$1F00,d0
+    neg.w   d0
+    addi.w  #$2000,d0
+    move.w  d0,($FFFFEED0).w
+    btst    #0,status(a0)
+    beq.s   +
+    neg.w   inertia(a0)
++
+    move.b  #0,(Sonic_Dust+anim).w
+	move.w	#SndID_SpindashRelease,d0	; spindash zoom sound
+    jsr (PlaySound).l
+    bra.s   Obj01_Peelout_ResetScr
+; ===========================================================================
+PeeloutSpeeds:
+	dc.w  $A00	; 3
+	dc.w  $A80	; 4
+	dc.w  $B00	; 5
+	dc.w  $B80	; 6
+	dc.w  $C00	; 7
+	dc.w  $C80	; 8
+PeeloutSpeedsSuper:
+	dc.w  $A00	; 3
+	dc.w  $A80	; 4
+	dc.w  $B00	; 5
+	dc.w  $B80	; 6
+	dc.w  $C00	; 7
+	dc.w  $C80	; 8
+; ===========================================================================
+
+Sonic_ChargingPeelout:      ; If still charging the dash...
+    tst.w   peelout_counter(a0)
+    beq.s   +
+    move.w  peelout_counter(a0),d0
+    lsr.w   #5,d0
+    sub.w   d0,peelout_counter(a0)
+    bcc.s   +
+    move.w  #0,peelout_counter(a0)
++
+    move.b  (Ctrl_1_Press_Logical).w,d0
+    andi.b  #0,d0
+    beq.w   Obj01_Peelout_ResetScr
+    move.w  #$E0,d0
+    jsr (PlaySound).l
+    addi.w  #$200,peelout_counter(a0)
+    cmpi.w  #$800,peelout_counter(a0)
+    bcs.s   Obj01_Peelout_ResetScr
+    move.w  #$800,peelout_counter(a0)
+
+Obj01_Peelout_ResetScr:
+    addq.l  #4,sp
+    cmpi.w  #$60,(Camera_Y_pos_bias).w
+    beq.s   ++
+    bcc.s   +
+    addq.w  #4,(Camera_Y_pos_bias).w
++   subq.w  #2,(Camera_Y_pos_bias).w
+
++
+    bsr.w   Sonic_LevelBound
+    bsr.w   AnglePos
+    rts
+; End of subroutine Sonic_UpdatePeelout
 Sonic_AirCurl:
 	move.b	(Ctrl_1_Held_Logical).w,d0
 	andi.b	#button_A_mask,d0
@@ -2341,6 +2454,8 @@ SAnim_WalkRun:
 	lea	(SonAni_Run).l,a1	; use running animation
 	cmpi.w	#$600,d2		; is Sonic at running speed?
 	bhs.s	+			; use running animation
+	tst.b   peelout_flag(a0)
+	bne.s	+
 	lea	(SonAni_Walk).l,a1	; if yes, branch
 	add.b	d0,d0
 +
@@ -2594,9 +2709,9 @@ SonAni_Spring:	dc.b $2F,$5B,$FD,  0
 	rev02even
 SonAni_Hang:	dc.b   1,$50,$51,$FF
 	rev02even
-SonAni_Dash2:	dc.b  $F,$D6,$FF
+SonAni_Dash2:	dc.b  $F,$D6,$FF	;Tecnically would be invalid in stock sonic 2, but here, it is one of the victory frames
 	rev02even
-SonAni_Dash3:	dc.b  $F,$43,$44,$FE,  1
+SonAni_Dash3:	dc.b  $F,$43,$44,$FE,  1 ; Unused, just uses 2 random spindash frames
 	rev02even
 SonAni_Hang2:	dc.b $13,$6B,$6C,$FF
 	rev02even
