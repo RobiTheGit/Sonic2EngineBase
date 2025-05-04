@@ -36,15 +36,15 @@ useFullWaterTables = 0
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ; AS-specific macros and assembler settings
 	CPU 68000
-	include "s2.macrosetup.asm"
+	include "MacroSetup.asm"
 
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ; Equates section - Names for variables.
-	include "s2.constants.asm"
+	include "Constants.asm"
 
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ; Simplifying macros and functions
-	include "s2.macros.asm"
+	include "Macros.asm"
 ; Including SMPS2ASM so we can edit music
 SonicDriverVer = 2
 use_s2_samples = 1
