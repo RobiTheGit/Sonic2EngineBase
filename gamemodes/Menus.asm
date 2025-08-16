@@ -2232,8 +2232,6 @@ LevSel_MarkTable:	; 4 bytes per level select entry
 	dc.b  $F,$2C,  0,  0	;$14
 	dc.b $12,$2C,$12,$48
 	
-
-
 LevSel_MappingOffsets:
 		dc.w planeLocH28(3,3)
 		dc.w planeLocH28(3,6)
