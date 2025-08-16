@@ -1687,8 +1687,13 @@ MenuScreen_LevelSelect:
 		;ori.w	#make_art_tile($000,0,0),d0
 		move.w	d0,(a2)+	; Send it to plane map
 		dbf	d2,.writeletter	; Loop for entire string
-
+		cmpi.W	#$5,d1
+		ble.s	.righthandside
 		move.w	#$D,d2		; Maximum length of string
+		bra.S	.calculatespaces
+	.righthandside:
+		move.w	#$C,d2		; Maximum length of string
+	.calculatespaces:
 		sub.w	d3,d2		; Get remaining space in string
 		bcs.s	.stringfull	; If there is none, skip ahead
 
@@ -1725,7 +1730,7 @@ MenuScreen_LevelSelect:
 		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
 	
 		; Overwrite duplicate LAVA REEF 1/2 with 3/4 (obviously, S3 didn't do this)
-		move.w	#make_art_tile('3',0,0),(RAM_start+planeLocH28($25,5)).l
+		move.w	#make_art_tile('3',0,0),(RAM_start+planeLocH28($24,5)).l
 
 		restore
 
@@ -2099,7 +2104,7 @@ LevelSelect_MarkFields:
 ; ===========================================================================
 ;loc_965A:
 LevelSelect_DrawSoundNumber:
-	move.l	#vdpComm(VRAM_Plane_A_Name_Table+planeLocH40(35,18),VRAM,WRITE),(VDP_control_port).l
+	move.l	#vdpComm(VRAM_Plane_A_Name_Table+planeLocH40(34,18),VRAM,WRITE),(VDP_control_port).l
 	move.w	(Sound_test_sound).w,d0
 	move.b	d0,d2
 	lsr.b	#4,d0
@@ -2218,14 +2223,14 @@ LevSel_MarkTable:	; 4 bytes per level select entry
 	dc.b $15,  6,$15,$24	;$C
 	dc.b $15,  6,$16,$24
 ; --- second column ---
-	dc.b   3,$2C,  3,$4A
-	dc.b   3,$2C,  4,$4A
-	dc.b   3,$2C,  5,$4A	;$10
+	dc.b   3,$2C,  3,$48
+	dc.b   3,$2C,  4,$48
+	dc.b   3,$2C,  5,$48	;$10
 	dc.b   6,$2C,  0,  0
 	dc.b   9,$2C,  0,  0
 	dc.b  $C,$2C,  0,  0
 	dc.b  $F,$2C,  0,  0	;$14
-	dc.b $12,$2C,$12,$4A
+	dc.b $12,$2C,$12,$48
 	
 
 
