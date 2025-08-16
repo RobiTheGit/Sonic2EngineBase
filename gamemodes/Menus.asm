@@ -1637,6 +1637,28 @@ off_92EA:
 off_92F2:
 	dc.l TextOptScr_0
 ; ===========================================================================
+; macro for generating level select strings
+levselstr macro str
+	save
+	codepage	LEVELSELECT
+	dc.b strlen(str)-1, str
+	restore
+    endm
+
+; codepage for level select
+	save
+	codepage LEVELSELECT
+	charset '0','9', 16
+	charset 'A','Z', 30
+	charset 'a','z', 30
+	charset '*', 26
+	charset $A9, 27	; '?'
+	charset ':', 28
+	charset '.', 29
+	charset ' ',  0
+	restore
+planeLocH28 function col,line,(($50 * line) + (2 * col))
+
 ; loc_92F6:
 MenuScreen_LevelSelect:
 	; Load foreground (sans zone icon)
@@ -1644,6 +1666,69 @@ MenuScreen_LevelSelect:
 	lea	(MapEng_LevSel).l,a0	; 2 bytes per 8x8 tile, compressed
 	move.w	#make_art_tile(ArtTile_VRAM_Start,0,0),d0
 	bsr.w	EniDec
+		save
+		codepage	LEVELSELECT	; This is here so we can use '*' instead of '$1A'
+
+		lea	(Chunk_Table).l,a3
+		lea	(LevelSelectText).l,a1
+		lea	(LevSel_MappingOffsets).l,a5
+		moveq	#0,d0
+		move.w	#$D-1,d1		; This is how many entries there are in LevelSelectText
+
+	.writezone:
+		move.w	(a5)+,d3	; Get relative address in plane map to write to
+		lea	(a3,d3.w),a2	; Get absolute address
+		moveq	#0,d2
+		move.b	(a1)+,d2	; Get length of string
+		move.w	d2,d3		; Store it
+
+	.writeletter:
+		move.b	(a1)+,d0	; Get character from string
+		;ori.w	#make_art_tile($000,0,0),d0
+		move.w	d0,(a2)+	; Send it to plane map
+		dbf	d2,.writeletter	; Loop for entire string
+
+		move.w	#$D,d2		; Maximum length of string
+		sub.w	d3,d2		; Get remaining space in string
+		bcs.s	.stringfull	; If there is none, skip ahead
+
+	.blankloop:
+		move.w	#make_art_tile(' ',0,0),(a2)+	; Full the remaining space with blank characters
+		dbf	d2,.blankloop
+
+	.stringfull:
+		move.w	#make_art_tile('1',0,0),(a2)	; Write (act) '1'
+		lea	$28*2(a2),a2	; Next line
+		move.w	#make_art_tile('2',0,0),(a2)	; Write (act) '2'
+		dbf	d1,.writezone
+
+		; Assuming the last line was the sound test...
+		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act) '2'
+		lea	-$28*2(a2),a2	; Go back to (act) '1'
+		move.w	#make_art_tile('*',0,0),(a2)	; Replace that with '*'
+
+		lea	-$28*4(a2),a2	; Go back to (act)
+		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
+		lea	-$28*2(a2),a2	; Go back to (act)
+		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
+		lea	-$28*4(a2),a2	; Go back to (act)
+		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
+		lea	-$28*2(a2),a2	; Go back to (act)
+		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
+		lea	-$28*4(a2),a2	; Go back to (act)
+		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
+		lea	-$28*2(a2),a2	; Go back to (act)
+		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
+		lea	-$28*4(a2),a2	; Go back to (act)
+		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
+		lea	-$28*2(a2),a2	; Go back to (act)
+		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
+	
+		; Overwrite duplicate LAVA REEF 1/2 with 3/4 (obviously, S3 didn't do this)
+		move.w	#make_art_tile('3',0,0),(RAM_start+planeLocH28($25,5)).l
+
+		restore
+
 
 	lea	(Chunk_Table).l,a1
 	move.l	#vdpComm(VRAM_Plane_A_Name_Table,VRAM,WRITE),d0
@@ -2014,7 +2099,7 @@ LevelSelect_MarkFields:
 ; ===========================================================================
 ;loc_965A:
 LevelSelect_DrawSoundNumber:
-	move.l	#vdpComm(VRAM_Plane_A_Name_Table+planeLocH40(34,18),VRAM,WRITE),(VDP_control_port).l
+	move.l	#vdpComm(VRAM_Plane_A_Name_Table+planeLocH40(35,18),VRAM,WRITE),(VDP_control_port).l
 	move.w	(Sound_test_sound).w,d0
 	move.b	d0,d2
 	lsr.b	#4,d0
@@ -2133,14 +2218,48 @@ LevSel_MarkTable:	; 4 bytes per level select entry
 	dc.b $15,  6,$15,$24	;$C
 	dc.b $15,  6,$16,$24
 ; --- second column ---
-	dc.b   3,$2C,  3,$48
-	dc.b   3,$2C,  4,$48
-	dc.b   3,$2C,  5,$48	;$10
+	dc.b   3,$2C,  3,$4A
+	dc.b   3,$2C,  4,$4A
+	dc.b   3,$2C,  5,$4A	;$10
 	dc.b   6,$2C,  0,  0
 	dc.b   9,$2C,  0,  0
 	dc.b  $C,$2C,  0,  0
 	dc.b  $F,$2C,  0,  0	;$14
-	dc.b $12,$2C,$12,$48
+	dc.b $12,$2C,$12,$4A
+	
+
+
+LevSel_MappingOffsets:
+		dc.w planeLocH28(3,3)
+		dc.w planeLocH28(3,6)
+		dc.w planeLocH28(3,9)
+		dc.w planeLocH28(3,$C)
+		dc.w planeLocH28(3,$F)
+		dc.w planeLocH28(3,$12)
+		dc.w planeLocH28(3,$15)
+
+		dc.w planeLocH28($16,3)
+		dc.w planeLocH28($16,6)
+		dc.w planeLocH28($16,9)
+		dc.w planeLocH28($16,$C)
+		dc.w planeLocH28($16,$F)
+		dc.w planeLocH28($16,$12)
+
+LevelSelectText:
+		levselstr "EMERALD HILL"
+		levselstr "CHEMICAL PLANT"
+		levselstr "AQUATIC RUIN"
+		levselstr "CASINO NIGHT"
+		levselstr "HILL TOP"
+		levselstr "MYSTIC CAVE"
+		levselstr "OIL OCEAN"
+		levselstr "METROPOLIS"
+		levselstr "SKY CHASE"
+		levselstr "WING FORTRESS"
+		levselstr "DEATH EGG"
+		levselstr "SPECIAL STAGE"
+		levselstr "SOUND TEST  *"
+		even
 ; ===========================================================================
 ; loc_9746:
 CheckCheats:	; This is called from 2 places: the options screen and the level select screen

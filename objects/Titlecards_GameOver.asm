@@ -1187,17 +1187,20 @@ Obj34_MapUnc_147BA:	offsetTable
 	offsetTableEntry.w TC_STH
 	offsetTableEntry.w TC_RedStripes
 TC_EHZ:	dc.w $B
-	dc.w 5,	$8580, $82C0, $FFC3
-	dc.w 9,	$85DE, $82EF, $FFD0
-	dc.w 5,	$8580, $82C0, $FFE8
-	dc.w 5,	$85E4, $82F2, $FFF8
-	dc.w 5,	$85E8, $82F4, 8
-	dc.w 5,	$85EC, $82F6, $18
-	dc.w 5,	$85F0, $82F8, $28
-	dc.w 5,	$85F4, $82FA, $48
-	dc.w 1,	$85F8, $82FC, $58
-	dc.w 5,	$85EC, $82F6, $60
-	dc.w 5,	$85EC, $82F6, $70
+	dc.w $5, $8580, $82C0, $FFB0 ;E
+	dc.w $9, $85DE, $82ED, $FFC0 ;M
+	dc.w $5, $8580, $82C0, $FFD8 ;E
+	dc.w $5, $85E4, $82F1, $FFE8 ;R
+	dc.w $5, $85E8, $82F3, $FFF8 ;A
+	dc.w $5, $85EC, $82F5, $8 ;L
+	dc.w $5, $85F0, $82F7, $18 ;D
+
+	dc.w $5, $85F4, $82F9, $38 ;H
+	dc.w $1, $85F8, $82FB, $48 ;I
+	dc.w $5, $85EC, $82F5, $50 ;L
+	dc.w $5, $85EC, $82F5, $60 ;L
+
+
 TC_MTZ:	dc.w $A
 	dc.w 9,	$85DE, $82EF, $FFE0
 	dc.w 5,	$8580, $82C0, $FFF8

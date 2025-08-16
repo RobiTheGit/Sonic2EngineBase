@@ -151,7 +151,7 @@ MapEng_LevSel2P:	BINCLUDE "mappings/misc/Level Select 2P.bin"
 	even
 MapEng_Options:	BINCLUDE "mappings/misc/Options Screen.bin"
 
-; level select screen mappings (Enigma compressed)
+; level select screen mappings (Enigma compressed) (Kept for borders and the emblem exclusivley)
 ; byte_9ADE:
 	even
 MapEng_LevSel:	BINCLUDE "mappings/misc/Level Select.bin"
