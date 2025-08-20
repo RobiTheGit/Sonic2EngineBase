@@ -70,7 +70,7 @@ IF NOT "%1"=="" goto parseloop
 
 echo Assembling...
 
-"win32/as/asw" -xx -c %debug_syms% %print_err% -A -U -L %revision_override% Sonic.asm
+"win32/as/asw" -q -xx -c %debug_syms% %print_err% -A -U -L %revision_override% Sonic.asm
 
 REM // if there were errors, there won't be any Sonic.p output
 IF NOT EXIST Sonic.p goto LABLERROR5
