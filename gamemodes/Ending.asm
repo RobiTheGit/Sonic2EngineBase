@@ -121,13 +121,13 @@ EndingSequence:
 	move.w	#$100,objoff_40(a1)
 +
 	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	move.w	(VDP_Reg1_val).w,d0
 	ori.b	#$40,d0
 	move.w	d0,(VDP_control_port).l
 -
 	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	addq.w	#1,(Timer_frames).w
 	jsr	(RandomNumber).l
 	jsr	(RunObjects).l
@@ -216,7 +216,7 @@ EndgameCredits:
 	move.w	#$144,d0
 
 /	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	dbf	d0,-
 
 	bsr.w	Pal_FadeToBlack
@@ -245,12 +245,12 @@ EndgameCredits:
 
 	move.w	#$3B,d0
 -	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	dbf	d0,-
 
 	move.w	#$257,d6
 -	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	addq.w	#1,(CreditsScreenIndex).w
 	bsr.w	EndgameLogoFlash
 	cmpi.w	#$5E,(CreditsScreenIndex).w

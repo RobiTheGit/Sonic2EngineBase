@@ -3451,38 +3451,38 @@ zMasterPlaylist:
 ; note: +20h means uncompressed, here
 ; +40h is a flag that forces PAL mode off when set
 
-zMusIDPtr_2PResult:	zmakePlaylistEntry	Mus_2PResult,20h	; 92
-zMusIDPtr_EHZ:		zmakePlaylistEntry	Mus_EHZ,20h		; 81
-zMusIDPtr_MCZ_2P:	zmakePlaylistEntry	Mus_MCZ_2P,20h		; 85
-zMusIDPtr_OOZ:		zmakePlaylistEntry	Mus_OOZ,20h		; 8F
-zMusIDPtr_MTZ:		zmakePlaylistEntry	Mus_MTZ,20h		; 82
-zMusIDPtr_HTZ:		zmakePlaylistEntry	Mus_HTZ,20h		; 94
-zMusIDPtr_ARZ:		zmakePlaylistEntry	Mus_ARZ,20h		; 86
-zMusIDPtr_CNZ_2P:	zmakePlaylistEntry	Mus_CNZ_2P,20h		; 80
-zMusIDPtr_CNZ:		zmakePlaylistEntry	Mus_CNZ,20h		; 83
-zMusIDPtr_DEZ:		zmakePlaylistEntry	Mus_DEZ,20h		; 87
-zMusIDPtr_MCZ:		zmakePlaylistEntry	Mus_MCZ,20h		; 84
-zMusIDPtr_EHZ_2P:	zmakePlaylistEntry	Mus_EHZ_2P,20h		; 91
-zMusIDPtr_SCZ:		zmakePlaylistEntry	Mus_SCZ,20h		; 8E
-zMusIDPtr_CPZ:		zmakePlaylistEntry	Mus_CPZ,20h		; 8C
-zMusIDPtr_WFZ:		zmakePlaylistEntry	Mus_WFZ,20h		; 90
-zMusIDPtr_HPZ:		zmakePlaylistEntry	Mus_HPZ,20h		; 9B
-zMusIDPtr_Options:	zmakePlaylistEntry	Mus_Options,20h		; 89
-zMusIDPtr_SpecStage:	zmakePlaylistEntry	Mus_SpecStage,20h	; 88
-zMusIDPtr_Boss:		zmakePlaylistEntry	Mus_Boss,20h		; 8D
-zMusIDPtr_EndBoss:	zmakePlaylistEntry	Mus_EndBoss,20h		; 8B
-zMusIDPtr_Ending:	zmakePlaylistEntry	Mus_Ending,20h		; 8A
-zMusIDPtr_SuperSonic:	zmakePlaylistEntry	Mus_SuperSonic,20h	; 93
-zMusIDPtr_Invincible:	zmakePlaylistEntry	Mus_Invincible,20h	; 99
-zMusIDPtr_ExtraLife:	zmakePlaylistEntry	Mus_ExtraLife,20h	; B5
-zMusIDPtr_Title:	zmakePlaylistEntry	Mus_Title,20h		; 96
-zMusIDPtr_EndLevel:	zmakePlaylistEntry	Mus_EndLevel,20h	; 97
-zMusIDPtr_GameOver:	zmakePlaylistEntry	Mus_GameOver,20h	; B8
-zMusIDPtr_Continue:	zmakePlaylistEntry	Mus_Continue,20h	; 0
-zMusIDPtr_Emerald:	zmakePlaylistEntry	Mus_Emerald,20h		; BA
-zMusIDPtr_Credits:	zmakePlaylistEntry	Mus_Credits,20h		; BD
-zMusIDPtr_Countdown:	zmakePlaylistEntry	Mus_Drowning,20h	; BC, PAL mode will be broken
-zMusIDPtr_SaveScreen:	zmakePlaylistEntry	Mus_SaveScreen,20h	
+zMusIDPtr_2PResult:	zmakePlaylistEntry	Mus_2PResult,0h		; 92
+zMusIDPtr_EHZ:		zmakePlaylistEntry	Mus_EHZ,0h		; 81
+zMusIDPtr_MCZ_2P:	zmakePlaylistEntry	Mus_MCZ_2P,0h		; 85
+zMusIDPtr_OOZ:		zmakePlaylistEntry	Mus_OOZ,0h		; 8F
+zMusIDPtr_MTZ:		zmakePlaylistEntry	Mus_MTZ,0h		; 82
+zMusIDPtr_HTZ:		zmakePlaylistEntry	Mus_HTZ,0h		; 94
+zMusIDPtr_ARZ:		zmakePlaylistEntry	Mus_ARZ,0h		; 86
+zMusIDPtr_CNZ_2P:	zmakePlaylistEntry	Mus_CNZ_2P,0h		; 80
+zMusIDPtr_CNZ:		zmakePlaylistEntry	Mus_CNZ,0h		; 83
+zMusIDPtr_DEZ:		zmakePlaylistEntry	Mus_DEZ,0h		; 87
+zMusIDPtr_MCZ:		zmakePlaylistEntry	Mus_MCZ,0h		; 84
+zMusIDPtr_EHZ_2P:	zmakePlaylistEntry	Mus_EHZ_2P,0h		; 91
+zMusIDPtr_SCZ:		zmakePlaylistEntry	Mus_SCZ,0h		; 8E
+zMusIDPtr_CPZ:		zmakePlaylistEntry	Mus_CPZ,0h		; 8C
+zMusIDPtr_WFZ:		zmakePlaylistEntry	Mus_WFZ,0h		; 90
+zMusIDPtr_HPZ:		zmakePlaylistEntry	Mus_HPZ,0h		; 9B
+zMusIDPtr_Options:	zmakePlaylistEntry	Mus_Options,0h		; 89
+zMusIDPtr_SpecStage:	zmakePlaylistEntry	Mus_SpecStage,0h	; 88
+zMusIDPtr_Boss:		zmakePlaylistEntry	Mus_Boss,0h		; 8D
+zMusIDPtr_EndBoss:	zmakePlaylistEntry	Mus_EndBoss,0h		; 8B
+zMusIDPtr_Ending:	zmakePlaylistEntry	Mus_Ending,0h		; 8A
+zMusIDPtr_SuperSonic:	zmakePlaylistEntry	Mus_SuperSonic,0h	; 93
+zMusIDPtr_Invincible:	zmakePlaylistEntry	Mus_Invincible,0h	; 99
+zMusIDPtr_ExtraLife:	zmakePlaylistEntry	Mus_ExtraLife,0h	; B5
+zMusIDPtr_Title:	zmakePlaylistEntry	Mus_Title,0h		; 96
+zMusIDPtr_EndLevel:	zmakePlaylistEntry	Mus_EndLevel,0h		; 97
+zMusIDPtr_GameOver:	zmakePlaylistEntry	Mus_GameOver,0h		; B8
+zMusIDPtr_Continue:	zmakePlaylistEntry	Mus_Continue,0h		; 0
+zMusIDPtr_Emerald:	zmakePlaylistEntry	Mus_Emerald,0h		; BA
+zMusIDPtr_Credits:	zmakePlaylistEntry	Mus_Credits,0h		; BD
+zMusIDPtr_Countdown:	zmakePlaylistEntry	Mus_Drowning,40h	; BC
+zMusIDPtr_SaveScreen:	zmakePlaylistEntry	Mus_SaveScreen,0h	
 zMusIDPtr__End:
 
 ; Tempo with speed shoe tempo for each song
@@ -3504,10 +3504,8 @@ DACSize macro Sample
 	dw	Sample_End-Sample
 	endm
 zDACPtrTbl:
-zDACPtr_Kick:	dw	zmake68kPtr(SndDAC_Kick)
-zDACLenTbl:
-			dw	SndDAC_Kick_End-SndDAC_Kick
-
+zDACLenTbl equ zDACPtrTbl+2
+zDACPtr_Kick:		DACSize SndDAC_Kick
 zDACPtr_Snare:		DACSize	SndDAC_Snare	
 zDACPtr_Clap:		DACSize	SndDAC_Clap
 zDACPtr_Scratch:	DACSize SndDAC_Scratch
@@ -3516,12 +3514,9 @@ zDACPtr_Tom:		DACSize SndDAC_Tom
 zDACPtr_Bongo:		DACSize SndDAC_Bongo
 zDACPtr_Crash:		DACSize SndDAC_Crash
 zDACPtr_Ride:		DACSize	SndDAC_Ride
-;Stops working after here? for some dumb reason
 zDACPtr_CupCym:		DACSize	SndDAC_CupCym
-
 zDACPtr_Clave:		DACSize	SndDAC_Clave
 zDACPtr_China:		DACSize	SndDAC_China
-
 zDACPtr_Rim:		DACSize	SndDAC_Rim
 zDACPtr_Timbale:	DACSize	SndDAC_Timbale
 zDACPtr_CngSlp:		DACSize	SndDAC_CngSlp
@@ -3562,9 +3557,9 @@ dac_sample_metadata macro label,sampleRate
 	dac_sample_metadata zDACPtr_Tom,	15000	; 8Ch HiTom
 	dac_sample_metadata zDACPtr_Tom,	12000	; 8Dh MidTom
 	dac_sample_metadata zDACPtr_Tom,	9000	; 8Eh LowTom
-	dac_sample_metadata zDACPtr_Bongo,	10050	; 8Fh HiClap
-	dac_sample_metadata zDACPtr_Bongo,	9050	; 90h MidClap
-	dac_sample_metadata zDACPtr_Bongo,	6800	; 91h LowClap
+	dac_sample_metadata zDACPtr_Bongo,	15350	; 8Fh HiClap
+	dac_sample_metadata zDACPtr_Bongo,	12050	; 90h MidClap
+	dac_sample_metadata zDACPtr_Bongo,	9800	; 91h LowClap
 	dac_sample_metadata zDACPtr_Crash,	13000	; 92h Crash
 	dac_sample_metadata zDACPtr_Ride,	11000	; 93h Ride
 	dac_sample_metadata zDACPtr_CupCym,	13000	; 94h CupCym (ride bell)
@@ -3581,7 +3576,7 @@ dac_sample_metadata macro label,sampleRate
 	dac_sample_metadata zDACPtr_Shaker,	13000	; 9Fh Shaker
   	dac_sample_metadata zDACPtr_Kick2,	13000	; A0h Kick (2)
 	dac_sample_metadata zDACPtr_Snare1,	13000	; A1h Snare (1)
-	dac_sample_metadata zDACPtr_Snare3,	14500	; A2h Snare (3)
+	dac_sample_metadata zDACPtr_Snare3,	12500	; A2h Snare (3)
 	ensure1byteoffset 34
 zDACBanks:
 	db	zmake68kBank(SndDAC_Kick)

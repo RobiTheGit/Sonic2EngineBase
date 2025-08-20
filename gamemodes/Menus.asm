@@ -78,14 +78,14 @@ TwoPlayerResults:
 	clr.l	(Vscroll_Factor_P2_HInt).w
 	move.l	#Obj21,(VSResults_HUD).w
 	move.b	#VintID_Menu,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	move.w	(VDP_Reg1_val).w,d0
 	ori.b	#$40,d0
 	move.w	d0,(VDP_control_port).l
 	bsr.w	Pal_FadeFromBlack
 
 -	move.b	#VintID_Menu,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	lea	(Anim_SonicMilesBG).l,a2
 	jsrto	(Dynamic_Normal).l, JmpTo_Dynamic_Normal
 	jsr	(RunObjects).l
@@ -1106,7 +1106,7 @@ MenuScreen:
 	clr.l	(Camera_X_pos).w
 	clr.l	(Camera_Y_pos).w
 	move.b	#VintID_Menu,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	move.w	(VDP_Reg1_val).w,d0
 	ori.b	#$40,d0
 	move.w	d0,(VDP_control_port).l
@@ -1115,7 +1115,7 @@ MenuScreen:
 ;loc_8DA8:
 LevelSelect2P_Main:
 	move.b	#VintID_Menu,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	move	#$2700,sr
 	bsr.w	ClearOld2PLevSelSelection
 	bsr.w	LevelSelect2P_Controls
@@ -1370,7 +1370,7 @@ MenuScreen_Options:
 	clr.w	(Correct_cheat_entries).w
 	clr.w	(Correct_cheat_entries_2).w
 	move.b	#VintID_Menu,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	move.w	(VDP_Reg1_val).w,d0
 	ori.b	#$40,d0
 	move.w	d0,(VDP_control_port).l
@@ -1378,7 +1378,7 @@ MenuScreen_Options:
 ; loc_9060:
 OptionScreen_Main:
 	move.b	#VintID_Menu,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	move	#$2700,sr
 	bsr.w	OptionScreen_DrawUnselected
 	bsr.w	OptionScreen_Controls
@@ -1785,7 +1785,7 @@ MenuScreen_LevelSelect:
 	clr.w	(Correct_cheat_entries_2).w
 
 	move.b	#VintID_Menu,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 
 	move.w	(VDP_Reg1_val).w,d0
 	ori.b	#$40,d0
@@ -1796,7 +1796,7 @@ MenuScreen_LevelSelect:
 ;loc_93AC:
 LevelSelect_Main:	; routine running during level select
 	move.b	#VintID_Menu,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 
 	move	#$2700,sr
 

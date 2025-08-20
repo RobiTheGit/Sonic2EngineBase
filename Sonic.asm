@@ -148,9 +148,9 @@ ROMEndLoc:
 	dc.l (RAM_End-1)&$FFFFFF		; End address of RAM
 ExternalRam:       dc.b  "RA"
 RamType:        dc.b  $F8
-Space        dc.b  " "
-RamStartLocation  dc.l  $200001
-RamEndingLocation  dc.l  $2003FF
+Space:        dc.b  " "
+RamStartLocation:  dc.l  $200001
+RamEndingLocation:  dc.l  $2003FF
 	dc.b "            "	; Modem support
 	dc.b "                                        "	; Notes (unused, anything can be put in this space, but it has to be 52 bytes.)
 	dc.b "JUE             " ; Country code (region)
@@ -404,6 +404,7 @@ MainGameLoop:
 	bra.s	MainGameLoop	; loop indefinitely
 
 	include	"gamemodes/Gamemodes.asm"
+	include	"misc/Joypads.asm"
   	include	"misc/VDP.asm"
 	include	"sound/code/PlaySound.asm"
   	include	"misc/Pause.asm"
