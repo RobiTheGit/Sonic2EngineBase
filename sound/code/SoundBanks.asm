@@ -22,41 +22,33 @@ __LABEL___End label *
 	endm
 
 SndDAC_Start:
-SndDAC_Kick:	DAC Kick
-
+SndDAC_Kick:	DAC	Kick
 SndDAC_Snare2:
 SndDAC_Snare:	DAC	Snare2
-
 SndDAC_Clap:	DAC	Clap
 SndDAC_Scratch:	DAC	Scratch
 SndDAC_Timpani:	DAC	Timpani
-SndDAC_Tom:		DAC Tom
-SndDAC_Bongo:	DAC Conga
-SndDAC_Crash:	DAC Crash
-SndDAC_Ride:	DAC Ride
-SndDAC_Clave:	DAC Clave
-SndDAC_China:	DAC China
-SndDAC_CupCym:	DAC CupCym
-
-SndDAC_Rim:		DAC Rim
-SndDAC_Timbale:	DAC Timbale
-SndDAC_CngSlp:	DAC CngSlp
-SndDAC_Cowbell:	DAC Cowbell
-SndDAC_Tamb:	DAC Tamb
-SndDAC_Agogo:	DAC Agogo
-SndDAC_Shaker:	DAC Shaker
-
-SndDAC_Kick2:	DAC Kick2
-
+SndDAC_Tom:	DAC	Tom
+SndDAC_Bongo:	DAC	Conga
+SndDAC_Crash:	DAC	Crash
+SndDAC_Ride:	DAC	Ride
+SndDAC_Clave:	DAC	Clave
+SndDAC_China:	DAC	China
+SndDAC_CupCym:	DAC	CupCym
+SndDAC_Rim:	DAC	Rim
+SndDAC_Timbale:	DAC	Timbale
+SndDAC_CngSlp:	DAC	CngSlp
+SndDAC_Cowbell:	DAC	Cowbell
+SndDAC_Tamb:	DAC	Tamb
+SndDAC_Agogo:	DAC	Agogo
+SndDAC_Shaker:	DAC	Shaker
+SndDAC_Kick2:	DAC	Kick2
 SndDAC_Snare1:	DAC	Snare1
 SndDAC_Snare3:	DAC	Snare3
 
 
 SndDAC_End
 	even
-; 	if SndDAC_End - SndDAC_Start > Size_of_DAC_samples
-; 		fatal "Size_of_DAC_samples = $\{Size_of_DAC_samples}, but you have $\{SndDAC_End-SndDAC_Start} bytes of DAC samples."
-; 	endif
 
 ; ---------------------------------------------------------------------------
 ; Music pointers
@@ -69,28 +61,6 @@ Mus_Invincible:	INCLUDE	"sound/music/Invincible.asm"
 Mus_Continue:   INCLUDE	"sound/music/Continue.asm"
 
 	finishBank
-   align  $8000
-
-; ----------------------------------------------------------------------------------
-; Filler (free space)
-; ----------------------------------------------------------------------------------
-	; the PCM data has to line up with the end of the bank.
-	cnop -Size_of_SEGA_sound, $8000
-
-; -------------------------------------------------------------------------------
-; Sega Intro Sound
-; 8-bit unsigned raw audio at 16Khz
-; -------------------------------------------------------------------------------
-; loc_F1E8C:
-Snd_Sega:	BINCLUDE	"sound/PCM/SEGA.bin"
-Snd_Sega_End:
-
-	if Snd_Sega_End - Snd_Sega > $8000
-		fatal "Sega sound must fit within $8000 bytes, but you have a $\{Snd_Sega_End-Snd_Sega} byte Sega sound."
-	endif
-	if Snd_Sega_End - Snd_Sega > Size_of_SEGA_sound
-		fatal "Size_of_SEGA_sound = $\{Size_of_SEGA_sound}, but you have a $\{Snd_Sega_End-Snd_Sega} byte Sega sound."
-	endif
 
 ; ------------------------------------------------------------------------------
 ; Music pointers
@@ -315,4 +285,12 @@ Sound6D:	include "sound/sfx/ED - Error.asm"
 Sound6E:	include "sound/sfx/EE - Mecha Sonic Buzz.asm"
 Sound6F:	include "sound/sfx/EF - Large Laser.asm"
 Sound70:	include "sound/sfx/F0 - Oil Slide.asm"
+
+; -------------------------------------------------------------------------------
+; Sega Intro Sound
+; 8-bit unsigned raw audio at 16Khz
+; -------------------------------------------------------------------------------
+; loc_F1E8C:
+Snd_Sega:	BINCLUDE	"sound/PCM/SEGA.bin"
+Snd_Sega_End:
 	finishBank

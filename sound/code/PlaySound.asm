@@ -33,12 +33,9 @@ JmpTo_SoundDriverLoad ; JmpTo
 ; else move d0 into Music_to_play_2.
 ; sub_135E:
 PlayMusic:
-	tst.b	(Music_to_play).w
-	bne.s	+
-	move.b	d0,(Music_to_play).w
-	rts
-+
-	move.b	d0,(Music_to_play_2).w
+	stopZ80
+	move.b	d0,(Z80_RAM+zAbsVar.SFXToPlay).l
+	startZ80
 	rts
 ; End of function PlayMusic
 
@@ -49,7 +46,9 @@ PlayMusic:
 Play_Sound:
 Play_Sound_2:
 PlaySound:
-	move.b	d0,(SFX_to_play).w
+	stopZ80
+	move.b	d0,(Z80_RAM+zAbsVar.SFXUnknown).l
+	startZ80
 	rts
 ; End of function PlaySound
 
@@ -58,7 +57,9 @@ PlaySound:
 ; play a sound in alternating speakers (as in the ring collection sound)
 ; sub_1376:
 PlaySoundStereo:
-	move.b	d0,(SFX_to_play_2).w
+	stopZ80
+	move.b	d0,(Z80_RAM+zAbsVar.SFXStereoToPlay).l
+	startZ80
 	rts
 ; End of function PlaySoundStereo
 
@@ -69,7 +70,9 @@ PlaySoundStereo:
 PlaySoundLocal:
 	tst.b	render_flags(a0)
 	bpl.s	+	; rts
-	move.b	d0,(SFX_to_play).w
+	stopZ80
+	move.b	d0,(Z80_RAM+zAbsVar.SFXToPlay).l
+	startZ80
 +
 	rts
 ; End of function PlaySoundLocal

@@ -124,7 +124,7 @@ REM // display a noticeable message
 echo.
 echo **********************************************************************
 echo *                                                                    *
-echo *      There were build warnings. See Sonic.log for more details.       *
+echo *      There were build warnings. See Sonic.log for more details.    *
 echo *                                                                    *
 echo **********************************************************************
 echo.
@@ -137,7 +137,7 @@ REM // display a noticeable message
 echo.
 echo **********************************************************************
 echo *                                                                    *
-echo *       There were build errors. See Sonic.log for more details.        *
+echo *       There were build errors. See Sonic.log for more details.     *
 echo *                                                                    *
 echo **********************************************************************
 echo.

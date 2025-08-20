@@ -12,7 +12,7 @@
 DelayProgram:
 Wait_VSync:
 WaitForVint:
-	move	#$2300,sr
+	stop	#$2300
 
 -	tst.b	(Vint_routine).w
 	bne.s	-

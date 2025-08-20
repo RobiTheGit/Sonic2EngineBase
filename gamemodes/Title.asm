@@ -1,7 +1,7 @@
 ; ===========================================================================
 ; loc_3998:
 TitleScreen:
-	move.b	#MusID_Stop,d0
+	move.b	#MusID_FadeOut,d0
 	bsr.w	PlayMusic
 	bsr.w	ClearPLC
 	bsr.w	Pal_FadeToBlack

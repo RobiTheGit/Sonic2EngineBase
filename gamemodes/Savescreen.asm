@@ -1,4 +1,6 @@
 s3_save_screen:
+		move.b	#MusID_FadeOut,d0
+		jsrto	(PlayMusic).l, JmpTo_PlayMusic
 		jsr	(Pal_FadeToBlack).l
 		move	#$2700,sr
 		move.w	(VDP_reg_1_command).w,d0
@@ -34,8 +36,6 @@ s3_save_screen:
 .initplanes:
 		move.l	d0,(a1)+
 		dbf	d1,.initplanes
-		move.w	#MusID_2PResult,d0
-		jsrto	(PlayMusic).l, JmpTo_PlayMusic
 		clearRAM Chunk_Table,Chunk_Table_End
 		clearRAM Object_RAM,Object_RAM_End
 		clearRAM Camera_RAM,Camera_RAM_End
@@ -154,6 +154,8 @@ s3_save_screen:
 .preparenewsave:
 		move.l	(a0)+,(a1)+
 		dbf	d0,.preparenewsave
+		move.w	#MusID_2PResult,d0
+		jsrto	(PlayMusic).l, JmpTo_PlayMusic
 		move.l	#Non_Level_Save_Icons,(_unkEF44_1).w
 		move.b	#VintID_Savescreen,(V_int_routine).w
 		jsr	(Wait_VSync).l

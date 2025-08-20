@@ -20,13 +20,13 @@ Snd_Menu_DAC:
 	dc.b	dSnare, $12
 	dc.b	dClap, $12
 	dc.b	dScratch, $12
-	dc.b	dTimpani, $12
+	dc.b	dTimpani, $12*2
 	dc.b	dHiTom, $12
 	dc.b	dVLowClap, $12
-	dc.b	dHiTimpani, $12
-	dc.b	dMidTimpani, $12
-	dc.b	dLowTimpani, $12
-	dc.b	dVLowTimpani, $12
+	dc.b	dHiTimpani, $12*2
+	dc.b	dMidTimpani, $12*2
+	dc.b	dLowTimpani, $12*2
+	dc.b	dVLowTimpani, $12*2
 	dc.b	dMidTom, $12
 	dc.b	dLowTom, $12
 	dc.b	dFloorTom, $12
@@ -34,10 +34,10 @@ Snd_Menu_DAC:
 	dc.b	dMidClap, $12
 	dc.b	dLowClap, $12
 	dc.b	dCrash, $12
-	dc.b	dRide, $12
-	dc.b	dCupCym, $12
+	dc.b	dRide, $12*2
+	dc.b	dCupCym, $12*2
 	dc.b	dClave, $12
-	dc.b	dChina, $12
+	dc.b	dChina, $12*2
 	dc.b	dRim, $12
 	dc.b	dTimable, $12
 	dc.b	dLowTimbale, $12

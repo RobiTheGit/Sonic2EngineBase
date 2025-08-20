@@ -4,7 +4,7 @@
 
 ; loc_37B8:
 SegaScreen:
-	move.b	#MusID_Stop,d0
+	move.b	#MusID_FadeOut,d0
 	bsr.w	PlayMusic ; stop music
 	bsr.w	ClearPLC
 	bsr.w	Pal_FadeToBlack
@@ -78,8 +78,8 @@ Sega_WaitPalette:
 	jsr	(BuildSprites).l
 	tst.b	(SegaScr_PalDone_Flag).w
 	beq.s	Sega_WaitPalette
-	move.b	#SndID_SegaSound,d0
-	bsr.w	PlaySound	; play "SEGA" sound
+	;move.b	#SndID_SegaSound,d0
+	;bsr.w	PlaySound	; play "SEGA" sound
 	move.b	#VintID_SEGA,(Vint_routine).w
 	bsr.w	WaitForVint
 	move.w	#3*60,(Demo_Time_left).w	; 3 seconds
