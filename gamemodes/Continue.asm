@@ -65,7 +65,7 @@ ContinueScreen:
 	divu.w	#60,d1
 	andi.l	#$F,d1
 	jsr	(ContScrCounter).l
-	move	#$2300,sr
+	stop	#$2300
 +
 	jsr	(RunObjects).l
 	jsr	(BuildSprites).l

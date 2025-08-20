@@ -18,7 +18,7 @@ SoundDriverLoad:
 	move.w	d1,(a2)	; release Z80 reset (was held high by console on startup)
 -	btst	d2,(a3)
 	bne.s	-	; wait until the 68000 has the bus
-	jsr	DecompressSoundDriver(pc)
+	bsr.s	DecompressSoundDriver
 	btst	#0,(VDP_control_port+1).l	; check video mode
 	sne	(Z80_RAM+zPalModeByte).l	; set if PAL
 	move.w	d2,(a2)	; hold Z80 reset

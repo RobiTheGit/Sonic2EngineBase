@@ -59,7 +59,7 @@ TwoPlayerResults:
 	move	#$2700,sr
 	lea	(Std1PLCload).l,a2
 	   jsr	SubLoopPLCentry
-	move	#$2300,sr
+	stop	#$2300
 	moveq	#PalID_Menu,d0
 	bsr.w	PalLoad_ForFade
 	moveq	#0,d0
@@ -1120,7 +1120,7 @@ LevelSelect2P_Main:
 	bsr.w	ClearOld2PLevSelSelection
 	bsr.w	LevelSelect2P_Controls
 	bsr.w	Update2PLevSelSelection
-	move	#$2300,sr
+	stop	#$2300
 	lea	(Anim_SonicMilesBG).l,a2
 	jsrto	(Dynamic_Normal).l, JmpTo2_Dynamic_Normal
 	move.b	(Ctrl_1_Press).w,d0
@@ -1383,7 +1383,7 @@ OptionScreen_Main:
 	bsr.w	OptionScreen_DrawUnselected
 	bsr.w	OptionScreen_Controls
 	bsr.w	OptionScreen_DrawSelected
-	move	#$2300,sr
+	stop	#$2300
 	lea	(Anim_SonicMilesBG).l,a2
 	jsrto	(Dynamic_Normal).l, JmpTo2_Dynamic_Normal
 	move.b	(Ctrl_1_Press).w,d0
@@ -1808,7 +1808,7 @@ LevelSelect_Main:	; routine running during level select
 
 	bsr.w	LevelSelect_DrawIcon
 
-	move	#$2300,sr
+	stop	#$2300
 
 	lea	(Anim_SonicMilesBG).l,a2
 	jsrto	(Dynamic_Normal).l, JmpTo2_Dynamic_Normal
@@ -2332,7 +2332,7 @@ TextOptScr_SonicAlone:		menutxt	"SONIC ALONE    "	; byte_97FC:
 TextOptScr_MilesAlone:		menutxt	"MILES ALONE    "	; byte_980C:
 TextOptScr_TailsAlone:		menutxt	"TAILS ALONE    "	; byte_981C:
 
-TextOptScr_VsModeItems:		menutxt	"WHY YOU POKING   "	; byte_982C:
+TextOptScr_VsModeItems:		menutxt	"WHY ARE YOU POKING"	; byte_982C:
 TextOptScr_AllKindsItems:	menutxt	"AROUND HERE YOU"	; byte_983E:
 TextOptScr_TeleportOnly:	menutxt	"CANT BE HERE   "	; byte_984E:
 

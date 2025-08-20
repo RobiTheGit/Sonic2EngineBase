@@ -7,7 +7,6 @@
 
 ; sub_1388:
 PauseGame:
-	nop
 	tst.b	(Life_count).w	; do you have any lives left?
 	beq.w	Unpause		; if not, branch
 	tst.w	(Game_paused).w	; is game already paused?
@@ -30,7 +29,6 @@ Pause_Loop:
 	btst	#button_A,(Ctrl_1_Press).w	; is button A pressed?
 	beq.s	Pause_ChkBC		; if not, branch
 	move.b	#GameModeID_TitleScreen,(Game_Mode).w ; set game mode to 4 (title screen)
-	nop
 	bra.s	Pause_Resume
 ; ===========================================================================
 ; loc_13D4:

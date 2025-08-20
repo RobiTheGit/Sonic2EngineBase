@@ -72,7 +72,7 @@ EndingSequence:
 	lea	(ArtNem_Clouds).l,a0
 	jsrto	(NemDec).l, JmpTo_NemDec
 	move.w	#death_egg_zone_act_1,(Current_ZoneAndAct).w
-	move	#$2300,sr
+	stop	#$2300
 	moveq	#MusID_Ending,d0
 	jsrto	(PlayMusic).l, JmpTo2_PlayMusic
 	move.l	#$EEE0EEE,d1
@@ -401,7 +401,7 @@ loc_A256:
 	moveq	#$B,d1
 	moveq	#8,d2
 	jsrto	(PlaneMapToVRAM_H40).l, JmpTo2_PlaneMapToVRAM_H40
-	move	#$2300,sr
+	stop	#$2300
 	movea.l	(sp)+,a0 ; load 0bj address
 	rts
 ; ===========================================================================
@@ -1412,7 +1412,7 @@ loc_B272:
 +	bra.s	--
 ; ===========================================================================
 +
-	move	#$2300,sr
+	stop	#$2300
 	rts
 ; End of function ShowCreditsScreen
 

@@ -101,7 +101,6 @@ RunPLC_RAM:
 	bne.s	++	; rts
 	movea.l	(Plc_Buffer).w,a0
 	lea_	NemDec_WriteAndStay,a3
-	nop
 	lea	(Decomp_Buffer).w,a1
 	move.w	(a0)+,d2
 	tst.w	d2

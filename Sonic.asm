@@ -244,7 +244,7 @@ PSGInitLoop:
  ; loc_292:
 PortC_OK: ;;
 	jmp	GameProgram	; Branch to game program.
-; ===========================================================================  '
+; ===========================================================================
 
 ; byte_294:
 SetupValues:
@@ -417,13 +417,20 @@ MainGameLoop:
   	include	"misc/Palettes.asm"
 	include	"misc/OscData.asm"
 	include	"gamemodes/SEGA.asm"
+	even
 	include	"gamemodes/Title.asm"
+	even
 	include	"sound/code/MusicLists.asm"
 	include	"gamemodes/Level.asm"
+	even
 	include	"gamemodes/SpecialStage.asm"
+	even
 	include	"gamemodes/Continue.asm"
+	even
 	include	"gamemodes/Menus.asm"
+	even
 	include	"gamemodes/Ending.asm"
+	even
 	include	"level/data/CameraBoundaries.asm"
 	include	"level/data/StartPositions.asm"
 	include	"level/data/Deformation.asm"

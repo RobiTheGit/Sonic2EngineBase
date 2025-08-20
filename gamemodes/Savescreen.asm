@@ -1833,7 +1833,7 @@ loc_C336:
 		move.b	#0,(SRAM_access_flag).l	; No longer access SRAM
 		tst.w	(SRAM_mask_interrupts_flag).w
 		beq.s	loc_C354
-		move	#$2300,sr		; Restore interrupts if EF56 is set
+		stop	#$2300		; Restore interrupts if EF56 is set
 
 loc_C354:
 		subq.w	#1,d6
@@ -1898,7 +1898,7 @@ loc_C3A2:
 		move.b	#0,(SRAM_access_flag).l	; Stop SRAM access
 		tst.w	(SRAM_mask_interrupts_flag).w
 		beq.s	locret_C3C0
-		move	#$2300,sr		; Restore interrupts if EF56 was set
+		stop	#$2300		; Restore interrupts if EF56 was set
 
 locret_C3C0:
 		rts

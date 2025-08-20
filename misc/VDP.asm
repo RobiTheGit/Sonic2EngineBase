@@ -5,7 +5,7 @@
 V_Int:
 	movem.l	d0-a6,-(sp)
 	tst.b	(Vint_routine).w
-	beq.w	Vint_Lag
+	beq.s	Vint_Lag
 
 -	move.w	(VDP_control_port).l,d0
 	andi.w	#8,d0
@@ -13,12 +13,7 @@ V_Int:
 
 	move.l	#vdpComm($0000,VSRAM,WRITE),(VDP_control_port).l
 	move.l	(Vscroll_Factor).w,(VDP_data_port).l ; send screen y-axis pos. to VSRAM
-	btst	#6,(Graphics_Flags).w ; is Megadrive PAL?
-	beq.s	+		; if not, branch
 
-	move.w	#$700,d0
--	dbf	d0,- ; wait here in a loop doing nothing for a while...
-+
 	move.b	(Vint_routine).w,d0
 	move.b	#VintID_Lag,(Vint_routine).w
 	move.w	#1,(Hint_flag).w
@@ -32,7 +27,7 @@ VintRet:
 	rte
 ; ===========================================================================
 Vint_SwitchTbl: offsetTable
-Vint_Lag_ptr		offsetTableEntry.w Vint_Lag			;   0
+Vint_Lag_ptr:		offsetTableEntry.w Vint_Lag			;   0
 Vint_SEGA_ptr:		offsetTableEntry.w Vint_SEGA		;   2
 Vint_Title_ptr:		offsetTableEntry.w Vint_Title		;   4
 Vint_Unused6_ptr:	offsetTableEntry.w Vint_Unused6		;   6
@@ -66,12 +61,7 @@ loc_4C4:
 	tst.b	(Water_flag).w
 	beq.w	Vint0_noWater
 	move.w	(VDP_control_port).l,d0
-	btst	#6,(Graphics_Flags).w
-	beq.s	+
 
-	move.w	#$700,d0
--	dbf	d0,- ; do nothing for a while...
-+
 	move.w	#1,(Hint_flag).w
 
 	stopZ80_nowait
@@ -100,12 +90,7 @@ Vint0_noWater:
 	move.w	(VDP_control_port).l,d0
 	move.l	#vdpComm($0000,VSRAM,WRITE),(VDP_control_port).l
 	move.l	(Vscroll_Factor).w,(VDP_data_port).l
-	btst	#6,(Graphics_Flags).w
-	beq.s	+
 
-	move.w	#$700,d0
--	dbf	d0,- ; do nothing for a while...
-+
 	move.w	#1,(Hint_flag).w
 	move.w	(Hint_counter_reserve).w,(VDP_control_port).l
 	move.w	#$8200|(VRAM_Plane_A_Name_Table/$400),(VDP_control_port).l	; Set scroll A PNT base to $C000
@@ -122,7 +107,7 @@ Vint0_noWater:
 ; table (in VRAM).
 ;VintSub2
 Vint_SEGA:
-	bsr.w	Do_ControllerPal
+	bsr.w	Do_ControllerPal_Alt2
 
 	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 	jsrto	(SegaScr_VInt).l, JmpTo_SegaScr_VInt
@@ -138,30 +123,29 @@ Vint_PCM:
 	andi.w	#$F,d0
 	bne.s	+
 
-	stopZ80
+	stopZ80_nowait
 	bsr.w	ReadJoypads
 	startZ80
 +
 	tst.w	(Demo_Time_left).w	; is there time left on the demo?
-	beq.w	+	; if not, return
+	beq.s	+	; if not, return
 	subq.w	#1,(Demo_Time_left).w	; subtract 1 from time left in demo
 +
 	rts
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;VintSub4
 Vint_Title:
-	bsr.w	Do_ControllerPal
+	bsr.w	Do_ControllerPal_Alt2
 	bsr.w	ProcessDPLC
 	tst.w	(Demo_Time_left).w	; is there time left on the demo?
-	beq.w	+	; if not, return
+	beq.s	+	; if not, return
 	subq.w	#1,(Demo_Time_left).w	; subtract 1 from time left in demo
 +
 	rts
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;VintSub6
 Vint_Unused6:
-	bsr.w	Do_ControllerPal
-	rts
+	bra.w	Do_ControllerPal
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;VintSub10
 Vint_Pause:
@@ -248,7 +232,7 @@ Do_Updates:
 	jsr	(HudUpdate).l
 	bsr.w	ProcessDPLC2
 	tst.w	(Demo_Time_left).w	; is there time left on the demo?
-	beq.w	+		; if not, branch
+	beq.s	+		; if not, branch
 	subq.w	#1,(Demo_Time_left).w	; subtract 1 from time left in demo
 +
 	rts
@@ -342,7 +326,7 @@ SS_PNTA_Transfer_Table:	offsetTable
 
 	bsr.w	ProcessDPLC2
 	tst.w	(Demo_Time_left).w
-	beq.w	+	; rts
+	beq.s	+	; rts
 	subq.w	#1,(Demo_Time_left).w
 +
 	rts
@@ -439,7 +423,7 @@ Vint_CtrlDMA:
 	startZ80
 	rts
 VInt_1E:
-		bsr.w	Do_ControllerPal
+		bsr.w	Do_ControllerPal_Alt2
 		jsr     ProcessDMAQueue
 		movea.l	(_unkEF44_1).w,a0
 		jsr	(a0)
@@ -478,8 +462,7 @@ loc_BD6:
 	movem.l	(Scroll_flags).w,d0-d1
 	movem.l	d0-d1,(Scroll_flags_copy).w
 	move.l	(Vscroll_Factor_P2).w,(Vscroll_Factor_P2_HInt).w
-	bsr.w	ProcessDPLC
-	rts
+	bra.w	ProcessDPLC
 ; ===========================================================================
 ;VintSubE
 Vint_UnusedE:
@@ -517,7 +500,7 @@ Vint_Ending:
 	beq.s	+	; rts
 	clr.w	(Ending_VInt_Subrout).w
 	move.w	off_D3C-2(pc,d0.w),d0
-	jsr	off_D3C(pc,d0.w)
+	jmp	off_D3C(pc,d0.w)
 +
 	rts
 ; ===========================================================================
@@ -541,8 +524,7 @@ off_D3C:	offsetTable
 	move.l	#vdpComm(VRAM_EndSeq_Plane_A_Name_Table + planeLocH40($16,$21),VRAM,WRITE),d0	;$50AC0003
 	moveq	#$16,d1
 	moveq	#$E,d2
-	jsrto	(PlaneMapToVRAM_H40).l, PlaneMapToVRAM_H40
-	rts
+	jmpto	(PlaneMapToVRAM_H40).l, PlaneMapToVRAM_H40
 ; ===========================================================================
 ;VintSub16
 Vint_Menu:
@@ -560,7 +542,7 @@ Vint_Menu:
 
 	bsr.w	ProcessDPLC
 	tst.w	(Demo_Time_left).w
-	beq.w	+	; rts
+	beq.s	+	; rts
 	subq.w	#1,(Demo_Time_left).w
 +
 	rts
@@ -585,6 +567,24 @@ loc_EDA:
 loc_EFE:
 	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+
+	startZ80
+
+	rts
+; End of function sub_E98
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+; Another alternative version that removes the check for underwater
+; and puts palette last
+;sub_E98
+Do_ControllerPal_Alt2:
+	stopZ80_nowait
+
+	bsr.w	ReadJoypads
+
+	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDP Normal_palette,$0000,palette_line_size*4,CRAM
 
 	startZ80
 
@@ -631,7 +631,7 @@ H_Int:
 	move.l	#vdpComm($0000,VSRAM,WRITE),(VDP_control_port).l
 	move.l	(Vscroll_Factor_P2_HInt).w,(VDP_data_port).l
 
-	stopZ80
+	stopZ80_nowait
 	dma68kToVDP Sprite_Table_2,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 	startZ80
 
@@ -712,10 +712,10 @@ VDP_Loop:
 
 	move.l	#vdpComm($0000,CRAM,WRITE),(VDP_control_port).l
 
-	move.w	#bytesToWcnt(palette_line_size*4),d7
+	move.w	#bytesToLcnt(palette_line_size*4),d7
 ; loc_11A0:
 VDP_ClrCRAM:
-	move.w	d0,(a1)
+	move.l	d0,(a1)
 	dbf	d7,VDP_ClrCRAM	; clear	the CRAM
 
 	clr.l	(Vscroll_Factor).w
@@ -757,7 +757,7 @@ VDPSetupArray_End:
 ; sub_1208:
 Clear_DisplayData:
 ClearScreen:
-	stopZ80
+	stopZ80_nowait
 
 	dmaFillVRAM 0,$0000,$40		; Fill first $40 bytes of VRAM with 0
 	dmaFillVRAM 0,VRAM_Plane_A_Name_Table,VRAM_Plane_Table_Size	; Clear Plane A pattern name table
@@ -772,8 +772,8 @@ ClearScreen:
 	clr.l	(unk_F61A).w
 
 	; Bug: These '+4's shouldn't be here; clearRAM accidentally clears an additional 4 bytes
-	clearRAM Sprite_Table,Sprite_Table_End+4
-	clearRAM Horiz_Scroll_Buf,Horiz_Scroll_Buf_End+4
+	clearRAM Sprite_Table,Sprite_Table_End
+	clearRAM Horiz_Scroll_Buf,Horiz_Scroll_Buf_End
 
 	startZ80
 	rts
