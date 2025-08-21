@@ -1,4 +1,6 @@
 s3_save_screen:
+		move.b	#MusID_FadeOut,d0
+		jsrto	(PlayMusic).l, JmpTo_PlayMusic
 		jsr	(Pal_FadeToBlack).l
 		move	#$2700,sr
 		move.w	(VDP_reg_1_command).w,d0
@@ -34,8 +36,6 @@ s3_save_screen:
 .initplanes:
 		move.l	d0,(a1)+
 		dbf	d1,.initplanes
-		move.w	#MusID_2PResult,d0
-		jsrto	(PlayMusic).l, JmpTo_PlayMusic
 		clearRAM Chunk_Table,Chunk_Table_End
 		clearRAM Object_RAM,Object_RAM_End
 		clearRAM Camera_RAM,Camera_RAM_End
@@ -154,6 +154,8 @@ s3_save_screen:
 .preparenewsave:
 		move.l	(a0)+,(a1)+
 		dbf	d0,.preparenewsave
+		move.w	#MusID_SaveScreen,d0
+		jsrto	(PlayMusic).l, JmpTo_PlayMusic
 		move.l	#Non_Level_Save_Icons,(_unkEF44_1).w
 		move.b	#VintID_Savescreen,(V_int_routine).w
 		jsr	(Wait_VSync).l
@@ -711,10 +713,10 @@ loc_D238:
 		tst.b	(Dataselect_entry).w
 		beq.s	loc_D254
 		subq.b	#1,(Dataselect_entry).w
-		move.w	#sfx_Switch,d0
+		move.w	#sfx_SlotMachine,d0
 		tst.w	(Events_bg+$12).w
 		beq.s	loc_D24C
-		move.w	#sfx_Switch,d0
+		move.w	#sfx_SlotMachine,d0
 
 loc_D24C:
 		jsr	(Play_Sound_2).l
@@ -726,10 +728,10 @@ loc_D254:
 		cmpi.b	#9,(Dataselect_entry).w
 		beq.s	loc_D27A
 		addq.b	#1,(Dataselect_entry).w
-		move.w	#sfx_Switch,d0
+		move.w	#sfx_SlotMachine,d0
 		tst.w	(Events_bg+$12).w
 		beq.s	loc_D272
-		move.w	#sfx_Switch,d0
+		move.w	#sfx_SlotMachine,d0
 
 loc_D272:
 		jsr	(Play_Sound_2).l
@@ -972,7 +974,7 @@ Obj_SaveScreen_Save_Slot:
 		move.b	(Ctrl_1_pressed).w,d0
 		btst	#1,d0
 		beq.s	.next_level
-		moveq	#sfx_Switch,d2
+		moveq	#sfx_SlotMachine,d2
 		subq.w	#1,d1
 		bpl.s	.update
 		move.w	d6,d1
@@ -982,7 +984,7 @@ Obj_SaveScreen_Save_Slot:
 .next_level:
 		btst	#0,d0
 		beq.s	.update
-		move.w	#sfx_Switch,d2
+		move.w	#sfx_SlotMachine,d2
 		addq.w	#1,d1
 		cmp.w	d6,d1
 		bls.s	.update
@@ -1127,7 +1129,7 @@ ChangePlayerMode:
 		move.b	(Ctrl_1_pressed).w,d1
 		lsr.w	#1,d1
 		bcc.s	loc_D6EE
-		move.w	#sfx_Switch,d2
+		move.w	#sfx_SlotMachine,d2
 		addq.w	#1,d0
 		cmpi.w	#2,d0
 		bls.s	loc_D6FA
@@ -1138,7 +1140,7 @@ ChangePlayerMode:
 loc_D6EE:
 		lsr.w	#1,d1
 		bcc.s	loc_D6FA
-		move.w	#sfx_Switch,d2
+		move.w	#sfx_SlotMachine,d2
 		subq.w	#1,d0
 		bpl.s	loc_D6FA
 		moveq	#2,d0
@@ -1831,7 +1833,7 @@ loc_C336:
 		move.b	#0,(SRAM_access_flag).l	; No longer access SRAM
 		tst.w	(SRAM_mask_interrupts_flag).w
 		beq.s	loc_C354
-		move	#$2300,sr		; Restore interrupts if EF56 is set
+		stop	#$2300		; Restore interrupts if EF56 is set
 
 loc_C354:
 		subq.w	#1,d6
@@ -1896,7 +1898,7 @@ loc_C3A2:
 		move.b	#0,(SRAM_access_flag).l	; Stop SRAM access
 		tst.w	(SRAM_mask_interrupts_flag).w
 		beq.s	locret_C3C0
-		move	#$2300,sr		; Restore interrupts if EF56 was set
+		stop	#$2300		; Restore interrupts if EF56 was set
 
 locret_C3C0:
 		rts

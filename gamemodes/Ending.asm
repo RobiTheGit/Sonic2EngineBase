@@ -72,7 +72,7 @@ EndingSequence:
 	lea	(ArtNem_Clouds).l,a0
 	jsrto	(NemDec).l, JmpTo_NemDec
 	move.w	#death_egg_zone_act_1,(Current_ZoneAndAct).w
-	move	#$2300,sr
+	stop	#$2300
 	moveq	#MusID_Ending,d0
 	jsrto	(PlayMusic).l, JmpTo2_PlayMusic
 	move.l	#$EEE0EEE,d1
@@ -121,13 +121,13 @@ EndingSequence:
 	move.w	#$100,objoff_40(a1)
 +
 	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	move.w	(VDP_Reg1_val).w,d0
 	ori.b	#$40,d0
 	move.w	d0,(VDP_control_port).l
 -
 	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	addq.w	#1,(Timer_frames).w
 	jsr	(RandomNumber).l
 	jsr	(RunObjects).l
@@ -216,7 +216,7 @@ EndgameCredits:
 	move.w	#$144,d0
 
 /	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	dbf	d0,-
 
 	bsr.w	Pal_FadeToBlack
@@ -245,12 +245,12 @@ EndgameCredits:
 
 	move.w	#$3B,d0
 -	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	dbf	d0,-
 
 	move.w	#$257,d6
 -	move.b	#VintID_Ending,(Vint_routine).w
-	bsr.w	WaitForVint
+	jsr	(WaitForVint).l
 	addq.w	#1,(CreditsScreenIndex).w
 	bsr.w	EndgameLogoFlash
 	cmpi.w	#$5E,(CreditsScreenIndex).w
@@ -401,7 +401,7 @@ loc_A256:
 	moveq	#$B,d1
 	moveq	#8,d2
 	jsrto	(PlaneMapToVRAM_H40).l, JmpTo2_PlaneMapToVRAM_H40
-	move	#$2300,sr
+	stop	#$2300
 	movea.l	(sp)+,a0 ; load 0bj address
 	rts
 ; ===========================================================================
@@ -1412,7 +1412,7 @@ loc_B272:
 +	bra.s	--
 ; ===========================================================================
 +
-	move	#$2300,sr
+	stop	#$2300
 	rts
 ; End of function ShowCreditsScreen
 

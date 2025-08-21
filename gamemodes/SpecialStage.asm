@@ -77,7 +77,7 @@ SpecialStage:
 	clr.w	(VDP_Command_Buffer).w
 	move.l	#VDP_Command_Buffer,(VDP_Command_Buffer_Slot).w
 
-	move	#$2300,sr
+	stop	#$2300
 	lea	(VDP_control_port).l,a6
 	move.w	#$8F02,(a6)		; VRAM pointer increment: $0002
 	bsr.w	ssInitTableBuffers
@@ -227,13 +227,13 @@ SpecialStage:
 	jsrto	(Hud_Base).l, JmpTo_Hud_Base
 	clr.w	(VDP_Command_Buffer).w
 	move.l	#VDP_Command_Buffer,(VDP_Command_Buffer_Slot).w
-	move	#$2300,sr
+	stop	#$2300
 	moveq	#PalID_Result,d0
 	bsr.w	PalLoad_Now
 	move	#$2700,sr
 	lea     (Std1PLCload).l,a2
         jsr     SubLoopPLCentry
-	move	#$2300,sr
+	stop	#$2300
 ;	moveq	#PLCID_Std1,d0
 ;	bsr.w	LoadPLC2
 	move.l	#vdpComm(tiles_to_bytes(ArtTile_VRAM_Start+2),VRAM,WRITE),d0
@@ -2665,7 +2665,7 @@ SSPlaneB_Background:
 	moveq	#$1F,d1
 	moveq	#$1F,d2
 	jsrto	(PlaneMapToVRAM_H80_SpecialStage).l, PlaneMapToVRAM_H80_SpecialStage
-	move	#$2300,sr
+	stop	#$2300
 	rts
 ; End of function SSPlaneB_Background
 

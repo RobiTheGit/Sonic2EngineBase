@@ -5,7 +5,7 @@
 V_Int:
 	movem.l	d0-a6,-(sp)
 	tst.b	(Vint_routine).w
-	beq.w	Vint_Lag
+	beq.s	Vint_Lag
 
 -	move.w	(VDP_control_port).l,d0
 	andi.w	#8,d0
@@ -13,12 +13,7 @@ V_Int:
 
 	move.l	#vdpComm($0000,VSRAM,WRITE),(VDP_control_port).l
 	move.l	(Vscroll_Factor).w,(VDP_data_port).l ; send screen y-axis pos. to VSRAM
-	btst	#6,(Graphics_Flags).w ; is Megadrive PAL?
-	beq.s	+		; if not, branch
 
-	move.w	#$700,d0
--	dbf	d0,- ; wait here in a loop doing nothing for a while...
-+
 	move.b	(Vint_routine).w,d0
 	move.b	#VintID_Lag,(Vint_routine).w
 	move.w	#1,(Hint_flag).w
@@ -32,7 +27,7 @@ VintRet:
 	rte
 ; ===========================================================================
 Vint_SwitchTbl: offsetTable
-Vint_Lag_ptr		offsetTableEntry.w Vint_Lag			;   0
+Vint_Lag_ptr:		offsetTableEntry.w Vint_Lag			;   0
 Vint_SEGA_ptr:		offsetTableEntry.w Vint_SEGA		;   2
 Vint_Title_ptr:		offsetTableEntry.w Vint_Title		;   4
 Vint_Unused6_ptr:	offsetTableEntry.w Vint_Unused6		;   6
@@ -59,10 +54,6 @@ Vint_Lag:
 	cmpi.b	#GameModeID_Level,(Game_Mode).w	; Zone play mode?
 	beq.s	loc_4C4
 
-	stopZ80			; stop the Z80
-	bsr.w	sndDriverInput	; give input to the sound driver
-	startZ80		; start the Z80
-
 	bra.s	VintRet
 ; ---------------------------------------------------------------------------
 
@@ -70,15 +61,10 @@ loc_4C4:
 	tst.b	(Water_flag).w
 	beq.w	Vint0_noWater
 	move.w	(VDP_control_port).l,d0
-	btst	#6,(Graphics_Flags).w
-	beq.s	+
 
-	move.w	#$700,d0
--	dbf	d0,- ; do nothing for a while...
-+
 	move.w	#1,(Hint_flag).w
 
-	stopZ80
+	stopZ80_nowait
 
 	tst.b	(Water_fullscreen_flag).w
 	bne.s	loc_526
@@ -94,7 +80,6 @@ loc_526:
 loc_54A:
 	move.w	(Hint_counter_reserve).w,(a5)
 	move.w	#$8200|(VRAM_Plane_A_Name_Table/$400),(VDP_control_port).l	; Set scroll A PNT base to $C000
-	bsr.w	sndDriverInput
 
 	startZ80
 
@@ -105,20 +90,14 @@ Vint0_noWater:
 	move.w	(VDP_control_port).l,d0
 	move.l	#vdpComm($0000,VSRAM,WRITE),(VDP_control_port).l
 	move.l	(Vscroll_Factor).w,(VDP_data_port).l
-	btst	#6,(Graphics_Flags).w
-	beq.s	+
 
-	move.w	#$700,d0
--	dbf	d0,- ; do nothing for a while...
-+
 	move.w	#1,(Hint_flag).w
 	move.w	(Hint_counter_reserve).w,(VDP_control_port).l
 	move.w	#$8200|(VRAM_Plane_A_Name_Table/$400),(VDP_control_port).l	; Set scroll A PNT base to $C000
 	move.l	(Vscroll_Factor_P2).w,(Vscroll_Factor_P2_HInt).w
 
-	stopZ80
+	stopZ80_nowait
 	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
-	bsr.w	sndDriverInput
 	startZ80
 
 	bra.w	VintRet
@@ -128,7 +107,7 @@ Vint0_noWater:
 ; table (in VRAM).
 ;VintSub2
 Vint_SEGA:
-	bsr.w	Do_ControllerPal
+	bsr.w	Do_ControllerPal_Alt2
 
 	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 	jsrto	(SegaScr_VInt).l, JmpTo_SegaScr_VInt
@@ -144,30 +123,29 @@ Vint_PCM:
 	andi.w	#$F,d0
 	bne.s	+
 
-	stopZ80
+	stopZ80_nowait
 	bsr.w	ReadJoypads
 	startZ80
 +
 	tst.w	(Demo_Time_left).w	; is there time left on the demo?
-	beq.w	+	; if not, return
+	beq.s	+	; if not, return
 	subq.w	#1,(Demo_Time_left).w	; subtract 1 from time left in demo
 +
 	rts
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;VintSub4
 Vint_Title:
-	bsr.w	Do_ControllerPal
+	bsr.w	Do_ControllerPal_Alt2
 	bsr.w	ProcessDPLC
 	tst.w	(Demo_Time_left).w	; is there time left on the demo?
-	beq.w	+	; if not, return
+	beq.s	+	; if not, return
 	subq.w	#1,(Demo_Time_left).w	; subtract 1 from time left in demo
 +
 	rts
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;VintSub6
 Vint_Unused6:
-	bsr.w	Do_ControllerPal
-	rts
+	bra.w	Do_ControllerPal
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;VintSub10
 Vint_Pause:
@@ -175,7 +153,7 @@ Vint_Pause:
 	beq.w	Vint_Pause_specialStage
 ;VintSub8
 Vint_Level:
-	stopZ80
+	stopZ80_nowait
 
 	bsr.w	ReadJoypads
 	tst.b	(Teleport_timer).w
@@ -225,7 +203,6 @@ loc_748:
 	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 
 	bsr.w	ProcessDMAQueue
-	bsr.w	sndDriverInput
 
 	startZ80
 
@@ -255,7 +232,7 @@ Do_Updates:
 	jsr	(HudUpdate).l
 	bsr.w	ProcessDPLC2
 	tst.w	(Demo_Time_left).w	; is there time left on the demo?
-	beq.w	+		; if not, branch
+	beq.s	+		; if not, branch
 	subq.w	#1,(Demo_Time_left).w	; subtract 1 from time left in demo
 +
 	rts
@@ -264,10 +241,9 @@ Do_Updates:
 ; ---------------------------------------------------------------------------
 ;Vint10_specialStage
 Vint_Pause_specialStage:
-	stopZ80
+	stopZ80_nowait
 
 	bsr.w	ReadJoypads
-	jsr	(sndDriverInput).l
 	tst.b	(SS_Last_Alternate_HorizScroll_Buf).w
 	beq.s	loc_84A
 
@@ -283,7 +259,7 @@ loc_86E:
 ; ========================================================================>>>
 ;VintSubA
 Vint_S2SS:
-	stopZ80
+	stopZ80_nowait
 
 	bsr.w	ReadJoypads
 	bsr.w	SSSet_VScroll
@@ -345,13 +321,12 @@ SS_PNTA_Transfer_Table:	offsetTable
 	eori.b	#1,(SS_Alternate_PNT).w			; Toggle flag
 +
 	bsr.w	ProcessDMAQueue
-	jsr	(sndDriverInput).l
 
 	startZ80
 
 	bsr.w	ProcessDPLC2
 	tst.w	(Demo_Time_left).w
-	beq.w	+	; rts
+	beq.s	+	; rts
 	subq.w	#1,(Demo_Time_left).w
 +
 	rts
@@ -443,12 +418,12 @@ SSAnim_Base_Duration:
 ; ===========================================================================
 ;VintSub1A
 Vint_CtrlDMA:
-	stopZ80
+	stopZ80_nowait
 	jsr	(ProcessDMAQueue).l
 	startZ80
 	rts
 VInt_1E:
-		bsr.w	Do_ControllerPal
+		bsr.w	Do_ControllerPal_Alt2
 		jsr     ProcessDMAQueue
 		movea.l	(_unkEF44_1).w,a0
 		jsr	(a0)
@@ -458,7 +433,7 @@ VInt_1E:
 ; ===========================================================================
 ;VintSubC
 Vint_TitleCard:
-	stopZ80
+	stopZ80_nowait
 
 	bsr.w	ReadJoypads
 	tst.b	(Water_fullscreen_flag).w
@@ -479,7 +454,6 @@ loc_BD6:
 
 	bsr.w	ProcessDMAQueue
 	jsr	(DrawLevelTitleCard).l
-	jsr	(sndDriverInput).l
 
 	startZ80
 
@@ -488,8 +462,7 @@ loc_BD6:
 	movem.l	(Scroll_flags).w,d0-d1
 	movem.l	d0-d1,(Scroll_flags_copy).w
 	move.l	(Vscroll_Factor_P2).w,(Vscroll_Factor_P2_HInt).w
-	bsr.w	ProcessDPLC
-	rts
+	bra.w	ProcessDPLC
 ; ===========================================================================
 ;VintSubE
 Vint_UnusedE:
@@ -506,7 +479,7 @@ Vint_Fade:
 ; ===========================================================================
 ;VintSub18
 Vint_Ending:
-	stopZ80
+	stopZ80_nowait
 
 	bsr.w	ReadJoypads
 
@@ -515,7 +488,6 @@ Vint_Ending:
 	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 
 	bsr.w	ProcessDMAQueue
-	bsr.w	sndDriverInput
 	movem.l	(Camera_RAM).w,d0-d7
 	movem.l	d0-d7,(Camera_RAM_copy).w
 	movem.l	(Scroll_flags).w,d0-d3
@@ -528,7 +500,7 @@ Vint_Ending:
 	beq.s	+	; rts
 	clr.w	(Ending_VInt_Subrout).w
 	move.w	off_D3C-2(pc,d0.w),d0
-	jsr	off_D3C(pc,d0.w)
+	jmp	off_D3C(pc,d0.w)
 +
 	rts
 ; ===========================================================================
@@ -552,12 +524,11 @@ off_D3C:	offsetTable
 	move.l	#vdpComm(VRAM_EndSeq_Plane_A_Name_Table + planeLocH40($16,$21),VRAM,WRITE),d0	;$50AC0003
 	moveq	#$16,d1
 	moveq	#$E,d2
-	jsrto	(PlaneMapToVRAM_H40).l, PlaneMapToVRAM_H40
-	rts
+	jmpto	(PlaneMapToVRAM_H40).l, PlaneMapToVRAM_H40
 ; ===========================================================================
 ;VintSub16
 Vint_Menu:
-	stopZ80
+	stopZ80_nowait
 
 	bsr.w	ReadJoypads
 
@@ -566,13 +537,12 @@ Vint_Menu:
 	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 
 	bsr.w	ProcessDMAQueue
-	bsr.w	sndDriverInput
 
 	startZ80
 
 	bsr.w	ProcessDPLC
 	tst.w	(Demo_Time_left).w
-	beq.w	+	; rts
+	beq.s	+	; rts
 	subq.w	#1,(Demo_Time_left).w
 +
 	rts
@@ -581,7 +551,7 @@ Vint_Menu:
 
 ;sub_E98
 Do_ControllerPal:
-	stopZ80
+	stopZ80_nowait
 
 	bsr.w	ReadJoypads
 	tst.b	(Water_fullscreen_flag).w
@@ -598,12 +568,45 @@ loc_EFE:
 	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 
-	bsr.w	sndDriverInput
+	startZ80
+
+	rts
+; End of function sub_E98
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+; Another alternative version that removes the check for underwater
+; and puts palette last
+;sub_E98
+Do_ControllerPal_Alt2:
+	stopZ80_nowait
+
+	bsr.w	ReadJoypads
+
+	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDP Normal_palette,$0000,palette_line_size*4,CRAM
 
 	startZ80
 
 	rts
 ; End of function sub_E98
+
+; ---------------------------------------------------------------------------
+; Subroutine to perform vertical synchronization
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+
+; sub_3384:
+DelayProgram:
+Wait_VSync:
+WaitForVint:
+	stop	#$2300
+
+-	tst.b	(Vint_routine).w
+	bne.s	-
+	rts
+; End of function WaitForVint
 ; ||||||||||||||| E N D   O F   V - I N T |||||||||||||||||||||||||||||||||||
 
 ; ===========================================================================
@@ -628,7 +631,7 @@ H_Int:
 	move.l	#vdpComm($0000,VSRAM,WRITE),(VDP_control_port).l
 	move.l	(Vscroll_Factor_P2_HInt).w,(VDP_data_port).l
 
-	stopZ80
+	stopZ80_nowait
 	dma68kToVDP Sprite_Table_2,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 	startZ80
 
@@ -674,52 +677,6 @@ loc_1072:
 	movem.l	(sp)+,d0-a6
 	rte
 
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-; Input our music/sound selection to the sound driver.
-
-sndDriverInput:
-	lea	(Music_to_play&$00FFFFFF).l,a0
-	lea	(Z80_RAM+zAbsVar).l,a1 ; $A01B80
-	tst.b 8(a1)
-	bne.s	loc_10C4	; So we'll wait until at least the next frame before putting anything in there.
-	move.b	0(a0),d0
-	beq.s	loc_10A4
-	clr.b	0(a0)
-	bra.s	loc_10AE
-; ---------------------------------------------------------------------------
-
-loc_10A4:
-	move.b	4(a0),d0	; If there was something in Music_to_play_2, check what that was. Else, just go to the loop.
-	beq.s	loc_10C4
-	clr.b	4(a0)
-
-loc_10AE:		; Check that the sound is not FE or FF
-	move.b	d0,d1	; If it is, we need to put it in $A01B83 as $7F or $80 respectively
-	subi.b	#MusID_Pause,d1
-	bcs.s	loc_10C0
-	addi.b	#$7F,d1
-	move.b	d1,zAbsVar.StopMusic-zAbsVar(a1)
-	bra.s	loc_10C4
-	nop
-; ---------------------------------------------------------------------------
-
-loc_10C0:
-	move.b	d0,zAbsVar.QueueToPlay-zAbsVar(a1)
-
-loc_10C4:
-	moveq	#4-1,d1
-				; FFE4 (Music_to_play_2) goes to 1B8C (zMusicToPlay),
--	move.b	1(a0,d1.w),d0	; FFE3 (unk_FFE3) goes to 1B8B, (unknown)
-	beq.s	+		; FFE2 (SFX_to_play_2) goes to 1B8A (zSFXToPlay2),
-	tst.b	zAbsVar.SFXToPlay-zAbsVar(a1,d1.w)	; FFE1 (SFX_to_play) goes to 1B89 (zSFXToPlay).
-	bne.s	+
-	clr.b	1(a0,d1.w)
-	move.b	d0,zAbsVar.SFXToPlay-zAbsVar(a1,d1.w)
-+
-	dbf	d1,-
-	rts
-; End of function sndDriverInput
-
     if ~~removeJmpTos
 ; sub_10E0:
 JmpTo_LoadTilesAsYouMove ; JmpTo
@@ -729,60 +686,6 @@ JmpTo_SegaScr_VInt ; JmpTo
 
 	align 4
     endif
-
-
-
-
-; ---------------------------------------------------------------------------
-; Subroutine to initialize joypads
-; ---------------------------------------------------------------------------
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-
-; sub_10EC:
-JoypadInit:
-	stopZ80
-	moveq	#$40,d0
-	move.b	d0,(HW_Port_1_Control).l	; init port 1 (joypad 1)
-	move.b	d0,(HW_Port_2_Control).l	; init port 2 (joypad 2)
-	move.b	d0,(HW_Expansion_Control).l	; init port 3 (expansion/extra)
-	startZ80
-	rts
-; End of function JoypadInit
-
-; ---------------------------------------------------------------------------
-; Subroutine to read joypad input, and send it to the RAM
-; ---------------------------------------------------------------------------
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-
-; sub_111C:
-ReadJoypads:
-	lea	(Ctrl_1).w,a0	; address where joypad states are written
-	lea	(HW_Port_1_Data).l,a1	; first joypad port
-	bsr.s	Joypad_Read		; do the first joypad
-	addq.w	#2,a1			; do the second joypad
-
-; sub_112A:
-Joypad_Read:
-	move.b	#0,(a1)
-	nop
-	nop
-	move.b	(a1),d0
-	lsl.b	#2,d0
-	andi.b	#$C0,d0
-	move.b	#$40,(a1)
-	nop
-	nop
-	move.b	(a1),d1
-	andi.b	#$3F,d1
-	or.b	d1,d0
-	not.b	d0
-	move.b	(a0),d1
-	eor.b	d0,d1
-	move.b	d0,(a0)+
-	and.b	d0,d1
-	move.b	d1,(a0)+
-	rts
-; End of function Joypad_Read
 
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
@@ -809,10 +712,10 @@ VDP_Loop:
 
 	move.l	#vdpComm($0000,CRAM,WRITE),(VDP_control_port).l
 
-	move.w	#bytesToWcnt(palette_line_size*4),d7
+	move.w	#bytesToLcnt(palette_line_size*4),d7
 ; loc_11A0:
 VDP_ClrCRAM:
-	move.w	d0,(a1)
+	move.l	d0,(a1)
 	dbf	d7,VDP_ClrCRAM	; clear	the CRAM
 
 	clr.l	(Vscroll_Factor).w
@@ -854,7 +757,7 @@ VDPSetupArray_End:
 ; sub_1208:
 Clear_DisplayData:
 ClearScreen:
-	stopZ80
+	stopZ80_nowait
 
 	dmaFillVRAM 0,$0000,$40		; Fill first $40 bytes of VRAM with 0
 	dmaFillVRAM 0,VRAM_Plane_A_Name_Table,VRAM_Plane_Table_Size	; Clear Plane A pattern name table
@@ -869,8 +772,8 @@ ClearScreen:
 	clr.l	(unk_F61A).w
 
 	; Bug: These '+4's shouldn't be here; clearRAM accidentally clears an additional 4 bytes
-	clearRAM Sprite_Table,Sprite_Table_End+4
-	clearRAM Horiz_Scroll_Buf,Horiz_Scroll_Buf_End+4
+	clearRAM Sprite_Table,Sprite_Table_End
+	clearRAM Horiz_Scroll_Buf,Horiz_Scroll_Buf_End
 
 	startZ80
 	rts

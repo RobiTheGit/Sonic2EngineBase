@@ -11,7 +11,6 @@
 
 ; loc_3F554:
 TouchResponse:
-	nop
 	jsrto	(Touch_Rings).l, JmpTo_Touch_Rings
 	; Bumpers in CNZ
 	cmpi.b	#casino_night_zone,(Current_Zone).w
@@ -389,7 +388,6 @@ Touch_NoHurt:
 ; ---------------------------------------------------------------------------
 ; loc_3F86E:
 Touch_Hurt:
-	;nop
 	tst.b	invulnerable_time(a0)
 	bne.s	Touch_NoHurt
 	movea.l	a1,a2

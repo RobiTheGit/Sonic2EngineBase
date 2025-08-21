@@ -97,7 +97,7 @@ Level_ClrRam:
 	clearRAM Misc_Variables,Misc_Variables_End
 	clearRAM Oscillating_Data,Oscillating_variables_End
 	; Bug: The '+C0' shouldn't be here; CNZ_saucer_data is only $40 bytes large
-	clearRAM CNZ_saucer_data,CNZ_saucer_data_End+$C0
+	clearRAM CNZ_saucer_data,CNZ_saucer_data_End
 	move.b	#0,(Victory_Pose).w
 	cmpi.w	#chemical_plant_zone_act_2,(Current_ZoneAndAct).w ; CPZ 2
 	beq.s	Level_InitWater

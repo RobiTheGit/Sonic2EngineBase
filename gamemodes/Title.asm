@@ -1,7 +1,7 @@
 ; ===========================================================================
 ; loc_3998:
 TitleScreen:
-	move.b	#MusID_Stop,d0
+	move.b	#MusID_FadeOut,d0
 	bsr.w	PlayMusic
 	bsr.w	ClearPLC
 	bsr.w	Pal_FadeToBlack
@@ -113,12 +113,7 @@ TitleScreen:
 ;	bsr.w	LoadPLC2
 	move.w	#0,(Correct_cheat_entries).w
 	move.w	#0,(Correct_cheat_entries_2).w
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+
 	move.w	#4,(Sonic_Pos_Record_Index).w
 	move.w	#0,(Sonic_Pos_Record_Buf).w
 

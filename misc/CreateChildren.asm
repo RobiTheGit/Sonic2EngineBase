@@ -1,4 +1,5 @@
-; this is an important ConQuest  Routine (Dulled Towork with s2 childs since the orignal is fucked for somereason)
+; this is an important Conquest routine
+; (Dulled Towork with s2 childs since the orignal is fucked for some reason)
 CreateChildSimplePositons:
 		moveq	#0,d2				; child routine that sets a timer and a child distance
 		move.w	(a2)+,d6

@@ -85,6 +85,11 @@ stopZ80 macro
 	bne.s	.loop ; loop until it says it's stopped
     endm
 
+; tells the Z80 to stop, but does not wait
+stopZ80_nowait macro
+	move.w	#$100,(Z80_Bus_Request).l ; stop the Z80
+    endm
+
 ; tells the Z80 to start again
 startZ80 macro
 	move.w	#0,(Z80_Bus_Request).l    ; start the Z80
@@ -107,7 +112,7 @@ soundBankStart := __LABEL__
 soundBankName := "__LABEL__"
     endm
 
-DebugSoundbanks := 0
+DebugSoundbanks := 1
 
 finishBank macro
 	if * > soundBankStart + $8000

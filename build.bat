@@ -70,7 +70,7 @@ IF NOT "%1"=="" goto parseloop
 
 echo Assembling...
 
-"win32/as/asw" -xx -c %debug_syms% %print_err% -A -U -L %revision_override% Sonic.asm
+"win32/as/asw" -q -xx -c %debug_syms% %print_err% -A -U -L %revision_override% Sonic.asm
 
 REM // if there were errors, there won't be any Sonic.p output
 IF NOT EXIST Sonic.p goto LABLERROR5
@@ -124,7 +124,7 @@ REM // display a noticeable message
 echo.
 echo **********************************************************************
 echo *                                                                    *
-echo *      There were build warnings. See Sonic.log for more details.       *
+echo *      There were build warnings. See Sonic.log for more details.    *
 echo *                                                                    *
 echo **********************************************************************
 echo.
@@ -137,7 +137,7 @@ REM // display a noticeable message
 echo.
 echo **********************************************************************
 echo *                                                                    *
-echo *       There were build errors. See Sonic.log for more details.        *
+echo *       There were build errors. See Sonic.log for more details.     *
 echo *                                                                    *
 echo **********************************************************************
 echo.

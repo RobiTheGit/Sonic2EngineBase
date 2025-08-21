@@ -325,19 +325,6 @@ zPalModeByte:
 	db	0
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-    if OptimiseDriver=0	; This is redundant: the Z80 is slow enough to not need to worry about this
-	align	8
-;zsub_8
-zFMBusyWait:    rsttarget
-	; Performs the annoying task of waiting for the FM to not be busy
-	ld	a,(zYM2612_A0)
-	add	a,a
-	jr	c,zFMBusyWait
-	ret
-; End of function zFMBusyWait
-    endif
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 	align	8
 ;zsub_10
 zWriteFMIorII:    rsttarget
@@ -596,7 +583,6 @@ zloc_167:
 	im	1	; set interrupt mode 1
 	call	zClearTrackPlaybackMem
 	ei		; enable interrupts
-;	ld	iy,zDACDecodeTbl
 	ld	de,0
 	; This controls the update rate for the DAC...
 	; My speculation for the rate at which the DAC updates:
@@ -620,32 +606,10 @@ zWaitLoop:
 	jr	z,zWaitLoop	; As long as 'de' (length of sample) = 0, wait...
 
 	; 'hl' is the pointer to the sample, 'de' is the length of the sample,
-	; and 'iy' points to the translation table; let's go...
+	; let's go...
 
 	; The "djnz $" loops control the playback rate of the DAC
 	; (the higher the 'b' value, the slower it will play)
-
-
-	; As for the actual encoding of the data, it is described by jman2050:
-
-	; "As for how the data is compressed, lemme explain that real quick:
-	; First, it is a lossy compression. So if you recompress a PCM sample this way,
-	; you will lose precision in data. Anyway, what happens is that each compressed data
-	; is separated into nybbles (1 4-bit section of a byte). This first nybble of data is
-	; read, and used as an index to a table containing the following data:
-	; 0,1,2,4,8,$10,$20,$40,$80,$FF,$FE,$FC,$F8,$F0,$E0,$C0."   [zDACDecodeTbl / zbyte_1B3]
-	; "So if the nybble were equal to F, it'd extract $C0 from the tale. If it were 8,
-	; it would extract $80 from the table. ... Anyway, there is also another byte of data
-	; that we'll call 'd'. At the start of decompression, d is $80. What happens is that d
-	; is then added to the data extracted from the table using the nybble. So if the nybble
-	; were 4, the 8 would be extracted from the table, then added to d, which is $80,
-	; resulting in $88. This result is then put back into d, then fed into the YM2612 for
-	; processing. Then the next nybble is read, the data is extracted from the table, then
-	; is added to d (remember, d is now changed because of the previous operation), then is
-	; put back into d, then is fed into the YM2612. This process is repeated until the number
-	; of bytes as defined in the table above are read and decompressed."
-
-	; In our case, the so-called 'd' value is shadow register 'a'
 
 zWriteToDAC:
 	djnz	$			; 8	; Busy wait for specific amount of time in 'b'
@@ -664,27 +628,21 @@ zWriteToDAC:
 	dec	de			; 6	; One less byte
 	ei				; 4	; enable interrupts (done updating DAC, busy waiting for next update)
 
-    bit 7,h         ; has bank boundary been crossed?
-    jr  nz,zWaitLoop        ; if not, branch
-    ld  h,80h           ; correct address so it points to start of bank
-    di
-    push    hl
-    ld  hl,zCurrentDACBank
-    inc (hl)            ; set zCurrentDACBank to the next bank, since the boundary's been crossed
-    ld  a,(hl)
-    call    zBankSwitch     ; bankswitch to this new bank
-    pop hl
-    ei
+	bit	7,h			; 8	; has bank boundary been crossed?
+	jr	nz,zWaitLoop		; 7	; if not, branch
+	ld	h,80h			; 7	; correct address so it points to start of bank
+	di				; 4
+	push	hl			; 11
+	ld	hl,zCurrentDACBank	; 10
+	inc	(hl)			; 11	; set zCurrentDACBank to the next bank, since the boundary's been crossed
+	ld	a,(hl)			; 7
+	call	zBankSwitch		; 17	; bankswitch to this new bank
+	pop	hl			; 10
+	ei				; 4
 
 	jp	zWaitLoop		; 10	; Back to the wait loop; if there's more DAC to write, we come back down again!
-					; 181
+					; 178
 ; ---------------------------------------------------------------------------
-; 'jman2050' DAC decode lookup table
-;zbyte_1B3
-zDACDecodeTbl:
-	db	   0,0,0,0,0,0,0,0
-	db	   0,0,0,0,0,0,0,0
-
 	; The following two tables are used for when an SFX terminates
 	; its track to properly restore the music track it temporarily took
 	; over.  Note that an important rule here is that no SFX may use
@@ -1449,8 +1407,8 @@ zPlaySoundByIndex:
 	jp	c,zPlaySound_CheckRing		; if yes, branch to play the sound
 	cp	CmdID__First			; is it after the last regular sound but before the first special sound command (between 71 and 78)?
 	ret	c				; if yes, return (do nothing)
-	cp	MusID_Pause			; is it sound 7E or 7F (pause all or resume all)
-	ret	nc				; if yes, return (those get handled elsewhere)
+	;cp	MusID_Pause			; is it sound 7E or 7F (pause all or resume all)
+	;ret	nc				; if yes, return (those get handled elsewhere)
 	; Otherwise, this is a special command to the music engine...
 	sub	CmdID__First	; convert index 78-7D to a lookup into the following jump table
 	add	a,a
@@ -1478,11 +1436,11 @@ CmdPtr__End:
 ; ---------------------------------------------------------------------------
 ; zloc_6EF:
 zPlaySegaSound:
-
+	call	zStopSoundAndMusic
 	; reset panning (don't want Sega sound playing on only one speaker)
-	ld	a,0B6h		; Set Panning / AMS / FMS
-	ld	c,0C0h		; default Panning / AMS / FMS settings (only stereo L/R enabled)
-	rst	zWriteFMII	; Set it!
+	;ld	a,0B6h		; Set Panning / AMS / FMS
+	;ld	c,0C0h		; default Panning / AMS / FMS settings (only stereo L/R enabled)
+	;rst	zWriteFMII	; Set it!
 
 
 	ld	a,2Bh		; DAC enable/disable register
@@ -1618,26 +1576,7 @@ zBGMLoad:
 	; with the assumption that we're already decompressed with 'de' pointing
 	; at the decompressed data (which just so happens to be the ROM window)
 	pop	af
-	or	a	; Was the uncompressed song flag set?
-	jr	nz,+	; Bypass the Saxman decompressor if so
 
-	; This begins a call to the Saxman decompressor:
-	ex	de,hl
-	exx
-	push	hl
-	push	de
-	push	bc
-    if OptimiseDriver=0
-	exx
-    endif
-	call	zSaxmanDec
-	exx
-	pop	bc
-	pop	de
-	pop	hl
-	exx
-	ld	de,zMusicData	; Saxman compressed songs start at zMusicData (1380h)
-+
 	; Begin common track init code
 	push	de
 	pop	ix				; ix = de (BGM's starting address)
@@ -3512,38 +3451,38 @@ zMasterPlaylist:
 ; note: +20h means uncompressed, here
 ; +40h is a flag that forces PAL mode off when set
 
-zMusIDPtr_2PResult:	zmakePlaylistEntry	Mus_2PResult,20h	; 92
-zMusIDPtr_EHZ:		zmakePlaylistEntry	Mus_EHZ,20h		; 81
-zMusIDPtr_MCZ_2P:	zmakePlaylistEntry	Mus_MCZ_2P,20h		; 85
-zMusIDPtr_OOZ:		zmakePlaylistEntry	Mus_OOZ,20h		; 8F
-zMusIDPtr_MTZ:		zmakePlaylistEntry	Mus_MTZ,20h		; 82
-zMusIDPtr_HTZ:		zmakePlaylistEntry	Mus_HTZ,20h		; 94
-zMusIDPtr_ARZ:		zmakePlaylistEntry	Mus_ARZ,20h		; 86
-zMusIDPtr_CNZ_2P:	zmakePlaylistEntry	Mus_CNZ_2P,20h		; 80
-zMusIDPtr_CNZ:		zmakePlaylistEntry	Mus_CNZ,20h		; 83
-zMusIDPtr_DEZ:		zmakePlaylistEntry	Mus_DEZ,20h		; 87
-zMusIDPtr_MCZ:		zmakePlaylistEntry	Mus_MCZ,20h		; 84
-zMusIDPtr_EHZ_2P:	zmakePlaylistEntry	Mus_EHZ_2P,20h		; 91
-zMusIDPtr_SCZ:		zmakePlaylistEntry	Mus_SCZ,20h		; 8E
-zMusIDPtr_CPZ:		zmakePlaylistEntry	Mus_CPZ,20h		; 8C
-zMusIDPtr_WFZ:		zmakePlaylistEntry	Mus_WFZ,20h		; 90
-zMusIDPtr_HPZ:		zmakePlaylistEntry	Mus_HPZ,20h		; 9B
-zMusIDPtr_Options:	zmakePlaylistEntry	Mus_Options,20h		; 89
-zMusIDPtr_SpecStage:	zmakePlaylistEntry	Mus_SpecStage,20h	; 88
-zMusIDPtr_Boss:		zmakePlaylistEntry	Mus_Boss,20h		; 8D
-zMusIDPtr_EndBoss:	zmakePlaylistEntry	Mus_EndBoss,20h		; 8B
-zMusIDPtr_Ending:	zmakePlaylistEntry	Mus_Ending,20h		; 8A
-zMusIDPtr_SuperSonic:	zmakePlaylistEntry	Mus_SuperSonic,20h	; 93
-zMusIDPtr_Invincible:	zmakePlaylistEntry	Mus_Invincible,20h	; 99
-zMusIDPtr_ExtraLife:	zmakePlaylistEntry	Mus_ExtraLife,20h	; B5
-zMusIDPtr_Title:	zmakePlaylistEntry	Mus_Title,20h		; 96
-zMusIDPtr_EndLevel:	zmakePlaylistEntry	Mus_EndLevel,20h	; 97
-zMusIDPtr_GameOver:	zmakePlaylistEntry	Mus_GameOver,20h	; B8
-zMusIDPtr_Continue:	zmakePlaylistEntry	Mus_Continue,20h	; 0
-zMusIDPtr_Emerald:	zmakePlaylistEntry	Mus_Emerald,20h		; BA
-zMusIDPtr_Credits:	zmakePlaylistEntry	Mus_Credits,20h		; BD
-zMusIDPtr_Countdown:	zmakePlaylistEntry	Mus_Drowning,20h	; BC, PAL mode will be broken
-zMusIDPtr_SaveScreen:	zmakePlaylistEntry	Mus_SaveScreen,20h	
+zMusIDPtr_2PResult:	zmakePlaylistEntry	Mus_2PResult,0h		; 92
+zMusIDPtr_EHZ:		zmakePlaylistEntry	Mus_EHZ,0h		; 81
+zMusIDPtr_MCZ_2P:	zmakePlaylistEntry	Mus_MCZ_2P,0h		; 85
+zMusIDPtr_OOZ:		zmakePlaylistEntry	Mus_OOZ,0h		; 8F
+zMusIDPtr_MTZ:		zmakePlaylistEntry	Mus_MTZ,0h		; 82
+zMusIDPtr_HTZ:		zmakePlaylistEntry	Mus_HTZ,0h		; 94
+zMusIDPtr_ARZ:		zmakePlaylistEntry	Mus_ARZ,0h		; 86
+zMusIDPtr_CNZ_2P:	zmakePlaylistEntry	Mus_CNZ_2P,0h		; 80
+zMusIDPtr_CNZ:		zmakePlaylistEntry	Mus_CNZ,0h		; 83
+zMusIDPtr_DEZ:		zmakePlaylistEntry	Mus_DEZ,0h		; 87
+zMusIDPtr_MCZ:		zmakePlaylistEntry	Mus_MCZ,0h		; 84
+zMusIDPtr_EHZ_2P:	zmakePlaylistEntry	Mus_EHZ_2P,0h		; 91
+zMusIDPtr_SCZ:		zmakePlaylistEntry	Mus_SCZ,0h		; 8E
+zMusIDPtr_CPZ:		zmakePlaylistEntry	Mus_CPZ,0h		; 8C
+zMusIDPtr_WFZ:		zmakePlaylistEntry	Mus_WFZ,0h		; 90
+zMusIDPtr_HPZ:		zmakePlaylistEntry	Mus_HPZ,0h		; 9B
+zMusIDPtr_Options:	zmakePlaylistEntry	Mus_Options,0h		; 89
+zMusIDPtr_SpecStage:	zmakePlaylistEntry	Mus_SpecStage,0h	; 88
+zMusIDPtr_Boss:		zmakePlaylistEntry	Mus_Boss,0h		; 8D
+zMusIDPtr_EndBoss:	zmakePlaylistEntry	Mus_EndBoss,0h		; 8B
+zMusIDPtr_Ending:	zmakePlaylistEntry	Mus_Ending,0h		; 8A
+zMusIDPtr_SuperSonic:	zmakePlaylistEntry	Mus_SuperSonic,0h	; 93
+zMusIDPtr_Invincible:	zmakePlaylistEntry	Mus_Invincible,0h	; 99
+zMusIDPtr_ExtraLife:	zmakePlaylistEntry	Mus_ExtraLife,0h	; B5
+zMusIDPtr_Title:	zmakePlaylistEntry	Mus_Title,0h		; 96
+zMusIDPtr_EndLevel:	zmakePlaylistEntry	Mus_EndLevel,0h		; 97
+zMusIDPtr_GameOver:	zmakePlaylistEntry	Mus_GameOver,0h		; B8
+zMusIDPtr_Continue:	zmakePlaylistEntry	Mus_Continue,0h		; 0
+zMusIDPtr_Emerald:	zmakePlaylistEntry	Mus_Emerald,0h		; BA
+zMusIDPtr_Credits:	zmakePlaylistEntry	Mus_Credits,0h		; BD
+zMusIDPtr_Countdown:	zmakePlaylistEntry	Mus_Drowning,40h	; BC
+zMusIDPtr_SaveScreen:	zmakePlaylistEntry	Mus_SaveScreen,0h	
 zMusIDPtr__End:
 
 ; Tempo with speed shoe tempo for each song
@@ -3559,16 +3498,14 @@ zSpedUpTempoTable:
 	db	0D5h,0F0h, 80h
 
 	; DAC sample pointers and lengths
-	ensure1byteoffset 1Ch
+	ensure1byteoffset 34*4
 DACSize macro Sample
 	dw	zmake68kPtr(Sample)
 	dw	Sample_End-Sample
 	endm
 zDACPtrTbl:
-zDACPtr_Kick:	dw	zmake68kPtr(SndDAC_Kick)
-zDACLenTbl:
-			dw	SndDAC_Kick_End-SndDAC_Kick
-
+zDACLenTbl equ zDACPtrTbl+2
+zDACPtr_Kick:		DACSize SndDAC_Kick
 zDACPtr_Snare:		DACSize	SndDAC_Snare	
 zDACPtr_Clap:		DACSize	SndDAC_Clap
 zDACPtr_Scratch:	DACSize SndDAC_Scratch
@@ -3577,12 +3514,9 @@ zDACPtr_Tom:		DACSize SndDAC_Tom
 zDACPtr_Bongo:		DACSize SndDAC_Bongo
 zDACPtr_Crash:		DACSize SndDAC_Crash
 zDACPtr_Ride:		DACSize	SndDAC_Ride
-;Stops working after here? for some dumb reason
 zDACPtr_CupCym:		DACSize	SndDAC_CupCym
-
 zDACPtr_Clave:		DACSize	SndDAC_Clave
 zDACPtr_China:		DACSize	SndDAC_China
-
 zDACPtr_Rim:		DACSize	SndDAC_Rim
 zDACPtr_Timbale:	DACSize	SndDAC_Timbale
 zDACPtr_CngSlp:		DACSize	SndDAC_CngSlp
@@ -3598,29 +3532,7 @@ zDACPtr_Snare3:		DACSize	SndDAC_Snare3
 	; First byte selects one of the DAC samples.  The number that
 	; follows it is a wait time between each nibble written to the DAC
 	; (thus higher = slower)
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	ensure1byteoffset 22h
+	ensure1byteoffset 34*2
 ; zbyte_124F:
 zDACMasterPlaylist:
 ; DAC samples IDs
@@ -3629,42 +3541,43 @@ ptrsize :=	2+2
 idstart :=	80h
 
 dac_sample_metadata macro label,sampleRate
-	db	id(label),pcmLoopCounter(sampleRate+7950,181/2)	; See zWriteToDAC for an explanation of this magic number.
+	db	id(label),pcmLoopCounter(sampleRate,178)	; See zWriteToDAC for an explanation of this magic number.
     endm
-  	dac_sample_metadata zDACPtr_Kick,   11025	; 81h Kick (1)
-	dac_sample_metadata zDACPtr_Snare,  11025	; 82h Snare (2)
-	dac_sample_metadata zDACPtr_Clap,   11025	; 83h Clap
-	dac_sample_metadata zDACPtr_Scratch,15232	; 84h Scratch
-	dac_sample_metadata zDACPtr_Timpani,9550	; 85h VLowTimpani
-	dac_sample_metadata zDACPtr_Tom,   8050		; 86h FloorTom
-	dac_sample_metadata zDACPtr_Bongo, 9450		; 87h VLowClap (why tf are the bongos called claps?)
-	dac_sample_metadata zDACPtr_Timpani,10800	; 88h HiTimpani
-	dac_sample_metadata zDACPtr_Timpani,9300	; 89h Timpani
-	dac_sample_metadata zDACPtr_Timpani,8050	; 8Ah LowTimpani
-	dac_sample_metadata zDACPtr_Timpani,4050	; 8Bh VLowTimpani
-	dac_sample_metadata zDACPtr_Tom,   12050	; 8Ch HiTom
-	dac_sample_metadata zDACPtr_Tom,   7050		; 8Dh MidTom
-	dac_sample_metadata zDACPtr_Tom,   4050		; 8Eh LowTom
-	dac_sample_metadata zDACPtr_Bongo, 7050		; 8Fh HiClap
-	dac_sample_metadata zDACPtr_Bongo, 5050		; 90h MidClap
-	dac_sample_metadata zDACPtr_Bongo, 1800		; 91h LowClap
-	dac_sample_metadata zDACPtr_Crash,  11025	; 92h Crash
-	dac_sample_metadata zDACPtr_Ride,   11025	; 93h Ride
-	dac_sample_metadata zDACPtr_CupCym,  11025	; 94h CupCym (ride bell)
-	dac_sample_metadata zDACPtr_Clave,  11025	; 95h Clave (pronounced "claw"-"vey")
-	dac_sample_metadata zDACPtr_China,  11025	; 96h China (Chinesse Cymbal)
-	dac_sample_metadata zDACPtr_Rim,  11025		; 97h Rim (Snare Drum Rim)
-	dac_sample_metadata zDACPtr_Timbale,  11025	; 98h Timbale
-	dac_sample_metadata zDACPtr_Timbale,  8050	; 99h LowTimbale
-	dac_sample_metadata zDACPtr_CngSlp,  11025	; 9Ah CngSlp (Conga Slap)
-	dac_sample_metadata zDACPtr_Cowbell,  11025	; 9Bh Cowbell (we need more)
-	dac_sample_metadata zDACPtr_Tamb,  11025	; 9Ch Tamb (Tambourine)
-	dac_sample_metadata zDACPtr_Agogo,  11025	; 9Dh Agogo
-	dac_sample_metadata zDACPtr_Agogo,  8050	; 9Eh LowAgogo
-	dac_sample_metadata zDACPtr_Shaker,  11025	; 9Fh Shaker
-  	dac_sample_metadata zDACPtr_Kick2,   11025	; A0h Kick (2)
-	dac_sample_metadata zDACPtr_Snare1,  11025	; A1h Snare (1)
-	dac_sample_metadata zDACPtr_Snare3,  11025	; A2h Snare (3)
+  	dac_sample_metadata zDACPtr_Kick,	13000	; 81h Kick (1)
+	dac_sample_metadata zDACPtr_Snare,	13000	; 82h Snare (2)
+	dac_sample_metadata zDACPtr_Clap,	13000	; 83h Clap
+	dac_sample_metadata zDACPtr_Scratch,	15232	; 84h Scratch
+	dac_sample_metadata zDACPtr_Timpani,	7550	; 85h VLowTimpani
+	dac_sample_metadata zDACPtr_Tom,	10000	; 86h FloorTom
+	dac_sample_metadata zDACPtr_Bongo,	9450	; 87h VLowClap (why tf are the bongos called claps?)
+	dac_sample_metadata zDACPtr_Timpani,	12800	; 88h HiTimpani
+	dac_sample_metadata zDACPtr_Timpani,	11300	; 89h Timpani
+	dac_sample_metadata zDACPtr_Timpani,	10050	; 8Ah LowTimpani
+	dac_sample_metadata zDACPtr_Timpani,	8050	; 8Bh VLowTimpani
+	dac_sample_metadata zDACPtr_Tom,	15000	; 8Ch HiTom
+	dac_sample_metadata zDACPtr_Tom,	12000	; 8Dh MidTom
+	dac_sample_metadata zDACPtr_Tom,	9000	; 8Eh LowTom
+	dac_sample_metadata zDACPtr_Bongo,	15350	; 8Fh HiClap
+	dac_sample_metadata zDACPtr_Bongo,	12050	; 90h MidClap
+	dac_sample_metadata zDACPtr_Bongo,	9800	; 91h LowClap
+	dac_sample_metadata zDACPtr_Crash,	13000	; 92h Crash
+	dac_sample_metadata zDACPtr_Ride,	11000	; 93h Ride
+	dac_sample_metadata zDACPtr_CupCym,	13000	; 94h CupCym (ride bell)
+	dac_sample_metadata zDACPtr_Clave,	13000	; 95h Clave (pronounced "claw"-"vey")
+	dac_sample_metadata zDACPtr_China,	13000	; 96h China (Chinesse Cymbal)
+	dac_sample_metadata zDACPtr_Rim,	13000	; 97h Rim (Snare Drum Rim)
+	dac_sample_metadata zDACPtr_Timbale,	13000	; 98h Timbale
+	dac_sample_metadata zDACPtr_Timbale,	10050	; 99h LowTimbale
+	dac_sample_metadata zDACPtr_CngSlp,	13000	; 9Ah CngSlp (Conga Slap)
+	dac_sample_metadata zDACPtr_Cowbell,	13000	; 9Bh Cowbell (we need more)
+	dac_sample_metadata zDACPtr_Tamb,	13000	; 9Ch Tamb (Tambourine)
+	dac_sample_metadata zDACPtr_Agogo,	13000	; 9Dh Agogo
+	dac_sample_metadata zDACPtr_Agogo,	9050	; 9Eh LowAgogo
+	dac_sample_metadata zDACPtr_Shaker,	13000	; 9Fh Shaker
+  	dac_sample_metadata zDACPtr_Kick2,	13000	; A0h Kick (2)
+	dac_sample_metadata zDACPtr_Snare1,	13000	; A1h Snare (1)
+	dac_sample_metadata zDACPtr_Snare3,	12500	; A2h Snare (3)
+	ensure1byteoffset 34
 zDACBanks:
 	db	zmake68kBank(SndDAC_Kick)
 	db	zmake68kBank(SndDAC_Snare)
@@ -3688,156 +3601,6 @@ zDACBanks:
 	db	zmake68kBank(SndDAC_Kick2)
 	db	zmake68kBank(SndDAC_Snare1)
 	db	zmake68kBank(SndDAC_Snare3)
-
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-;zsub_1271
-zSaxmanDec:
-    if OptimiseDriver
-	xor	a
-	ld	b,a
-	ld	d,a
-	ld	e,a
-    else
-	exx
-	ld	bc,0
-	ld	de,0
-    endif
-	exx
-	ld	de,zMusicData
-	ld	c,(hl)
-	inc	hl
-	ld	b,(hl)			; bc = (hl) i.e. "size of song"
-	inc	hl
-	ld	(zGetNextByte+1),hl	; modify inst. @ zGetNextByte -- set to beginning of decompression stream
-    if OptimiseDriver=0
-	inc	bc
-    endif
-	ld	(zDecEndOrGetByte+1),bc	; modify inst. @ zDecEndOrGetByte -- set to length of song, +1
-
-;zloc_1288
-zSaxmanReadLoop:
-
-	exx				; shadow reg set
-    if OptimiseDriver
-	srl	b			; b >> 1 (just a mask that lets us know when we need to reload)
-	jr	c,+			; if it's set, we still have bits left in 'c'; jump to '+'
-	; If you get here, we're out of bits in 'c'!
-	call	zDecEndOrGetByte	; get next byte -> 'a'
-	ld	c,a			; a -> 'c'
-	ld	b,7Fh			; b = 7Fh (7 new bits in 'c')
-+
-	srl	c			; test next bit of 'c'
-	exx				; normal reg set
-	jr	nc,+			; if bit not set, it's a compression bit; jump to '+'
-    else
-	srl	c			; c >> 1 (active control byte)
-	srl	b			; b >> 1 (just a mask that lets us know when we need to reload)
-	bit	0,b			; test next bit of 'b'
-	jr	nz,+			; if it's set, we still have bits left in 'c'; jump to '+'
-	; If you get here, we're out of bits in 'c'!
-	call	zDecEndOrGetByte	; get next byte -> 'a'
-	ld	c,a			; a -> 'c'
-	ld	b,0FFh			; b = FFh (8 new bits in 'c')
-+
-	bit	0,c			; test next bit of 'c'
-	exx				; normal reg set
-	jr	z,+			; if bit not set, it's a compression bit; jump to '+'
-    endif
-	; If you get here, there's a non-compressed byte
-	call	zDecEndOrGetByte	; get next byte -> 'a'
-	ld	(de),a			; store it directly to the target memory address
-	inc	de			; de++
-	exx				; shadow reg set
-	inc	de			; Also increase shadow-side 'de'... relative pointer only, does not point to output Z80_RAM
-	exx				; normal reg set
-	jr	zSaxmanReadLoop		; loop back around...
-+
-	call	zDecEndOrGetByte	; get next byte -> 'a'
-	ld	c,a			; a -> 'c' (low byte of target address)
-	call	zDecEndOrGetByte	; get next byte -> 'a'
-	ld	b,a			; a -> 'b' (high byte of target address + count)
-	and	0Fh			; keep only lower four bits...
-	add	a,3			; add 3 (minimum 3 bytes are to be read in this mode)
-	push	af			; save 'a'...
-	ld	a,b			; b -> 'a' (low byte of target address)
-	rlca
-	rlca
-	rlca
-	rlca
-	and	0Fh			; basically (b >> 4) & 0xF (upper four bits now exclusively as lower four bits)
-	ld	b,a			; a -> 'b' (only upper four bits of value make up part of the address)
-	ld	a,c
-	add	a,12h
-	ld	c,a
-	adc	a,b
-	sub	c
-	and	0Fh
-	ld	b,a			; bc += 12h
-	pop	af			; restore 'a' (byte count to read; no less than 3)
-	exx				; shadow reg set
-	push	de			; keep current 'de' (relative pointer) value...
-	ld	l,a			; how many bytes we will read -> 'hl'
-	ld	h,0
-	add	hl,de			; add current relative pointer...
-	ex	de,hl			; effectively, de += a
-	exx				; normal reg set
-	pop	hl			; shadow 'de' -> 'hl' (relative pointer, prior to all bytes read, relative)
-	or	a			; Clear carry
-	sbc	hl,bc			; hl -= bc
-	jr	nc,+			; if result positive, jump to '+'
-	ex	de,hl			; current output pointer -> 'hl'
-	ld	b,a			; how many bytes to load -> 'b'
-
--	ld	(hl),0			; fill in zeroes that many times
-	inc	hl
-	djnz	-
-
-	ex	de,hl			; output pointer updated
-	jr	zSaxmanReadLoop		; loop back around...
-+
-	ld	hl,zMusicData		; point at beginning of decompression point
-	add	hl,bc			; move ahead however many bytes
-	ld	c,a
-	ld	b,0
-	ldir
-	jr	zSaxmanReadLoop
-; End of function zSaxmanDec
-
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
-; This is an ugly countdown to zero implemented in repeatedly modifying code!!
-; But basically, it starts at the full length of the song +1 (so it can decrement)
-; and waits until 'hl' decrements to zero
-;zsub_12E8
-zDecEndOrGetByte:
-	ld	hl,0			; "self-modified code" -- starts at full length of song +1, waits until it gets to 1...
-    if OptimiseDriver
-	ld	a,h
-	or	l
-	jr	z,+			; If 'h' and 'l' both equal zero, we quit!!
-    endif
-	dec	hl			; ... where this will be zero
-	ld	(zDecEndOrGetByte+1),hl	; "self-modifying code" -- update the count in case it's not zero
-    if OptimiseDriver=0
-	ld	a,h
-	or	l
-	jr	z,+			; If 'h' and 'l' both equal zero, we quit!!
-    endif
-;zloc_12F3
-zGetNextByte:
-	ld	hl,0			; "self-modified code" -- get address of next compressed byte
-	ld	a,(hl)			; put it into -> 'a'
-	inc	hl			; next byte...
-	ld	(zGetNextByte+1),hl	; change inst @ zGetNextByte so it loads next compressed byte
-	ret				; still going...
-+
-	pop	hl			; throws away return address to this function call so that next 'ret' exits decompressor (we're done!)
-	ret				; Exit decompressor
-; End of function zDecEndOrGetByte
 
 ; ---------------------------------------------------------------------------
 	; space for a few global variables

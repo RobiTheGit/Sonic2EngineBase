@@ -148,9 +148,9 @@ ROMEndLoc:
 	dc.l (RAM_End-1)&$FFFFFF		; End address of RAM
 ExternalRam:       dc.b  "RA"
 RamType:        dc.b  $F8
-Space        dc.b  " "
-RamStartLocation  dc.l  $200001
-RamEndingLocation  dc.l  $2003FF
+Space:        dc.b  " "
+RamStartLocation:  dc.l  $200001
+RamEndingLocation:  dc.l  $2003FF
 	dc.b "            "	; Modem support
 	dc.b "                                        "	; Notes (unused, anything can be put in this space, but it has to be 52 bytes.)
 	dc.b "JUE             " ; Country code (region)
@@ -244,7 +244,7 @@ PSGInitLoop:
  ; loc_292:
 PortC_OK: ;;
 	jmp	GameProgram	; Branch to game program.
-; ===========================================================================  '
+; ===========================================================================
 
 ; byte_294:
 SetupValues:
@@ -404,6 +404,7 @@ MainGameLoop:
 	bra.s	MainGameLoop	; loop indefinitely
 
 	include	"gamemodes/Gamemodes.asm"
+	include	"misc/Joypads.asm"
   	include	"misc/VDP.asm"
 	include	"sound/code/PlaySound.asm"
   	include	"misc/Pause.asm"
@@ -416,18 +417,25 @@ MainGameLoop:
   	include	"misc/Palettes.asm"
 	include	"misc/OscData.asm"
 	include	"gamemodes/SEGA.asm"
+	even
 	include	"gamemodes/Title.asm"
+	even
 	include	"sound/code/MusicLists.asm"
 	include	"gamemodes/Level.asm"
+	even
 	include	"gamemodes/SpecialStage.asm"
+	even
 	include	"gamemodes/Continue.asm"
+	even
 	include	"gamemodes/Menus.asm"
+	even
 	include	"gamemodes/Ending.asm"
+	even
 	include	"level/data/CameraBoundaries.asm"
 	include	"level/data/StartPositions.asm"
 	include	"level/data/Deformation.asm"
 	include	"level/data/DrawTilesAsYouMove.asm"
-    include	"level/data/DynamicLevelEvents.asm"
+	include	"level/data/DynamicLevelEvents.asm"
 	include	"objects/Bridge.asm"
 	include	"objects/SwingingPlatform.asm"
 	include	"objects/SpikeHelix.asm"
@@ -555,14 +563,14 @@ MainGameLoop:
 	include	"objects/SegaSonic.asm"
 	include	"objects/Tornado.asm"
 	include	"objects/WFZBoss.asm"
-    include	"misc/CreateChildren.asm"
+	include	"misc/CreateChildren.asm"
 	include	"objects/Eggman.asm"
 	include	"objects/CrawlBadnik.asm"
 	include	"objects/EggMech.asm"
-    include	"misc/SpriteScaling.asm"
+	include	"misc/SpriteScaling.asm"
 	include	"objects/SonicTeam.asm"
 	include	"objects/CoreObj/Capsule.asm"
-    include	"misc/TouchResponse.asm"
+	include	"misc/TouchResponse.asm"
 	include "gamemodes/Savescreen.asm"
 	include	"level/data/AnimatedTiles.asm"
 	include	"objects/CoreObj/HUD.asm"

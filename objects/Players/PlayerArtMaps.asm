@@ -21,13 +21,13 @@ ArtNem_SuperSonic_stars:	BINCLUDE	"art/nemesis/Super Sonic stars.bin"
 ; Uncompressed art
 ; Patterns for Sonic  ; ArtUnc_50000:
 ;---------------------------------------------------------------------------------------
-	align $2000
+	align $8000
 ArtUnc_Sonic:	BINCLUDE	"art/uncompressed/Sonic's art.bin"
 ;---------------------------------------------------------------------------------------
 ; Uncompressed art
 ; Patterns for Tails  ; ArtUnc_64320:
 ;---------------------------------------------------------------------------------------
-	align $2000
+	align $8000
 ArtUnc_Tails:	BINCLUDE	"art/uncompressed/Tails's art.bin"
 ;--------------------------------------------------------------------------------------
 ; Sprite Mappings
@@ -55,3 +55,4 @@ MapUnc_Tails:	BINCLUDE	"mappings/sprite/Tails.bin"
 ; Tails DPLCs	; MapRUnc_7446C:
 ;--------------------------------------------------------------------------------------
 MapRUnc_Tails:	BINCLUDE	"mappings/spriteDPLC/Tails.bin"
+	even
