@@ -1521,7 +1521,6 @@ Sonic_CheckPeelout:
 	andi.b	#button_B_mask|button_C_mask,d0
     beq.w   .return
     move.b  #$22,anim(a0)
-    move.w  #$800,inertia(a0)
     move.w  #SndID_SpindashRev,d0
     jsr (PlaySound).l
     addq.l  #4,sp
@@ -1553,13 +1552,11 @@ Sonic_UpdatePeelout:
     bne.w   Sonic_ChargingPeelout
     move.b  #1,anim(a0)
     move.b  #0,peelout_flag(a0)
-    moveq   #0,d0
-    move.b  peelout_counter(a0),d0
-    add.w   d0,d0
-    move.w  PeeloutSpeeds(pc,d0.w),inertia(a0)
-    tst.b   (Super_Sonic_flag).w
-    beq.s   +
-    move.w  PeeloutSpeedsSuper(pc,d0.w),inertia(a0)
+	cmpi.w	#$600,inertia(a0)
+	bls.w	Obj01_Peelout_ResetScr
+	cmpi.w	#$1000,inertia(a0)
+	ble.S	+
+    move.w  #$1000,inertia(a0)
 +
     move.w  inertia(a0),d0
     subi.w  #$800,d0
@@ -1594,13 +1591,11 @@ PeeloutSpeedsSuper:
 ; ===========================================================================
 
 Sonic_ChargingPeelout:      ; If still charging the dash...
-    tst.w   peelout_counter(a0)
-    beq.s   +
-    move.w  peelout_counter(a0),d0
-    lsr.w   #5,d0
-    sub.w   d0,peelout_counter(a0)
-    bcc.s   +
-    move.w  #0,peelout_counter(a0)
+	moveq   #0,d0
+    add.w    #$40,inertia(a0)     ; add $40 charge to peelout speed per frame
+	cmpi.w	#$1000,inertia(a0)
+	ble.S	+
+    move.w  #$1000,inertia(a0)
 +
     move.b  (Ctrl_1_Press_Logical).w,d0
     andi.b  #0,d0
@@ -2454,8 +2449,6 @@ SAnim_WalkRun:
 	lea	(SonAni_Run).l,a1	; use running animation
 	cmpi.w	#$600,d2		; is Sonic at running speed?
 	bhs.s	+			; use running animation
-	tst.b   peelout_flag(a0)
-	bne.s	+
 	lea	(SonAni_Walk).l,a1	; if yes, branch
 	add.b	d0,d0
 +
