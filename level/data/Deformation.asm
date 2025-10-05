@@ -2447,6 +2447,15 @@ ScrollVerti:
 ; ===========================================================================
 ; loc_D7C4:
 .decideScrollType:
+		move.w	d0,d1 ; copy camera offset to d1
+		asr.w	#2,d0 ; divide the number to smooth camera movement
+		bne.s	.skip 
+		move.w	d1,d0 ; if the result is 0 get the initial offset in case it's less than divisor	
+		asr.w	#1,d0 ; try to divide the number by lower value
+		bne.s	.skip
+		move.w	d1,d0 ; if the result is 0 get the initial offset in case it's less than divisor	
+
+.skip
 	cmpi.w	#(224/2)-16,d3		; is the camera bias normal?
 	bne.s	.doScroll_slow	; if not, branch
 	mvabs.w	inertia(a0),d1	; get player ground velocity, force it to be positive
