@@ -451,7 +451,7 @@ TailsCPU_Normal_SonicOK:
 	move.w	(a1,d0.w),d2	; d2 = earlier x position of Sonic
 	move.w	2(a1,d0.w),d3	; d3 = earlier y position of Sonic
 	lea	(Sonic_Stat_Record_Buf).w,a1
-	move.w	(a1,d0.w),d1	; d1 = earlier input of Sonic
+	move.w	(Ctrl_1_Logical).w,d1	; d1 = earlier input of Sonic
 	move.b	2(a1,d0.w),d4	; d4 = earlier status of Sonic
 	move.w	d1,d0
 	btst	#5,status(a0)	; is Tails pushing against something?
