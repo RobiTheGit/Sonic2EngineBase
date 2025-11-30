@@ -26,7 +26,6 @@ Obj42_Init:
 	ori.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#4,priority(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo27_Adjust2PArtPointer
 	move.b	#7,mapping_frame(a0)
 	move.w	y_pos(a0),objoff_38(a0)
 	move.w	#$10,objoff_3A(a0)
@@ -208,8 +207,6 @@ JmpTo7_SingleObjLoad ; JmpTo
 	jmp	(SingleObjLoad).l
 JmpTo18_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo27_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo2_SolidObject_Always_SingleCharacter ; JmpTo
 	jmp	(SolidObject_Always_SingleCharacter).l
 

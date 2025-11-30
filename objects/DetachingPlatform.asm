@@ -31,7 +31,6 @@ Obj82_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj82_MapUnc_2A476,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo46_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#3,priority(a0)
 	moveq	#0,d0
@@ -236,8 +235,6 @@ Obj82_MapUnc_2A476:	BINCLUDE "mappings/sprite/obj82.bin"
     if ~~removeJmpTos
 JmpTo2_ObjCheckFloorDist ; JmpTo
 	jmp	(ObjCheckFloorDist).l
-JmpTo46_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo_ObjCheckCeilingDist ; JmpTo
 	jmp	(ObjCheckCeilingDist).l
 JmpTo23_SolidObject ; JmpTo
@@ -292,7 +289,6 @@ Obj83_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj15_Obj83_MapUnc_1021E,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo47_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#4,priority(a0)
 	move.b	#$20,width_pixels(a0)
@@ -517,8 +513,6 @@ JmpTo4_DeleteObject2 ; JmpTo
 	jmp	(DeleteObject2).l
 JmpTo19_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo47_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo10_CalcSine ; JmpTo
 	jmp	(CalcSine).l
 JmpTo7_PlatformObject ; JmpTo

@@ -657,7 +657,6 @@ Obj55_Laser_CreateWave:
 	move.w	#0,y_vel(a1)
 	move.l	#Obj55_MapUnc_33756,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_OOZBoss,0,0),art_tile(a1)
-	jsrto	(Adjust2PArtPointer).l, JmpTo63_Adjust2PArtPointer
 	ori.b	#4,render_flags(a1)
 	move.b	#2,priority(a1)
 	move.w	#5,Obj55_Wave_delay(a1)
@@ -763,8 +762,6 @@ JmpTo22_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
 JmpTo5_RandomNumber ; JmpTo
 	jmp	(RandomNumber).l
-JmpTo63_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo13_CalcSine ; JmpTo
 	jmp	(CalcSine).l
 JmpTo8_PlayLevelMusic ; JmpTo

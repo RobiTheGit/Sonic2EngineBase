@@ -33,7 +33,6 @@ Obj46_Init:
 	move.b	#$F,x_radius(a0)
 	move.l	#Obj46_MapUnc_24C52,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_BallThing,3,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo20_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#3,priority(a0)
 	move.w	x_pos(a0),objoff_38(a0)
@@ -225,8 +224,6 @@ JmpTo4_SingleObjLoad ; JmpTo
 ; some of these are still used, for some reason:
 JmpTo11_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo20_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo5_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 JmpTo_SolidObject_Always_SingleCharacter ; JmpTo

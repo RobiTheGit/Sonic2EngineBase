@@ -627,7 +627,6 @@ loc_A4B6:
 	clr.b	anim_frame_duration(a0)
 	move.l	#ObjCF_MapUnc_ADA2,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,0,0),art_tile(a0)
-	jsr	(Adjust2PArtPointer).l
 	subi.w	#$14,x_pos(a0)
 	addi.w	#$14,y_pos(a0)
 	bra.w	sub_A58C
@@ -921,7 +920,6 @@ ObjCE_Init:
 	move.l	#ObjCF_MapUnc_ADA2,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,0,1),art_tile(a0)
 	move.b	#1,priority(a0)
-	jsr	(Adjust2PArtPointer).l
 	move.b	#$C,mapping_frame(a0)
 	cmpi.w	#4,(Ending_Routine).w
 	bne.s	+
@@ -1016,7 +1014,6 @@ ObjCF_Init:
 	move.l	#ObjCF_MapUnc_ADA2,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,0,1),art_tile(a0)
 	move.b	#3,priority(a0)
-	jsr	(Adjust2PArtPointer).l
 	move.b	#5,mapping_frame(a0)
 	move.b	#2,anim(a0)
 	move.w	#$10F,d0

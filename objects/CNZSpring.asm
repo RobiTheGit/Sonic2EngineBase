@@ -48,7 +48,6 @@ Obj85_Init:
 	move.l	#Obj85_MapUnc_2B0EC,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZDiagPlunger,0,0),art_tile(a0)
 +
-	jsrto	(Adjust2PArtPointer).l, JmpTo49_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	bset	#6,render_flags(a0)
 	move.b	#1,mainspr_mapframe(a0)
@@ -429,8 +428,6 @@ JmpTo4_DisplaySprite3 ; JmpTo
 	jmp	(DisplaySprite3).l
 JmpTo43_DeleteObject ; JmpTo
 	jmp	(DeleteObject).l
-JmpTo49_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo5_SolidObject_Always_SingleCharacter ; JmpTo
 	jmp	(SolidObject_Always_SingleCharacter).l
 

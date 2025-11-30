@@ -20,7 +20,6 @@ Obj66_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj66_MapUnc_27120,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Powerups,0,1),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo30_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#8,width_pixels(a0)
 	move.b	#4,priority(a0)
@@ -175,8 +174,6 @@ JmpTo47_DisplaySprite ; JmpTo
 
 JmpTo33_DeleteObject ; JmpTo
 	jmp	(DeleteObject).l
-JmpTo30_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo3_SolidObject_Always_SingleCharacter ; JmpTo
 	jmp	(SolidObject_Always_SingleCharacter).l
 

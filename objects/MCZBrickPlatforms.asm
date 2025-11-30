@@ -190,8 +190,6 @@ JmpTo9_SingleObjLoad ; JmpTo
 	jmp	(SingleObjLoad).l
 JmpTo_DeleteObject2 ; JmpTo
 	jmp	(DeleteObject2).l
-JmpTo37_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo17_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 
@@ -229,7 +227,6 @@ Obj75_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj75_MapUnc_28D8A,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,1,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo38_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#5,priority(a0)
 	move.b	#$10,width_pixels(a0)
@@ -378,8 +375,6 @@ JmpTo2_DeleteObject2 ; JmpTo
 	jmp	(DeleteObject2).l
 JmpTo15_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo38_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo8_CalcSine ; JmpTo
 	jmp	(CalcSine).l
 JmpTo18_SolidObject ; JmpTo
@@ -420,7 +415,6 @@ Obj76_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj76_MapUnc_28F3A,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo39_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#4,priority(a0)
 	moveq	#0,d0
@@ -530,8 +524,6 @@ Obj76_MapUnc_28F3A:	BINCLUDE "mappings/sprite/obj76.bin"
     if ~~removeJmpTos
 JmpTo_Touch_ChkHurt2 ; JmpTo
 	jmp	(Touch_ChkHurt2).l
-JmpTo39_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo19_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 JmpTo5_MarkObjGone2 ; JmpTo
@@ -564,7 +556,6 @@ Obj77_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj77_MapUnc_29064,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_MCZGateLog,3,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo40_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#$80,width_pixels(a0)
 ; loc_28FBC:
@@ -643,8 +634,6 @@ Obj77_MapUnc_29064:	BINCLUDE "mappings/sprite/obj77.bin"
     if ~~removeJmpTos
 JmpTo23_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo40_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo20_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 

@@ -81,7 +81,6 @@ Obj1C_Init:
 	move.b	(a1),mapping_frame(a0)
 	move.l	(a1)+,mappings(a0)
 	move.w	(a1)+,art_tile(a0)
-	bsr.w	Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	(a1)+,width_pixels(a0)
 	move.b	(a1)+,priority(a0)
@@ -126,7 +125,6 @@ Obj71_Init:
 	move.b	(a1),mapping_frame(a0)
 	move.l	(a1)+,mappings(a0)
 	move.w	(a1)+,art_tile(a0)
-	bsr.w	Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	(a1)+,width_pixels(a0)
 	move.b	(a1)+,priority(a0)

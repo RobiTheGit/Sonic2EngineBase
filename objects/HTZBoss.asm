@@ -613,8 +613,6 @@ JmpTo_Obj20 ; JmpTo
 	jmp	(Obj20).l
 JmpTo4_AddPoints ; JmpTo
 	jmp	(AddPoints).l
-JmpTo62_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo3_PlayLevelMusic ; JmpTo
 	jmp	(PlayLevelMusic).l
 JmpTo3_LoadPLC_AnimalExplosion ; JmpTo

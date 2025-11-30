@@ -4,30 +4,38 @@ Sound5E_WingFortress_Header:
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
 
-	smpsHeaderSFXChannel cFM4, Sound5E_WingFortress_FM4,	$FA, $0B
+	smpsHeaderSFXChannel cFM3, Sound5E_WingFortress_FM3,	$14, $05
 
 ; FM3 Data
-Sound5E_WingFortress_FM4:
+Sound5E_WingFortress_FM3:
 	smpsSetvoice        $00
-	dc.b	nF2, $08, $08, $08
+
+Sound5E_WingFortress_Loop00:
+	dc.b	nAb1, $02, nAb1, $01
+	smpsLoop            $00, $13, Sound5E_WingFortress_Loop00
+
+Sound5E_WingFortress_Loop01:
+	dc.b	nAb1, $02, nAb1, $01
+	smpsAlterVol        $01
+	smpsLoop            $00, $1B, Sound5E_WingFortress_Loop01
+	smpsStop
 
 Sound5E_WingFortress_Voices:
 ;	Voice $00
-;	$3C
-;	$00, $01, $00, $01, 	$1F, $0D, $12, $14, 	$10, $00, $1F, $00
-;	$09, $13, $0A, $12, 	$FF, $0F, $FF, $0F, 	$00, $A0, $00, $80
-	smpsVcAlgorithm     $04
-	smpsVcFeedback      $07
+;	$35
+;	$30, $40, $44, $51, 	$1F, $1F, $1F, $1F, 	$10, $13, $00, $15
+;	$1F, $1F, $00, $1A, 	$7F, $7F, $0F, $5F, 	$02, $80, $A8, $80
+	smpsVcAlgorithm     $05
+	smpsVcFeedback      $06
 	smpsVcUnusedBits    $00
-	smpsVcDetune        $00, $00, $00, $00
-	smpsVcCoarseFreq    $01, $00, $01, $00
+	smpsVcDetune        $05, $04, $04, $03
+	smpsVcCoarseFreq    $01, $04, $00, $00
 	smpsVcRateScale     $00, $00, $00, $00
-	smpsVcAttackRate    $14, $12, $0D, $1F
+	smpsVcAttackRate    $1F, $1F, $1F, $1F
 	smpsVcAmpMod        $00, $00, $00, $00
-	smpsVcDecayRate1    $00, $1F, $00, $10
-	smpsVcDecayRate2    $12, $0A, $13, $09
-	smpsVcDecayLevel    $00, $0F, $00, $0F
+	smpsVcDecayRate1    $15, $00, $13, $10
+	smpsVcDecayRate2    $1A, $00, $1F, $1F
+	smpsVcDecayLevel    $05, $00, $07, $07
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $00, $20, $00
-
+	smpsVcTotalLevel    $00, $28, $00, $02
 

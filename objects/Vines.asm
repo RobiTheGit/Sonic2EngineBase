@@ -20,7 +20,6 @@ Obj7F_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj7F_MapUnc_29938,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_VineSwitch,3,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo43_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#8,width_pixels(a0)
 	move.b	#4,priority(a0)
@@ -118,8 +117,6 @@ Obj7F_MapUnc_29938:	BINCLUDE "mappings/sprite/obj7F.bin"
     if ~~removeJmpTos
 JmpTo24_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo43_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif
@@ -158,7 +155,6 @@ Obj80_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj80_MapUnc_29DD0,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_WfzHook_Fudge,1,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo44_Adjust2PArtPointer
 	move.w	#$A0,objoff_32(a0)
 	move.b	subtype(a0),d0
 	move.b	d0,d1
@@ -184,7 +180,6 @@ Obj80_Init:
 Obj80_MCZ_Init:
 	move.l	#Obj80_MapUnc_29C64,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_VinePulley,3,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo44_Adjust2PArtPointer
 	move.w	#$B0,objoff_32(a0)
 	move.b	subtype(a0),d0
 	bpl.s	+
@@ -407,8 +402,6 @@ Obj80_MapUnc_29DD0:	BINCLUDE "mappings/sprite/obj80_b.bin"
     if ~~removeJmpTos
 JmpTo25_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo44_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif
@@ -444,7 +437,6 @@ Obj81_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj81_MapUnc_2A24E,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_MCZGateLog,3,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo45_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#5,priority(a0)
 	move.b	#8,width_pixels(a0)
@@ -637,8 +629,6 @@ JmpTo3_DeleteObject2 ; JmpTo
 	jmp	(DeleteObject2).l
 JmpTo18_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo45_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo9_CalcSine ; JmpTo
 	jmp	(CalcSine).l
 JmpTo22_SolidObject ; JmpTo

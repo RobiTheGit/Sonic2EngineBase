@@ -28,7 +28,6 @@ Obj20_Init:
 	move.b	#8,x_radius(a0)
 	move.l	#Obj20_MapUnc_23254,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_HtzFireball2,0,1),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo17_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#3,priority(a0)
 	move.b	#8,width_pixels(a0)
@@ -139,7 +138,6 @@ loc_23176:
 	move.w	#0,y_vel(a0)
 	move.l	#Obj20_MapUnc_23294,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_HtzFireball1,0,1),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo17_Adjust2PArtPointer
 	move.b	#0,mapping_frame(a0)
 	move.w	#9,objoff_36(a0)
 	move.b	#3,objoff_3A(a0)
@@ -225,8 +223,6 @@ JmpTo6_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
 JmpTo4_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
-JmpTo17_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 ; loc_232FA:
 JmpTo7_ObjectMove ; JmpTo
 	jmp	(ObjectMove).l

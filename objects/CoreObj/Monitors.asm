@@ -31,7 +31,6 @@ Obj26_Init:
 	move.b	#$E,x_radius(a0)
 	move.l	#Obj26_MapUnc_12D36,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Powerups,0,0),art_tile(a0)
-	bsr.w	Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#3,priority(a0)
 	move.b	#$F,width_pixels(a0)
@@ -247,7 +246,6 @@ Obj2E_Index:	offsetTable
 Obj2E_Init:
 	addq.b	#2,routine(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Powerups,0,1),art_tile(a0)
-	bsr.w	Adjust2PArtPointer
 	move.b	#$24,render_flags(a0)
 	move.b	#3,priority(a0)
 	move.b	#8,width_pixels(a0)

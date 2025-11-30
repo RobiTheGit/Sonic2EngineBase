@@ -26,7 +26,6 @@ Obj44_Init:
 	addq.b	#2,routine(a0) ; => Obj44_Main
 	move.l	#Obj44_MapUnc_1F85A,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZRoundBumper,2,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo5_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#1,priority(a0)
@@ -125,8 +124,6 @@ JmpTo2_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo3_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
-JmpTo5_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif

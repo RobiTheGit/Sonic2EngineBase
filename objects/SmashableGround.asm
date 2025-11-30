@@ -31,7 +31,6 @@ Obj2F_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj2F_MapUnc_236FA,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,2,1),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo18_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#4,priority(a0)

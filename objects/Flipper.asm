@@ -23,7 +23,6 @@ Obj86_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj86_MapUnc_2B45A,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZFlipper,2,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo50_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#$18,width_pixels(a0)
 	move.b	#4,priority(a0)
@@ -275,8 +274,6 @@ JmpTo27_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo9_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
-JmpTo50_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo11_CalcSine ; JmpTo
 	jmp	(CalcSine).l
 JmpTo6_SolidObject_Always_SingleCharacter ; JmpTo

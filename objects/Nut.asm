@@ -22,7 +22,6 @@ Obj69_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj69_MapUnc_27A26,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_MtzAsstBlocks,1,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo32_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$20,width_pixels(a0)
 	move.b	#$B,y_radius(a0)
@@ -183,8 +182,6 @@ JmpTo21_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo_ObjCheckFloorDist ; JmpTo
 	jmp	(ObjCheckFloorDist).l
-JmpTo32_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo12_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 ; loc_27AA8:

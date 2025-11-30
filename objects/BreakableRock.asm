@@ -32,7 +32,6 @@ Obj32_Init:
 	move.b	#$10,width_pixels(a0)
 	move.l	#Obj32_VelArray2,objoff_40(a0)
 +
-	jsrto	(Adjust2PArtPointer).l, JmpTo18_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#4,priority(a0)
 ; loc_23582:
@@ -203,8 +202,6 @@ JmpTo3_SingleObjLoad ; JmpTo
 	jmp	(SingleObjLoad).l
 JmpTo9_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo18_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo_BreakObjectToPieces ; JmpTo
 	jmp	(BreakObjectToPieces).l
 JmpTo3_SolidObject ; JmpTo

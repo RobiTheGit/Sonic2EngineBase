@@ -55,7 +55,6 @@ Obj1D_InitBall:
 	move.w	y_pos(a0),y_pos(a1)
 	move.l	#Obj1D_MapUnc_22576,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_CPZDroplet,3,0),art_tile(a1)
-	jsrto	(Adjust2PArtPointer2).l, JmpTo3_Adjust2PArtPointer2
 	move.b	#4,render_flags(a1)
 	move.b	#3,priority(a1)
 	move.b	#%10001011,collision_flags(a1)
@@ -149,8 +148,6 @@ JmpTo7_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo5_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo3_Adjust2PArtPointer2 ; JmpTo
-	jmp	(Adjust2PArtPointer2).l
 ; loc_22596:
 JmpTo6_ObjectMove ; JmpTo
 	jmp	(ObjectMove).l

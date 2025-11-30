@@ -22,7 +22,6 @@ Obj2A_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj2A_MapUnc_11666,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,2,0),art_tile(a0)
-	bsr.w	Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#4,priority(a0)

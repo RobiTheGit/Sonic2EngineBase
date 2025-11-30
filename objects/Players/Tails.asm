@@ -48,7 +48,7 @@ Obj02_Init:
 	bne.s	Obj02_Init_Continued
 	; only happens when not starting at a checkpoint:
 	move.w	#make_art_tile(ArtTile_ArtUnc_Tails,0,0),art_tile(a0)
-	bsr.w	Adjust2PArtPointer
+	;bsr.w	Adjust2PArtPointer
 	move.b	#$C,top_solid_bit(a0)
 	move.b	#$D,lrb_solid_bit(a0)
 	move.w	x_pos(a0),(Saved_x_pos).w
@@ -60,7 +60,7 @@ Obj02_Init:
 ; loc_1B952:
 Obj02_Init_2Pmode:
 	move.w	#make_art_tile(ArtTile_ArtUnc_Tails,0,0),art_tile(a0)
-	bsr.w	Adjust2PArtPointer
+	;bsr.w	Adjust2PArtPointer
 	move.w	(MainCharacter+top_solid_bit).w,top_solid_bit(a0)
 	tst.w	(MainCharacter+art_tile).w
 	bpl.s	Obj02_Init_Continued
@@ -3169,7 +3169,7 @@ Obj05_Init:
 	addq.b	#2,routine(a0) ; => Obj05_Main
 	move.l	#MapUnc_Tails,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtUnc_Tails_Tails,0,0),art_tile(a0)
-	bsr.w	Adjust2PArtPointer
+	;bsr.w	Adjust2PArtPointer
 	move.b	#2,priority(a0)
 	move.b	#$18,width_pixels(a0)
 	move.b	#4,render_flags(a0)

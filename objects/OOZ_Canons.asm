@@ -287,8 +287,6 @@ JmpTo9_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
 JmpTo3_MarkObjGone3 ; JmpTo
 	jmp	(MarkObjGone3).l
-JmpTo22_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo2_BreakObjectToPieces ; JmpTo
 	jmp	(BreakObjectToPieces).l
 JmpTo7_SolidObject ; JmpTo
@@ -578,8 +576,6 @@ JmpTo15_DisplaySprite ; JmpTo
 	jmp	(DisplaySprite).l
 JmpTo14_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo23_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif

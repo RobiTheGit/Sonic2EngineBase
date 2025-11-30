@@ -24,7 +24,6 @@ Obj5C_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj5C_MapUnc_2D442,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Masher,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo58_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#4,priority(a0)
 	move.b	#9,collision_flags(a0)
@@ -79,8 +78,6 @@ JmpTo34_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo16_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
-JmpTo58_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 ; loc_2D48E:
 JmpTo22_ObjectMove ; JmpTo
 	jmp	(ObjectMove).l

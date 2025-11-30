@@ -25,7 +25,6 @@ Obj8A_Init:
 	move.w	#$F0,y_pixel(a0)
 	move.l	#Obj8A_MapUnc_3EB4E,mappings(a0)
 	move.w	#make_art_tile($05A0,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo65_Adjust2PArtPointer
 	move.w	(Ending_demo_number).w,d0
 	move.b	d0,mapping_frame(a0)
 	move.b	#0,render_flags(a0)
@@ -33,7 +32,6 @@ Obj8A_Init:
 	cmpi.b	#GameModeID_TitleScreen,(Game_Mode).w	; title screen??
 	bne.s	Obj8A_Display	; if not, branch
 	move.w	#make_art_tile($0300,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo65_Adjust2PArtPointer
 	move.b	#$A,mapping_frame(a0)
 	tst.b	(S1_hidden_credits_flag).w
 	beq.s	Obj8A_Display
@@ -59,8 +57,6 @@ Obj8A_MapUnc_3EB4E:	BINCLUDE "mappings/sprite/obj8A.bin"
     endif
 
     if ~~removeJmpTos
-JmpTo65_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif

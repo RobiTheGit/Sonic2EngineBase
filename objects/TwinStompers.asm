@@ -42,7 +42,6 @@ Obj64_Init:
 +
 	move.l	#Obj64_MapUnc_26A5C,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,1,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo28_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#4,priority(a0)
 	move.w	x_pos(a0),objoff_38(a0)
@@ -142,8 +141,6 @@ Obj64_MapUnc_26A5C:	BINCLUDE "mappings/sprite/obj64.bin"
 ; ===========================================================================
 
     if ~~removeJmpTos
-JmpTo28_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo9_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 

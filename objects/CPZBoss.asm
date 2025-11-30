@@ -63,7 +63,6 @@ Obj5D_Init:
 	move.w	x_pos(a0),Obj5D_x_pos_next(a0)
 	move.w	y_pos(a0),Obj5D_y_pos_next(a0)
 	bclr	#3,Obj5D_status(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo60_Adjust2PArtPointer
 
 	; robotnik sitting in his eggmobile
 	jsr	(SingleObjLoad2).l
@@ -81,7 +80,6 @@ Obj5D_Init:
 	move.b	#$16,routine(a1)	; => Obj5D_Robotnik
 	move.b	#1,anim(a1)
 	move.b	render_flags(a0),render_flags(a1)
-	jsrto	(Adjust2PArtPointer2).l, JmpTo8_Adjust2PArtPointer2
 	tst.b	subtype(a0)
 	bmi.w	loc_2D8AC
 
@@ -92,7 +90,6 @@ Obj5D_Init:
 	move.l	a0,Obj5D_parent(a1)
 	move.l	#Obj5D_MapUnc_2EE88,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_EggpodJets_1,0,0),art_tile(a1)
-	jsrto	(Adjust2PArtPointer2).l, JmpTo8_Adjust2PArtPointer2
 	move.b	#1,anim_frame_duration(a0)
 	move.b	#4,render_flags(a1)
 	move.b	#$20,width_pixels(a1)
@@ -1504,7 +1501,6 @@ loc_2E9A8:
 	addq.b	#2,SecondaryRoutineCpzBoss(a0)
 	move.l	#Obj5D_MapUnc_2EEA0,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_EggpodJets_1,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo60_Adjust2PArtPointer
 	move.b	#0,mapping_frame(a0)
 	move.b	#5,anim_frame_duration(a0)
 	movea.l	Obj5D_parent(a0),a1 ; a1=object
@@ -1668,14 +1664,10 @@ JmpTo35_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo5_PlaySound ; JmpTo
 	jmp	(PlaySound).l
-JmpTo8_Adjust2PArtPointer2 ; JmpTo
-	jmp	(Adjust2PArtPointer2).l
 JmpTo5_LoadPLC ; JmpTo
 	jmp	(LoadPLC).l
 JmpTo2_AddPoints ; JmpTo
 	jmp	(AddPoints).l
-JmpTo60_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo_PlayLevelMusic ; JmpTo
 	jmp	(PlayLevelMusic).l
 JmpTo_LoadPLC_AnimalExplosion ; JmpTo

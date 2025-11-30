@@ -19,7 +19,6 @@ Obj49_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj49_MapUnc_20C50,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Waterfall,1,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo12_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$20,width_pixels(a0)
 	move.w	x_pos(a0),objoff_34(a0)

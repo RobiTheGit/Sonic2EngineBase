@@ -21,7 +21,6 @@ Obj16_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj16_MapUnc_21F14,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_HtzZipline,2,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo14_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#$20,width_pixels(a0)
 	move.b	#0,mapping_frame(a0)
@@ -134,8 +133,6 @@ JmpTo5_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo4_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo14_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo3_PlatformObject ; JmpTo
 	jmp	(PlatformObject).l
 ; loc_22010:

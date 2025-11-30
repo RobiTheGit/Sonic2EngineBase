@@ -28,7 +28,6 @@ Obj0B_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj0B_MapUnc_201A0,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CPZAnimatedBits,3,1),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo8_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#4,priority(a0)
@@ -114,8 +113,6 @@ Obj0B_MapUnc_201A0:	BINCLUDE "mappings/sprite/obj0B.bin"
     if ~~removeJmpTos
 JmpTo3_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo8_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif

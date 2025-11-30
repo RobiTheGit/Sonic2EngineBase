@@ -96,7 +96,6 @@ ObjD4_Init:
 	addq.b	#2,routine(a0)
 	move.l	#ObjD4_MapUnc_2B9CA,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_BigMovingBlock,2,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo52_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$20,width_pixels(a0)
 	move.b	#4,priority(a0)
@@ -173,8 +172,6 @@ ObjD4_MapUnc_2B9CA:	BINCLUDE "mappings/sprite/objD4.bin"
     endif
 
     if ~~removeJmpTos
-JmpTo52_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo25_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 JmpTo10_MarkObjGone2 ; JmpTo
@@ -210,7 +207,6 @@ ObjD5_Init:
 	addq.b	#2,routine(a0)
 	move.l	#ObjD5_MapUnc_2BB40,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZElevator,2,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo53_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#4,priority(a0)
@@ -323,8 +319,6 @@ ObjD5_MapUnc_2BB40:	BINCLUDE "mappings/sprite/objD5.bin"
     if ~~removeJmpTos
 JmpTo28_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo53_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo_PlatformObjectD5 ; JmpTo
 	jmp	(PlatformObjectD5).l
 ; loc_2BB66:
@@ -358,7 +352,6 @@ ObjD6_Init:
 	addq.b	#2,routine(a0)
 	move.l	#ObjD6_MapUnc_2BEBC,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZCage,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo54_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$18,width_pixels(a0)
 	move.b	#1,priority(a0)
@@ -451,7 +444,6 @@ loc_2BC86:
 	move.l	#ObjD3,(a1) ; load objD3
 	move.l	#ObjD3_MapUnc_2B8D4,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZBonusSpike,0,0),art_tile(a1)
-	jsrto	(Adjust2PArtPointer2).l, JmpTo6_Adjust2PArtPointer2
 	move.b	#4,render_flags(a1)
 	move.b	#$10,width_pixels(a1)
 	move.b	#4,priority(a1)
@@ -495,7 +487,6 @@ loc_2BD4E:
 	move.l	#ObjDC,(a1) ; load objDC
 	move.l	#Obj25_MapUnc_12382,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,0),art_tile(a1)
-	jsrto	(Adjust2PArtPointer2).l, JmpTo6_Adjust2PArtPointer2
 	move.b	#4,render_flags(a1)
 	move.b	#3,priority(a1)
 	move.b	#8,width_pixels(a1)
@@ -1165,10 +1156,6 @@ JmpTo29_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo10_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
-JmpTo6_Adjust2PArtPointer2 ; JmpTo
-	jmp	(Adjust2PArtPointer2).l
-JmpTo54_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo12_CalcSine ; JmpTo
 	jmp	(CalcSine).l
 JmpTo7_SolidObject_Always_SingleCharacter ; JmpTo
@@ -1201,7 +1188,6 @@ ObjD7_Init:
 	addq.b	#2,routine(a0)
 	move.l	#ObjD7_MapUnc_2C626,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZHexBumper,2,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo55_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#1,priority(a0)
@@ -1378,8 +1364,6 @@ JmpTo30_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo11_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
-JmpTo55_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif
@@ -1409,7 +1393,6 @@ ObjD8_Init:
 	addq.b	#2,routine(a0)
 	move.l	#ObjD8_MapUnc_2C8C4,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZMiniBumper,2,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo56_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#1,priority(a0)
@@ -1621,8 +1604,6 @@ JmpTo31_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo12_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
-JmpTo56_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif

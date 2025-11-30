@@ -18,7 +18,6 @@ LoadSubObject_Part2:
 LoadSubObject_Part3:
 	move.l	(a1)+,mappings(a0)
 	move.w	(a1)+,art_tile(a0)
-	jsr	(Adjust2PArtPointer).l
 	move.b	(a1)+,d0
 	or.b	d0,render_flags(a0)
 	move.b	(a1)+,priority(a0)

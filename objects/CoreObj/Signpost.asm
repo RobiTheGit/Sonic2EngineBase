@@ -55,7 +55,6 @@ loc_1921E:
 
 loc_1922C:
 	addq.b	#2,routine(a0) ; => Obj0D_Main
-	bsr.w	Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$18,width_pixels(a0)
 	move.b	#4,priority(a0)

@@ -41,7 +41,6 @@ Obj08_Init:
 	move.w	#Sidekick,parent(a0)
 	move.w	#tiles_to_bytes(ArtTile_ArtNem_TailsDust),obj08_vram_address(a0)
 +
-	bsr.w	Adjust2PArtPointer
 
 ; loc_1DD90:
 Obj08_Main:

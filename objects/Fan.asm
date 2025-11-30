@@ -21,7 +21,6 @@ Obj3F_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj3F_MapUnc_2AA12,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_OOZFanHoriz,3,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo48_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#4,priority(a0)
@@ -238,8 +237,6 @@ Obj3F_MapUnc_2AAC4:	BINCLUDE "mappings/sprite/obj3F_b.bin"
     if ~~removeJmpTos
 JmpTo26_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
-JmpTo48_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif

@@ -272,8 +272,6 @@ JmpTo4_LoadPLC ; JmpTo
 	jmp	(LoadPLC).l
 JmpTo_AddPoints ; JmpTo
 	jmp	(AddPoints).l
-JmpTo59_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif

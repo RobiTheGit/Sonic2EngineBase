@@ -26,7 +26,6 @@ Obj14_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj14_MapUnc_21CF0,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_HtzSeeSaw,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo13_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#4,priority(a0)
 	move.b	#$30,width_pixels(a0)
@@ -159,7 +158,6 @@ Obj14_Ball_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj14_MapUnc_21D7C,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Sol,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo13_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#4,priority(a0)
 	move.b	#$8B,collision_flags(a0)
@@ -355,8 +353,6 @@ Obj14_MapUnc_21D7C:	BINCLUDE "mappings/sprite/obj14_b.bin"
     if ~~removeJmpTos
 JmpTo3_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo13_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo_ObjectMoveAndFall ; JmpTo
 	jmp	(ObjectMoveAndFall).l
 JmpTo_MarkObjGone2 ; JmpTo

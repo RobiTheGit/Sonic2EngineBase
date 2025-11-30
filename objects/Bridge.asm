@@ -38,7 +38,6 @@ Obj11_Init:
 	move.l	#Obj11_MapUnc_FC28,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_HPZ_Bridge,3,0),art_tile(a0)
 +
-	bsr.w	Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#$80,width_pixels(a0)
 	move.w	y_pos(a0),d2
