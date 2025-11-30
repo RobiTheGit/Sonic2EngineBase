@@ -28,7 +28,6 @@ Obj24_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj24_MapUnc_1FBF6,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_BigBubbles,0,1),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo6_Adjust2PArtPointer
 	move.b	#$84,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#1,priority(a0)
@@ -442,8 +441,6 @@ JmpTo7_DisplaySprite ; JmpTo
 	jmp	(DisplaySprite).l
 JmpTo15_DeleteObject ; JmpTo
 	jmp	(DeleteObject).l
-JmpTo6_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 ; loc_1FCD6:
 JmpTo3_ObjectMove ; JmpTo
 	jmp	(ObjectMove).l

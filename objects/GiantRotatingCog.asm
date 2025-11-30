@@ -37,7 +37,6 @@ Obj70_LoadSubObject:
 	addq.b	#2,routine(a1)
 	move.l	#Obj70_MapUnc_28786,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_MtzWheel,3,0),art_tile(a1)
-	jsrto	(Adjust2PArtPointer2).l, JmpTo4_Adjust2PArtPointer2
 	move.b	#4,render_flags(a1)
 	move.b	#4,priority(a1)
 	move.b	#$10,width_pixels(a1)
@@ -192,8 +191,6 @@ Obj70_MapUnc_28786:	BINCLUDE "mappings/sprite/obj70.bin"
     if ~~removeJmpTos
 JmpTo14_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo4_Adjust2PArtPointer2 ; JmpTo
-	jmp	(Adjust2PArtPointer2).l
 JmpTo16_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 

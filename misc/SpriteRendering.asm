@@ -10,7 +10,7 @@
 ObjectFall:
 MoveSprite:
 ObjectMoveAndFall:
-            	move.w	x_vel(a0),d0	; load x speed
+	    	move.w	x_vel(a0),d0	; load x speed
 		ext.l	d0
 		lsl.l	#8,d0		; shift velocity to line up with the middle 16 bits of the 32-bit position
 		add.l	d0,x_pos(a0)	; add x speed to x position	; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
@@ -55,10 +55,10 @@ ObjectMove:
 ; input: a0 = the object
 ; loc_163D2:
 MarkObjGone:
-	tst.w	(Two_player_mode).w	; is it two player mode?
-	beq.s	+			; if not, branch
-	bra.w	DisplaySprite
-+
+	;tst.w	(Two_player_mode).w	; is it two player mode?
+	;beq.s	+			; if not, branch
+	;bra.w	DisplaySprite
+;+
 	move.w	x_pos(a0),d0
 	andi.w	#$FF80,d0
 	sub.w	(Camera_X_pos_coarse).w,d0
@@ -77,10 +77,10 @@ MarkObjGone:
 ; input: d0 = the object's x position
 ; loc_1640A:
 MarkObjGone2:
-	tst.w	(Two_player_mode).w
-	beq.s	+
-	bra.w	DisplaySprite
-+
+	;tst.w	(Two_player_mode).w
+	;beq.s	+
+	;bra.w	DisplaySprite
+;+
 	andi.w	#$FF80,d0
 	sub.w	(Camera_X_pos_coarse).w,d0
 	cmpi.w	#$80+320+$40+$80,d0	; This gives an object $80 pixels of room offscreen before being unloaded (the $40 is there to round up 320 to a multiple of $80)
@@ -99,15 +99,15 @@ MarkObjGone2:
 ; does nothing instead of calling DisplaySprite in the case of no deletion
 ; loc_1643E:
 MarkObjGone3:
-	tst.w	(Two_player_mode).w
-	beq.s	+
-	rts
-+
+	;tst.w	(Two_player_mode).w
+	;beq.s	+
+	;rts
+;+
 	move.w	x_pos(a0),d0
 	andi.w	#$FF80,d0
 	sub.w	(Camera_X_pos_coarse).w,d0
 	cmpi.w	#$80+320+$40+$80,d0	; This gives an object $80 pixels of room offscreen before being unloaded (the $40 is there to round up 320 to a multiple of $80)
-	bhi.w	+
+	bhi.s	+
 	rts
 +
 	lea	(Object_Respawn_Table).w,a2
@@ -121,8 +121,8 @@ MarkObjGone3:
 ; input: a0 = the object
 ; loc_16472:
 MarkObjGone_P1:
-	tst.w	(Two_player_mode).w
-	bne.s	MarkObjGone_P2
+	;tst.w	(Two_player_mode).w
+	;bne.s	MarkObjGone_P2
 	move.w	x_pos(a0),d0
 	andi.w	#$FF80,d0
 	sub.w	(Camera_X_pos_coarse).w,d0
@@ -136,31 +136,31 @@ MarkObjGone_P1:
 	beq.s	+
 	bclr	#7,2(a2,d0.w)
 +
-	bra.w	DeleteObject
+;	bra.w	DeleteObject
 ; ---------------------------------------------------------------------------
 ; input: a0 = the object
 ; loc_164A6:
-MarkObjGone_P2:
-	move.w	x_pos(a0),d0
-	andi.w	#$FF00,d0
-	move.w	d0,d1
-	sub.w	(Camera_X_pos_coarse).w,d0
-	cmpi.w	#$300,d0
-	bhi.w	+
-	bra.w	DisplaySprite
-+
-	sub.w	(Camera_X_pos_coarse_P2).w,d1
-	cmpi.w	#$300,d1
-	bhi.w	+
-	bra.w	DisplaySprite
-+
-	lea	(Object_Respawn_Table).w,a2
-	moveq	#0,d0
-	move.b	respawn_index(a0),d0
-	beq.s	+
-	bclr	#7,2(a2,d0.w)
-+
-	bra.w	DeleteObject ; useless branch...
+;MarkObjGone_P2:
+;	move.w	x_pos(a0),d0
+;	andi.w	#$FF00,d0
+;	move.w	d0,d1
+;	sub.w	(Camera_X_pos_coarse).w,d0
+;	cmpi.w	#$300,d0
+;	bhi.w	+
+;	bra.w	DisplaySprite
+;+
+;	sub.w	(Camera_X_pos_coarse_P2).w,d1
+;	cmpi.w	#$300,d1
+;	bhi.w	+
+;	bra.w	DisplaySprite
+;+
+;	lea	(Object_Respawn_Table).w,a2
+;	moveq	#0,d0
+;	move.b	respawn_index(a0),d0
+;	beq.s	+
+;	bclr	#7,2(a2,d0.w)
+;+
+;	bra.w	DeleteObject ; useless branch...
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to delete an object
@@ -221,30 +221,30 @@ loc_1ABDC:
 
 ; sub_16512:
 DisplaySprite:
-        lea     (Sprite_Table_Input).w,a1
-        moveq   #0,d0
-	move.b  priority(a0),d0
-        add.w  d0,d0
-        move.w  PriorityId(pc,d0.w),d0     ; get values
-        adda.w  d0,a1
-        cmpi.w  #$7E,(a1)
-        bcc.s   return_16510
-        addq.w  #2,(a1)
-        adda.w  (a1),a1
-        move.w  a0,(a1)
+	lea	(Sprite_Table_Input).w,a1
+	moveq	#0,d0
+	move.b	priority(a0),d0
+	add.w	d0,d0
+	move.w	PriorityId(pc,d0.w),d0     ; get values
+	adda.w	d0,a1
+	cmpi.w	#$7E,(a1)
+	bcc.s	return_16510
+	addq.w	#2,(a1)
+	adda.w	(a1),a1
+	move.w	a0,(a1)
 
 return_16510:
-        rts
+	rts
 ; End of function DisplaySprite
-PriorityId:    dc.w  0
-               dc.w  $80
-               dc.w  $100
-               dc.w  $180
-               dc.w  $200
-               dc.w  $280
-               dc.w  $300
-               dc.w  $380
-               even
+PriorityId:	dc.w	0
+		dc.w	$80
+		dc.w	$100
+		dc.w	$180
+		dc.w	$200
+		dc.w	$280
+		dc.w	$300
+		dc.w	$380
+		even
 ; ---------------------------------------------------------------------------
 ; Subroutine to display a sprite/object, when a1 is the object RAM
 ; ---------------------------------------------------------------------------
@@ -253,21 +253,21 @@ PriorityId:    dc.w  0
 
 ; sub_16512:
 DisplaySprite2:
-        lea     (Sprite_Table_Input).w,a2
-        moveq   #0,d0
-	move.b  priority(a1),d0
-        add.w  d0,d0
-        move.w  PriorityId(pc,d0.w),d0     ; get values
+	lea	(Sprite_Table_Input).w,a2
+	moveq	#0,d0
+	move.b	priority(a1),d0
+	add.w	d0,d0
+	move.w	PriorityId(pc,d0.w),d0     ; get values
 
-        adda.w  d0,a2
-        cmpi.w  #$7E,(a2)
-        bcc.s   return_1652E
-        addq.w  #2,(a2)
-        adda.w  (a2),a2
-        move.w  a1,(a2)
+	adda.w	d0,a2
+	cmpi.w	#$7E,(a2)
+	bcc.s	return_1652E
+	addq.w	#2,(a2)
+	adda.w	(a2),a2
+	move.w	a1,(a2)
 
 return_1652E:
-        rts
+	rts
 ; End of function DisplaySprite2
 ; End of function DisplaySprite2
 
@@ -302,8 +302,8 @@ AnimateSprite:
 	cmp.b	prev_anim(a0),d0	; is animation set to change?
 	beq.s	Anim_Run		; if not, branch
 	move.b	d0,prev_anim(a0)	; set prev anim to current current
-	move.b	#0,anim_frame(a0)	; reset animation
-	move.b	#0,anim_frame_duration(a0)	; reset frame duration
+	clr.b	anim_frame(a0)	; reset animation
+	clr.b	anim_frame_duration(a0)	; reset frame duration
 ; loc_16560:
 Anim_Run:
 	subq.b	#1,anim_frame_duration(a0)	; subtract 1 from frame duration
@@ -358,7 +358,7 @@ Anim_End_FC:
 	addq.b	#1,d0	; is the end flag = $FC ?
 	bne.s	Anim_End_FB	; if not, branch
 	addq.b	#2,routine(a0)	; jump to next routine
-	move.b	#0,anim_frame_duration(a0)
+	clr.b	anim_frame_duration(a0)
 	addq.b	#1,anim_frame(a0)
 	rts
 ; ===========================================================================
@@ -366,7 +366,7 @@ Anim_End_FC:
 Anim_End_FB:
 	addq.b	#1,d0	; is the end flag = $FB ?
 	bne.s	Anim_End_FA	; if not, branch
-	move.b	#0,anim_frame(a0)	; reset animation
+	clr.b	anim_frame(a0)	; reset animation
 	clr.b	routine_secondary(a0)	; reset 2nd routine counter
 	rts
 ; ===========================================================================
@@ -388,7 +388,7 @@ Anim_End:
 ; End of function AnimateSprite
 
 Render_Sprites:
-           ; 	tst.w	(Competition_mode).w
+	   ; 	tst.w	(Competition_mode).w
 	;	bne.w	Render_Sprites_CompetitionMode
 		moveq	#$4F,d7
 		moveq	#0,d6
@@ -436,7 +436,7 @@ Render_x_Object:
 		sub.w	4(a3),d1
 		tst.b   height_pixels(a0) ; has rendering sprite been filled up aka no more free ssts flag
 		bne.s   use_Height
-               	move.b	y_radius(a0),height_pixels(a0)
+	       	move.b	y_radius(a0),height_pixels(a0)
 use_Height
 		move.b	height_pixels(a0),d2
 DoNormal_Render:
@@ -1030,8 +1030,6 @@ Render_Sprites_CompetitionMode:
 
 ; sub_16604:
 BuildSprites:
-	tst.w	(Two_player_mode).w
-	bne.w	BuildSprites_2P
 	lea	(Sprite_Table).w,a2
 	moveq	#0,d5
 	moveq	#0,d4
@@ -1402,47 +1400,3 @@ CellOffsets_XFlip2:
 	dc.b $18,$18,$18,$18	; 12
 	dc.b $20,$20,$20,$20	; 16
 ; ===========================================================================
-
-; ---------------------------------------------------------------------------
-; Subroutine to convert mappings (etc) to proper Megadrive sprites
-; for 2-player (split screen) mode
-; ---------------------------------------------------------------------------
-
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-
-; loc_1694E:
-BuildSprites_2P:
-	rts
-
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-
-; adjust art pointer of object at a0 for 2-player mode
-; sub_16D6E:
-Adjust2PArtPointer:
-	tst.w	(Two_player_mode).w
-	beq.s	+ ; rts
-	move.w	art_tile(a0),d0
-	andi.w	#tile_mask,d0
-	lsr.w	#1,d0
-	andi.w	#nontile_mask,art_tile(a0)
-	add.w	d0,art_tile(a0)
-+
-	rts
-; End of function Adjust2PArtPointer
-
-
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-
-; adjust art pointer of object at a1 for 2-player mode
-; sub_16D8A:
-Adjust2PArtPointer2:
-	tst.w	(Two_player_mode).w
-	beq.s	+ ; rts
-	move.w	art_tile(a1),d0
-	andi.w	#tile_mask,d0
-	lsr.w	#1,d0
-	andi.w	#nontile_mask,art_tile(a1)
-	add.w	d0,art_tile(a1)
-+
-	rts
-; End of function Adjust2PArtPointer2

@@ -26,7 +26,6 @@ Obj6D_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj68_Obj6D_MapUnc_27750,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_MtzSpike,1,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo31_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#4,width_pixels(a0)
 	move.b	#4,priority(a0)
@@ -88,8 +87,6 @@ JmpTo20_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo12_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo31_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo11_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 JmpTo2_MarkObjGone2 ; JmpTo

@@ -314,7 +314,6 @@ Obj21_Init:
 	move.l	Obj21_PositionTable(pc,d0.w),x_pixel(a0) ; and y_pixel(a0)
 	move.l	#Obj21_MapUnc_8146,mappings(a0)
  	move.w	#make_art_tile(ArtTile_ArtNem_1P2PWins,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo2_Adjust2PArtPointer
 	move.b	#0,render_flags(a0)
 	move.b	#0,priority(a0)
 	moveq	#2,d1
@@ -990,8 +989,6 @@ VsResultsScreen_SSZone:	dc.l Map_2PSpecialStageZoneResults, Setup2PResults_Speci
 
 
     if ~~removeJmpTos
-JmpTo2_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo_Dynamic_Normal ; JmpTo
 	jmp	(Dynamic_Normal).l
 
@@ -1728,7 +1725,7 @@ MenuScreen_LevelSelect:
 		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
 		lea	-$28*2(a2),a2	; Go back to (act)
 		move.w	#make_art_tile(' ',0,0),(a2)	; Get rid of (act)
-	
+
 		; Overwrite duplicate LAVA REEF 1/2 with 3/4 (obviously, S3 didn't do this)
 		move.w	#make_art_tile('3',0,0),(RAM_start+planeLocH28($24,5)).l
 
@@ -2231,7 +2228,7 @@ LevSel_MarkTable:	; 4 bytes per level select entry
 	dc.b  $C,$2C,  0,  0
 	dc.b  $F,$2C,  0,  0	;$14
 	dc.b $12,$2C,$12,$48
-	
+
 LevSel_MappingOffsets:
 		dc.w planeLocH28(3,3)
 		dc.w planeLocH28(3,6)

@@ -327,8 +327,6 @@ DbgObjList_Test: dbglistheader
 	dbglistobj Obj3E,	Obj3E_MapUnc_3F436,   0,   0, make_art_tile(ArtTile_ArtNem_Capsule,1,0)
 DbgObjList_Test_End
     if ~~removeJmpTos
-JmpTo66_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 
 	align 4
     endif

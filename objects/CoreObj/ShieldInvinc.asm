@@ -11,7 +11,6 @@ Obj38:
 	move.b	#1,priority(a0)
 	move.b	#$18,width_pixels(a0)
 	move.w	#make_art_tile(ArtTile_ArtUnc_Shield,0,0),art_tile(a0)
-	bsr.w	Adjust2PArtPointer
 	move.l	#ArtUnc_Shield,d1
 	move.w	#tiles_to_bytes(ArtTile_ArtUnc_Shield),d2
 	move.w	#$320,d3
@@ -83,7 +82,6 @@ loc_1D9A4:
 	move.b	#4,objoff_12(a1)		; => loc_1DA80
 	move.l	#Obj35_MapUnc_1DCBC,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtUnc_Invincible_stars,0,0),art_tile(a1)
-	bsr.w	Adjust2PArtPointer2
 	move.b	#4,render_flags(a1)
 	bset	#6,render_flags(a1)
 	move.b	#$10,mainspr_width(a1)
@@ -278,7 +276,6 @@ Obj7E_Init:
 	move.b	#1,priority(a0)
 	move.b	#$18,width_pixels(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_SuperSonic_stars,0,0),art_tile(a0)
-	bsr.w	Adjust2PArtPointer
 	btst	#high_priority_bit,(MainCharacter+art_tile).w
 	beq.s	Obj7E_Main
 	bset	#high_priority_bit,art_tile(a0)

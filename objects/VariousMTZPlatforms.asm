@@ -82,7 +82,6 @@ loc_27BC4:
 	move.w	y_pos(a0),objoff_34(a0)
 
 loc_27BD0:
-	jsrto	(Adjust2PArtPointer).l, JmpTo33_Adjust2PArtPointer
 	move.b	subtype(a0),objoff_3C(a0)
 	jmp	loc_27CA2
 ; ===========================================================================
@@ -208,8 +207,6 @@ Obj6A_MapUnc_27D30:	BINCLUDE "mappings/sprite/obj6A.bin"
     if ~~removeJmpTos
 JmpTo13_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo33_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo13_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 JmpTo3_MarkObjGone2 ; JmpTo
@@ -257,7 +254,6 @@ Obj6B_Init:
 	move.l	#Obj6B_MapUnc_2800E,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CPZStairBlock,3,0),art_tile(a0)
 +
-	jsrto	(Adjust2PArtPointer).l, JmpTo34_Adjust2PArtPointer
 	move.b	#4,render_flags(a0)
 	move.b	#3,priority(a0)
 	moveq	#0,d0
@@ -531,8 +527,6 @@ Obj6B_MapUnc_2800E:	BINCLUDE "mappings/sprite/obj6B.bin"
     endif
 
     if ~~removeJmpTos
-JmpTo34_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo14_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 JmpTo4_MarkObjGone2 ; JmpTo
@@ -581,7 +575,6 @@ Obj6C_Init:
 	ori.b	#4,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#4,priority(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo35_Adjust2PArtPointer
 	move.b	#0,mapping_frame(a0)
 	moveq	#0,d0
 	move.b	subtype(a0),d0
@@ -817,8 +810,6 @@ JmpTo34_DeleteObject ; JmpTo
 	jmp	(DeleteObject).l
 JmpTo8_SingleObjLoad ; JmpTo
 	jmp	(SingleObjLoad).l
-JmpTo35_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo5_PlatformObject ; JmpTo
 	jmp	(PlatformObject).l
 ; loc_283A6:
@@ -861,7 +852,6 @@ Obj6E_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj6E_MapUnc_2852C,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,3,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo36_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#4,priority(a0)
 	moveq	#0,d0
@@ -879,7 +869,6 @@ Obj6E_Init:
 	bne.s	loc_28432
 	addq.b	#2,routine(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_MtzWheelIndent,3,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo36_Adjust2PArtPointer
 	move.b	#5,priority(a0)
 	jmp	loc_284BC
 ; ===========================================================================
@@ -981,8 +970,6 @@ Obj6E_MapUnc_2852C:	BINCLUDE "mappings/sprite/obj6E.bin"
 ; ===========================================================================
 
     if ~~removeJmpTos
-JmpTo36_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo15_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 

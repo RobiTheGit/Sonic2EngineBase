@@ -66,7 +66,7 @@ Obj36_Init:
 +
 	move.w	x_pos(a0),spikes_base_x_pos(a0)
 	move.w	y_pos(a0),spikes_base_y_pos(a0)
-	bra.w	Adjust2PArtPointer
+	rts
 ; ===========================================================================
 ; loc_15996:
 Obj36_Upright:

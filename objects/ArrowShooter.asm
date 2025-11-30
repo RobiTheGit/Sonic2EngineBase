@@ -23,7 +23,6 @@ Obj22_Init:
 	addq.b	#2,routine(a0)
 	move.l	#Obj22_MapUnc_25804,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_ArrowAndShooter,0,0),art_tile(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo24_Adjust2PArtPointer
 	ori.b	#4,render_flags(a0)
 	move.b	#3,priority(a0)
 	move.b	#$10,width_pixels(a0)
@@ -151,8 +150,6 @@ JmpTo15_MarkObjGone ; JmpTo
 	jmp	(MarkObjGone).l
 JmpTo5_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
-JmpTo24_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 ; loc_25886:
 JmpTo11_ObjectMove ; JmpTo
 	jmp	(ObjectMove).l

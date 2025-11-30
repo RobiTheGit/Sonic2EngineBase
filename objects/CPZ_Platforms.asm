@@ -47,7 +47,6 @@ Obj78_LoadSubObject:
 	move.l	(a0),(a1) ; load obj78
 	move.l	#Obj6B_MapUnc_2800E,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_CPZStairBlock,3,0),art_tile(a1)
-	jsrto	(Adjust2PArtPointer2).l, JmpTo5_Adjust2PArtPointer2
 	move.b	#4,render_flags(a1)
 	move.b	#3,priority(a1)
 	move.b	#$10,width_pixels(a1)
@@ -205,8 +204,6 @@ return_29386:
     if ~~removeJmpTos
 JmpTo16_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo5_Adjust2PArtPointer2 ; JmpTo
-	jmp	(Adjust2PArtPointer2).l
 JmpTo21_SolidObject ; JmpTo
 	jmp	(SolidObject).l
 JmpTo6_MarkObjGone2 ; JmpTo
@@ -271,7 +268,6 @@ Obj7A_Init:
 	move.l	#Obj15_Obj7A_MapUnc_10256,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtKos_LevelArt,0,0),art_tile(a0)
 +
-	jsrto	(Adjust2PArtPointer).l, JmpTo41_Adjust2PArtPointer
 	moveq	#0,d1
 	move.b	subtype(a0),d1
 	lea	byte_293B4(pc,d1.w),a2
@@ -420,8 +416,6 @@ JmpTo24_DisplaySprite ; JmpTo
 	jmp	(DisplaySprite).l
 JmpTo17_SingleObjLoad2 ; JmpTo
 	jmp	(SingleObjLoad2).l
-JmpTo41_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo6_PlatformObject ; JmpTo
 	jmp	(PlatformObject).l
 
@@ -480,7 +474,6 @@ Obj7B_Init:
 	move.b	subtype(a0),d0
 	andi.w	#2,d0
 	move.w	Obj7B_Strengths(pc,d0.w),objoff_34(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo42_Adjust2PArtPointer
 ; loc_295FE:
 Obj7B_Main:
 	cmpi.b	#1,mapping_frame(a0)
@@ -625,8 +618,6 @@ JmpTo40_DeleteObject ; JmpTo
 	jmp	(DeleteObject).l
 JmpTo8_AnimateSprite ; JmpTo
 	jmp	(AnimateSprite).l
-JmpTo42_Adjust2PArtPointer ; JmpTo
-	jmp	(Adjust2PArtPointer).l
 JmpTo4_SolidObject_Always_SingleCharacter ; JmpTo
 	jmp	(SolidObject_Always_SingleCharacter).l
 

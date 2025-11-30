@@ -49,7 +49,6 @@ loc_2416E:
 	move.b	subtype(a0),d0
 	andi.w	#2,d0
 	move.w	word_24182(pc,d0.w),objoff_34(a0)
-	jsrto	(Adjust2PArtPointer).l, JmpTo20_Adjust2PArtPointer
 	rts
 ; ===========================================================================
 word_24182:

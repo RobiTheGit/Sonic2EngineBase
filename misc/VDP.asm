@@ -14,10 +14,11 @@ V_Int:
 	move.l	#vdpComm($0000,VSRAM,WRITE),(VDP_control_port).l
 	move.l	(Vscroll_Factor).w,(VDP_data_port).l ; send screen y-axis pos. to VSRAM
 
+	moveq	#0,d0
 	move.b	(Vint_routine).w,d0
 	move.b	#VintID_Lag,(Vint_routine).w
 	move.w	#1,(Hint_flag).w
-	andi.w	#$3E,d0
+	;andi.w	#$3E,d0
 	move.w	Vint_SwitchTbl(pc,d0.w),d0
 	jsr	Vint_SwitchTbl(pc,d0.w)
 
@@ -614,46 +615,6 @@ WaitForVint:
 H_Int:
 	tst.w	(Hint_flag).w
 	beq.w	+
-	tst.w	(Two_player_mode).w
-	beq.w	PalToCRAM
-	move.w	#0,(Hint_flag).w
-	move.l	a5,-(sp)
-	move.l	d0,-(sp)
-
--	move.w	(VDP_control_port).l,d0	; loop start: Make sure V_BLANK is over
-	andi.w	#4,d0
-	beq.s	-	; loop end
-
-	move.w	(VDP_Reg1_val).w,d0
-	andi.b	#$BF,d0
-	move.w	d0,(VDP_control_port).l		; Display disable
-	move.w	#$8200|(VRAM_Plane_A_Name_Table_2P/$400),(VDP_control_port).l	; PNT A base: $A000
-	move.l	#vdpComm($0000,VSRAM,WRITE),(VDP_control_port).l
-	move.l	(Vscroll_Factor_P2_HInt).w,(VDP_data_port).l
-
-	stopZ80_nowait
-	dma68kToVDP Sprite_Table_2,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
-	startZ80
-
--	move.w	(VDP_control_port).l,d0
-	andi.w	#4,d0
-	beq.s	-
-
-	move.w	(VDP_Reg1_val).w,d0
-	ori.b	#$40,d0
-	move.w	d0,(VDP_control_port).l		; Display enable
-	move.l	(sp)+,d0
-	movea.l	(sp)+,a5
-+
-	rte
-
-
-; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-; game code
-
-; ---------------------------------------------------------------------------
-; loc_1000:
-PalToCRAM:
 	move	#$2700,sr
 	move.w	#0,(Hint_flag).w
 	movem.l	a0-a1,-(sp)
@@ -667,6 +628,7 @@ PalToCRAM:
 	movem.l	(sp)+,a0-a1
 	tst.b	(Do_Updates_in_H_int).w
 	bne.s	loc_1072
++
 	rte
 ; ===========================================================================
 
@@ -763,11 +725,6 @@ ClearScreen:
 	dmaFillVRAM 0,VRAM_Plane_A_Name_Table,VRAM_Plane_Table_Size	; Clear Plane A pattern name table
 	dmaFillVRAM 0,VRAM_Plane_B_Name_Table,VRAM_Plane_Table_Size	; Clear Plane B pattern name table
 
-	tst.w	(Two_player_mode).w
-	beq.s	+
-
-	dmaFillVRAM 0,VRAM_Plane_A_Name_Table_2P,VRAM_Plane_Table_Size
-+
 	clr.l	(Vscroll_Factor).w
 	clr.l	(unk_F61A).w
 

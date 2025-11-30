@@ -84,7 +84,7 @@ Obj41_Init_Common:
 	bset	#palette_bit_0,art_tile(a0)
 	move.l	#Obj41_MapUnc_19032,mappings(a0)
 +
-	bra.w	Adjust2PArtPointer
+	rts
 
 ; ===========================================================================
 ; word_1897C:
