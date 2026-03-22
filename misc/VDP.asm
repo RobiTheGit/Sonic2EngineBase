@@ -602,11 +602,21 @@ Do_ControllerPal_Alt2:
 DelayProgram:
 Wait_VSync:
 WaitForVint:
-	stop	#$2300
+	if Lagometer
+		move.w	#$9100,(VDP_control_port).l ; disable lag-o-meter
+	endif
+
+	move	#$2300,sr
 
 -	tst.b	(Vint_routine).w
 	bne.s	-
+
+	if Lagometer
+		move.w	#$9193,(VDP_control_port).l ; enable lag-o-meter
+	endif
+
 	rts
+
 ; End of function WaitForVint
 ; ||||||||||||||| E N D   O F   V - I N T |||||||||||||||||||||||||||||||||||
 
