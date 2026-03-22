@@ -26,7 +26,7 @@ dma68kToVDP macro source,dest,length,type
 	move.w	#((vdpComm(dest,type,DMA)>>16)&$FFFF),(a5)
 	move.w	#(vdpComm(dest,type,DMA)&$FFFF),(DMA_data_thunk).w
 	move.w	(DMA_data_thunk).w,(a5)
-    endm
+	endm
 
 ; tells the VDP to fill a region of VRAM with a certain byte
 dmaFillVRAM macro byte,addr,length
@@ -40,7 +40,7 @@ dmaFillVRAM macro byte,addr,length
 	btst	#1,d1
 	bne.s	.loop ; busy loop until the VDP is finished filling...
 	move.w	#$8F02,(a5) ; VRAM pointer increment: $0002
-    endm
+	endm
 
 ; calculates initial loop counter value for a dbf loop
 ; that writes n bytes total at 4 bytes per iteration
@@ -52,48 +52,48 @@ bytesToWcnt function n,n>>1-1
 
 ; fills a region of 68k RAM with 0
 clearRAM macro startaddr,endaddr
-    if startaddr>endaddr
+	if startaddr>endaddr
 	fatal "Starting address of clearRAM \{startaddr} is after ending address \{endaddr}."
-    elseif startaddr==endaddr
+	elseif startaddr==endaddr
 	warning "clearRAM is clearing zero bytes. Turning this into a nop instead."
 	exitm
-    endif
-    if ((startaddr)&$8000)==0
+	endif
+	if ((startaddr)&$8000)==0
 	lea	(startaddr).l,a1
-    else
+	else
 	lea	(startaddr).w,a1
-    endif
+	endif
 	moveq	#0,d0
-    if ((startaddr)&1)
+	if ((startaddr)&1)
 	move.b	d0,(a1)+
-    endif
+	endif
 	move.w	#bytesToLcnt((endaddr-startaddr) - ((startaddr)&1)),d1
 .loop:	move.l	d0,(a1)+
 	dbf	d1,.loop
-    if (((endaddr-startaddr) - ((startaddr)&1))&2)
+	if (((endaddr-startaddr) - ((startaddr)&1))&2)
 	move.w	d0,(a1)+
-    endif
-    if (((endaddr-startaddr) - ((startaddr)&1))&1)
+	endif
+	if (((endaddr-startaddr) - ((startaddr)&1))&1)
 	move.b	d0,(a1)+
-    endif
-    endm
+	endif
+	endm
 
 ; tells the Z80 to stop, and waits for it to finish stopping (acquire bus)
 stopZ80 macro
 	move.w	#$100,(Z80_Bus_Request).l ; stop the Z80
 .loop:	btst	#0,(Z80_Bus_Request).l
 	bne.s	.loop ; loop until it says it's stopped
-    endm
+	endm
 
 ; tells the Z80 to stop, but does not wait
 stopZ80_nowait macro
 	move.w	#$100,(Z80_Bus_Request).l ; stop the Z80
-    endm
+	endm
 
 ; tells the Z80 to start again
 startZ80 macro
-	move.w	#0,(Z80_Bus_Request).l    ; start the Z80
-    endm
+	move.w	#0,(Z80_Bus_Request).l	; start the Z80
+	endm
 
 ; function to make a little-endian 16-bit pointer for the Z80 sound driver
 z80_ptr function x,(x)<<8&$FF00|(x)>>8&$7F|$80
@@ -101,7 +101,7 @@ z80_ptr function x,(x)<<8&$FF00|(x)>>8&$7F|$80
 ; macro to declare a little-endian 16-bit pointer for the Z80 sound driver
 rom_ptr_z80 macro addr
 	dc.w z80_ptr(addr)
-    endm
+	endm
 
 ; aligns the start of a bank, and detects when the bank's contents is too large
 ; can also print the amount of free space in a bank with DebugSoundbanks set
@@ -110,9 +110,9 @@ startBank macro {INTLABEL}
 __LABEL__ label *
 soundBankStart := __LABEL__
 soundBankName := "__LABEL__"
-    endm
+	endm
 
-DebugSoundbanks := 1
+DebugSoundbanks := 0
 
 finishBank macro
 	if * > soundBankStart + $8000
@@ -120,7 +120,7 @@ finishBank macro
 	elseif (DebugSoundbanks<>0)&&(MOMPASS=1)
 		message "soundBank \{soundBankName} has $\{$8000+soundBankStart-*} bytes free at end."
 	endif
-    endm
+	endm
 
 ; macro to replace the destination with its absolute value
 abs macro destination
@@ -128,21 +128,21 @@ abs macro destination
 	bpl.s	.skip
 	neg.ATTRIBUTE	destination
 .skip:
-    endm
+	endm
 
-    if 0|allOptimizations
+	if 0|allOptimizations
 absw macro destination	; use a short branch instead
 	abs.ATTRIBUTE	destination
-    endm
-    else
+	endm
+	else
 ; macro to replace the destination with its absolute value using a word-sized branch
 absw macro destination
 	tst.ATTRIBUTE	destination
 	bpl.w	.skip
 	neg.ATTRIBUTE	destination
 .skip:
-    endm
-    endif
+	endm
+	endif
 
 ; macro to move the absolute value of the source in the destination
 mvabs macro source,destination
@@ -150,18 +150,18 @@ mvabs macro source,destination
 	bpl.s	.skip
 	neg.ATTRIBUTE	destination
 .skip:
-    endm
+	endm
 
 ; macro to declare an offset table
 offsetTable macro {INTLABEL}
 current_offset_table := __LABEL__
 __LABEL__ label *
-    endm
+	endm
 
 ; macro to declare an entry in an offset table
 offsetTableEntry macro ptr
 	dc.ATTRIBUTE ptr-current_offset_table
-    endm
+	endm
 
 ; macro to declare a zone-ordered table
 ; entryLen is the length of each table entry, and zoneEntries is the number of entries per zone
@@ -175,65 +175,65 @@ zone_entries := zoneEntries
 zone_entries_left := 0
 cur_zone_id := 0
 cur_zone_str := "0"
-    endm
+	endm
 
 zoneOrderedOffsetTable macro entryLen,zoneEntries,{INTLABEL}
 current_offset_table := __LABEL__
 __LABEL__ zoneOrderedTable entryLen,zoneEntries
-    endm
+	endm
 
 ; macro to declare one or more entries in a zone-ordered table
 zoneTableEntry macro value
 	if "value"<>""
-	    if zone_entries_left
+		if zone_entries_left
 		dc.ATTRIBUTE value
 zone_entries_left := zone_entries_left-1
-	    else
+		else
 		!org zone_table_addr+zone_id_{cur_zone_str}*zone_entry_len*zone_entries
 		dc.ATTRIBUTE value
 zone_entries_left := zone_entries-1
 cur_zone_id := cur_zone_id+1
 cur_zone_str := "\{cur_zone_id}"
-	    endif
-	    shift
-	    zoneTableEntry.ATTRIBUTE ALLARGS
+		endif
+		shift
+		zoneTableEntry.ATTRIBUTE ALLARGS
 	endif
-    endm
+	endm
 
 ; macro to declare one or more BINCLUDE entries in a zone-ordered table
 zoneTableBinEntry macro numEntries,path
 	if zone_entries_left
-	    BINCLUDE path
+		BINCLUDE path
 zone_entries_left := zone_entries_left-numEntries
 	else
-	    !org zone_table_addr+zone_id_{cur_zone_str}*zone_entry_len*zone_entries
-	    BINCLUDE path
+		!org zone_table_addr+zone_id_{cur_zone_str}*zone_entry_len*zone_entries
+		BINCLUDE path
 zone_entries_left := zone_entries-numEntries
 cur_zone_id := cur_zone_id+1
 cur_zone_str := "\{cur_zone_id}"
 	endif
-    endm
+	endm
 
 ; macro to declare one entry in a zone-ordered offset table
 zoneOffsetTableEntry macro value
 	zoneTableEntry.ATTRIBUTE value-current_offset_table
-    endm
+	endm
 
 ; macro which sets the PC to the correct value at the end of a zone offset table and checks if the correct
 ; number of entries were declared
 zoneTableEnd macro
 	if (cur_zone_id<>no_of_zones)&&(MOMPASS=1)
-	    message "Warning: Table \{zone_table_name} has \{cur_zone_id/1.0} entries, but it should have \{(no_of_zones)/1.0} entries"
+		message "Warning: Table \{zone_table_name} has \{cur_zone_id/1.0} entries, but it should have \{(no_of_zones)/1.0} entries"
 	endif
 	!org zone_table_addr+cur_zone_id*zone_entry_len*zone_entries
-    endm
+	endm
 
 ; macro to declare sub-object data
 subObjData macro mappings,vram,renderflags,priority,width,collision
 	dc.l mappings
 	dc.w vram
 	dc.b renderflags,priority,width,collision
-    endm
+	endm
 
 ; macros for defining animated PLC script lists
 zoneanimstart macro {INTLABEL}
@@ -241,11 +241,11 @@ __LABEL__ label *
 zoneanimcount := 0
 zoneanimcur := "__LABEL__"
 	dc.w zoneanimcount___LABEL__	; Number of scripts for a zone (-1)
-    endm
+	endm
 
 zoneanimend macro
 zoneanimcount_{"\{zoneanimcur}"} = zoneanimcount-1
-    endm
+	endm
 
 zoneanimdeclanonid := 0
 
@@ -256,7 +256,7 @@ start:
 	dc.w tiles_to_bytes(vramaddr)
 	dc.b numentries, numvramtiles
 zoneanimcount := zoneanimcount + 1
-    endm
+	endm
 
 ; macros to convert from tile index to art tiles, block mapping or VRAM address.
 make_art_tile function addr,pal,pri,((pri&1)<<15)|((pal&3)<<13)|(addr&tile_mask)
@@ -272,3 +272,121 @@ planeLocH40 function col,line,(($80 * line) + (2 * col))
 
 ; function to calculate the location of a tile in plane mappings with a width of 128 cells
 planeLocH80 function col,line,(($100 * line) + (2 * col))
+
+; ---------------------------------------------------------------------------
+; disable interrupts
+; ---------------------------------------------------------------------------
+
+disableInts macro
+	move	#$2700,sr
+	endm
+
+; ---------------------------------------------------------------------------
+; enable interrupts
+; ---------------------------------------------------------------------------
+
+enableInts macro
+	move	#$2300,sr
+	endm
+
+; ---------------------------------------------------------------------------
+; disable interrupts
+; ---------------------------------------------------------------------------
+
+disableIntsSave macro
+	move.w	sr,-(sp)		; save current interrupt mask
+	disableInts			; mask off interrupts
+	endm
+
+; ---------------------------------------------------------------------------
+; enable interrupts
+; ---------------------------------------------------------------------------
+
+enableIntsSave macro
+	move.w	(sp)+,sr		; restore interrupts to previous state
+	endm
+
+
+; ---------------------------------------------------------------------------
+; long conditional jumps
+; ---------------------------------------------------------------------------
+
+jhi:		macro loc
+		bls.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jcc:		macro loc
+		bcs.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jhs:		macro loc
+		jcc	loc
+		endm
+
+jls:		macro loc
+		bhi.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jcs:		macro loc
+		bcc.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jlo:		macro loc
+		jcs	loc
+		endm
+
+jeq:		macro loc
+		bne.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jne:		macro loc
+		beq.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jgt:		macro loc
+		ble.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jge:		macro loc
+		blt.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jle:		macro loc
+		bgt.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jlt:		macro loc
+		bge.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jpl:		macro loc
+		bmi.s	.nojump
+		jmp	loc
+.nojump:
+		endm
+
+jmi:		macro loc
+		bpl.s	.nojump
+		jmp	loc
+.nojump:
+		endm
