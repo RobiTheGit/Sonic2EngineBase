@@ -1203,181 +1203,204 @@ Obj_SaveScreen_Emeralds:
 Obj_SaveScreen_Delete_Save:
 		moveq	#0,d0
 		move.b	routine(a0),d0
-		jmp	loc_D78C(pc,d0.w)
+		jmp	SaveScreen_Delete_Save_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
 
-loc_D78C:
-		bra.w	loc_D7A4
-		bra.w	loc_D7C0
-		bra.w	loc_D7EA
-		bra.w	loc_D884
-		bra.w	loc_D8A4
-		bra.w	loc_D8C4
+SaveScreen_Delete_Save_Index:
+		bra.w	.Init_Eggman_Object
+; ---------------------------------------------------------------------------
+		bra.w	.CheckForDeleteSlot
+; ---------------------------------------------------------------------------
+		bra.w	.MoveEggmanObject
+; ---------------------------------------------------------------------------
+		bra.w	.check_screen_boundaries
+; ---------------------------------------------------------------------------
+		bra.w	.draw_eggman
+; ---------------------------------------------------------------------------
+		bra.w	.check_control
+; ---------------------------------------------------------------------------
 
-loc_D7A4:
-		move.b	#$40,4(a0)
-		move.b	#$30,7(a0)
-		move.w	#1,$16(a0)
-		move.b	#8,$1D(a0)
-		addq.b	#4,5(a0)
+;loc_D7A4:
+.Init_Eggman_Object:
+		move.b	#$40,render_flags(a0)
+		move.b	#$30,width_pixels(a0)
+		move.w	#1,y_sub(a0)
+		move.b	#8,sub2_mapframe(a0)
+		addq.b	#4,routine(a0)
 
-loc_D7C0:
+;loc_D7C0:
+.CheckForDeleteSlot:
 		cmpi.b	#9,(Dataselect_entry).w
-		bne.w	loc_D8A0
+		bne.w	.makechildsprites
 		move.b	(Ctrl_1_pressed).w,d0
-		andi.w	#$E0,d0
-		beq.w	loc_D8A0
+		andi.w	#button_A_mask|button_C_mask|button_start_mask,d0
+		beq.w	.makechildsprites
 		move.w	#sfx_Starpost,d0
 		jsr	(Play_Sound_2).l
 		st	(Events_bg+$12).w
-		addq.b	#4,5(a0)
-		bra.w	loc_D8A0
+		addq.b	#4,routine(a0)
+		bra.w	.makechildsprites
 ; ---------------------------------------------------------------------------
 
-loc_D7EA:
-		jsr	sub_D912(pc)
+;loc_D7EA:
+.MoveEggmanObject:
+		jsr	Animate_Eggman(pc)
 		jsr	sub_D94A(pc)
 		tst.w	(Player_2+object_control).w
-		bne.s	loc_D83C
+		bne.s	.allow_Eggman_move
 		move.b	(Ctrl_1_pressed).w,d0
 		btst	#4,d0
-		bne.s	loc_D854
-		andi.w	#$E0,d0
-		beq.s	loc_D83C
+		bne.s	.set_first_Frame
+		andi.w	#button_A_mask|button_C_mask|button_start_mask,d0
+		beq.s	.allow_Eggman_move
 		cmpi.b	#9,(Dataselect_entry).w
-		beq.s	loc_D854
+		beq.s	.set_first_Frame
 		moveq	#0,d0
 		move.b	(Dataselect_entry).w,d0
 		subq.w	#1,d0
 		mulu.w	#$A,d0
 		addi.l	#Saved_data,d0
-		move.l	d0,$2E(a0)
+		move.l	d0,object_control(a0)
 		movea.l	d0,a1
 		tst.b	(a1)
-		bmi.s	loc_D854
+		bmi.s	.set_first_Frame
 		move.w	#sfx_Starpost,d0
 		jsr	(Play_Sound_2).l
 		st	(Events_bg+$10).w
-		addq.b	#8,5(a0)
+		addq.b	#8,routine(a0)
 
-loc_D83C:
+;loc_D83C:
+.allow_Eggman_move:
 		move.w	(Player_2+x_pos).w,d0
-		move.w	d0,$10(a0)
-		move.w	d0,$18(a0)
-		move.w	$14(a0),$1A(a0)
+		move.w	d0,x_pos(a0)
+		move.w	d0,x_vel(a0)
+		move.w	y_pos(a0),sub2_y_pos(a0)
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_D854:
-		clr.b	$24(a0)
+;loc_D854:
+.set_first_Frame:
+		clr.b	sub4_x_pos(a0)
 		clr.b	$23(a0)
 		clr.b	$25(a0)
 		clr.b	$28(a0)
-		move.b	#$D,$22(a0)
-		move.b	#8,$1D(a0)
+		move.b	#$D,mapping_frame(a0)
+		move.b	#8,sub2_mapframe(a0)
 		move.w	(Player_2+x_pos).w,d0
 		add.w	(Camera_X_pos_copy).w,d0
-		move.w	d0,$12(a0)
-		addq.b	#4,5(a0)
+		move.w	d0,x_sub(a0)
+		addq.b	#4,routine(a0)
 		bra.w	Set_ChildSprites
 ; ---------------------------------------------------------------------------
 
-loc_D884:
+;loc_D884:
+.check_screen_boundaries:
 		clr.w	(Events_bg+$12).w
-		move.w	$12(a0),d0
+		move.w	x_sub(a0),d0
 		cmpi.w	#$448,d0
-		blo.s	loc_D89A
-		move.b	#4,5(a0)
-		bra.s	loc_D8A0
+		blo.s	.set_x_sub_pos
+		move.b	#4,routine(a0)
+		bra.s	.makechildsprites
 ; ---------------------------------------------------------------------------
 
-loc_D89A:
+;loc_D89A:
+.set_x_sub_pos:
 		addq.w	#8,d0
-		move.w	d0,$12(a0)
+		move.w	d0,x_sub(a0)
 
-loc_D8A0:
+;loc_D8A0:
+.makechildsprites:
 		bra.w	Set_ChildSprites
 ; ---------------------------------------------------------------------------
 
-loc_D8A4:
-		jsr	sub_D912(pc)
+.draw_eggman:
+		jsr	Animate_Eggman(pc)
 		jsr	sub_D94A(pc)
-		cmpi.b	#$B,$1D(a0)
-		bne.s	loc_D8BE
-		move.b	#$C,$1D(a0)
-		addq.b	#4,5(a0)
+		cmpi.b	#$B,sub2_mapframe(a0)
+		bne.s	.display
+		move.b	#$C,sub2_mapframe(a0)
+		addq.b	#4,routine(a0)
 
-loc_D8BE:
+;loc_D8BE:
+.display:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 
-loc_D8C4:
-		jsr	sub_D912(pc)
-		btst	#3,(Ctrl_1_pressed).w
-		bne.s	loc_D8FE
-		btst	#2,(Ctrl_1_pressed).w
-		beq.s	loc_D90C
+;loc_D8C4:
+.check_control:
+		jsr	Animate_Eggman(pc)
+		btst	#button_right,(Ctrl_1_pressed).w
+		bne.s	.right
+		btst	#button_left,(Ctrl_1_pressed).w
+		beq.s	.display2
 		move.w	#sfx_Perfect,d0
 		jsr	(Play_Sound_2).l
-		movea.l	$2E(a0),a1
+		movea.l	object_control(a0),a1
 		move.w	#$8000,(a1)
 		clr.l	2(a1)
-		clr.w	6(a1)
-		move.w	#$300,8(a1)
+		clr.w	height_pixels(a1)
+		move.w	#$300,priority(a1)
 		st	(SRAM_mask_interrupts_flag).w
 		jsr	Write_SaveGame(pc)
 
-loc_D8FE:
-		move.b	#8,5(a0)
+.right:
+		move.b	#8,routine(a0)
 		clr.w	(Events_bg+$10).w
-		bra.w	loc_D854
+		bra.w	.set_first_Frame
 ; ---------------------------------------------------------------------------
 
-loc_D90C:
+;loc_D90C:
+.display2:
 		jmp	(Draw_Sprite).l
 
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_D912:
-		subq.b	#1,$24(a0)
-		bpl.s	locret_D938
-		move.b	#5,$24(a0)
+;sub_D912:
+Animate_Eggman:
+		subq.b	#1,anim_frame_timer(a0)
+		bpl.s	.return
+		move.b	#5,anim_frame_timer(a0)
 
-loc_D91E:
+.run_anim:
 		moveq	#0,d0
-		move.b	$23(a0),d0
-		addq.b	#1,$23(a0)
-		move.b	byte_D93A(pc,d0.w),d0
-		bpl.s	loc_D934
-		clr.b	$23(a0)
-		bra.s	loc_D91E
+		move.b	anim_frame(a0),d0
+		addq.b	#1,anim_frame(a0)
+		move.b	Anim_EggmanChuckle(pc,d0.w),d0
+		bpl.s	.setmap
+		clr.b	anim_frame(a0)
+		bra.s	.run_anim
 ; ---------------------------------------------------------------------------
 
-loc_D934:
-		move.b	d0,$22(a0)
+;loc_D934:
+.setmap:
+		move.b	d0,mapping_frame(a0)
 
-locret_D938:
+.return:
 		rts
 ; End of function sub_D912
 
 ; ---------------------------------------------------------------------------
-byte_D93A:	dc.b   $D,  $E,  $D,  $E,  $D,  $E,  $D,  $E,  $D,  $E,  $D,  $D,  $D,  $D, $FF,   0
-                even
+;byte_D93A:
+Anim_EggmanChuckle:
+	dc.b	$D ;animation speed
+	dc.b	$E,$D,$E,$D,$E,$D,$E,$D,$E,$D,$D,$D,$D ;eggman frames
+	dc.b	$FF,0 ;loop
+	even
 ; =============== S U B R O U T I N E =======================================
 
 
 sub_D94A:
 		subq.b	#1,$25(a0)
-		bpl.s	locret_D968
+		bpl.s	.return
 		move.b	#3,$25(a0)
 		addq.b	#1,$28(a0)
 		move.b	$28(a0),d0
 		andi.b	#3,d0
 		addq.b	#8,d0
-		move.b	d0,$1D(a0)
+		move.b	d0,sub2_mapframe(a0)
 
-locret_D968:
+.return:
 		rts
 ; End of function sub_D94A
 
