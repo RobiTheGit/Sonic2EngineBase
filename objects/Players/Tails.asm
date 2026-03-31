@@ -3055,7 +3055,7 @@ TailsAni_Bubble:	dc.b  $B,$74,$74,$12,$13,$FD,  0
 	rev02even
 TailsAni_DeathBW:	dc.b $20,$99,$FF
 	rev02even
-TailsAni_Drown:		dc.b $2F,$5D,$FF
+TailsAni_Drown:		dc.b $2F,$9C,$FF
 	rev02even
 TailsAni_Death:		dc.b   3,$5D,$FF
 	rev02even
