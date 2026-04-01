@@ -659,7 +659,7 @@ SwScrl_MTZ:
 -	move.l	d0,(a1)+
 	dbf	d1,-
 
-	rts
+	jmp	SwScrl_Water
 ; ===========================================================================
 ; loc_C82A:
 SwScrl_WFZ:
@@ -1144,7 +1144,9 @@ SwScrl_OOZ:
 	move.w	d7,d0
 	moveq	#$47,d1
 	bsr.s	OOZ_BGScroll_Lines
-+	rts
++
+	jmp	SwScrl_Water		; Run Water Deform
+
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -1193,7 +1195,7 @@ OOZ_BGScroll_Lines:
 ; ===========================================================================
 +
 	addq.l	#4,sp
-	rts
+	jmp	SwScrl_Water
 ; End of function OOZ_BGScroll_Lines
 
 ; ===========================================================================
@@ -1870,7 +1872,9 @@ SwScrl_CPZ:
     endm
 	addq.b	#1,d4
 	dbf	d1,-
-	rts
+
+	jmp	SwScrl_Water		; Run Water Deform
+
 ; ===========================================================================
 
 loc_D34A:
@@ -1897,7 +1901,9 @@ loc_D34A:
 
 	addq.b	#1,d4
 	dbf	d1,--
-	rts
+
+	jmp	SwScrl_Water		; Run Water Deform
+
 ; ===========================================================================
 ; loc_D382:
 SwScrl_DEZ:
@@ -2177,7 +2183,7 @@ SwScrl_ARZ:
 	neg.w	d0
 +	dbf	d2,-		; Loop until Horiz_Scroll_Buf is full
 
-	rts
+	jmp	SwScrl_Water
 ; ===========================================================================
 ; byte_D5CE:
 SwScrl_ARZ_RowHeights:
@@ -2296,6 +2302,68 @@ SwScrl_HPZ_Continued:
 
 	rts
 
+SwScrl_Water:
+	lea	(Lz_Scroll_Data).l,a3 ;SwScrl_RippleData
+	lea	(Obj0A_WobbleData).l,a2
+	move.b	(LZ_Deform).w,d2
+	move.b	d2,d3
+	addi.w	#$80,(LZ_Deform).w
+
+	add.w	(Camera_BG_Y_pos).w,d2
+	andi.w	#$FF,d2 ;Absolute Value
+	add.w	(Camera_Y_pos).w,d3
+	andi.w	#$FF,d3 ;Absolute Value
+
+	lea	(Horiz_Scroll_Buf).w,a1
+	move.w	#$DF,d1
+	move.w	(Water_Level_1).w,d4
+	move.w	(Camera_Y_pos).w,d5
+
+	;Optimization, don't run this through a loop, instead calculate what lines need to be rippled
+	sub.w	d5,d4	;Find the difference of where the camera is and where the water level is
+	blt.s	.Do_Ripple	;if we are underwater, do the ripple code
+	add.b	d4,d2	; Add the water level to abs(Camera_BG_Y_pos)
+	add.b	d4,d3	; Add the water level to abs(Camera_Y_pos)
+	asl.w	#2,d4	; Roughly multiply by 4
+	adda.w	d4,a1	; Add our outcome to the horizontal scroll buffer
+	cmpi.w	#$380,d4	; Is the value we wrote to H-Int $380?
+	blt.s	.Do_Ripple	; Is it is less that $380, do the ripple
+	rts
+		; apply water deformation when underwater
+.Do_Ripple:
+	move.b	(a3,d3.w),d4	; FG ripple effect
+	ext.w	d4
+	add.w	d4,(a1)+
+
+	move.b	(a2,d2.w),d4	; BG ripple effect
+	ext.w	d4
+	add.w	d4,(a1)+
+
+	addq.b	#1,d2
+	addq.b	#1,d3
+
+	dbf	d1,.Do_Ripple
+	rts
+Lz_Scroll_Data:
+	;S3K Style
+	dc.w   1,  1,  2,  2,  3,  3,  3,  3,  2,  2,  1,  1,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	;Same as the first half, but negative
+	dc.w  -1, -1, -2, -2, -3, -3, -3, -3, -2, -2, -1, -1,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   1,  1,  2,  2,  3,  3,  3,  3,  2,  2,  1,  1,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	dc.w   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
+	; End of function Deform_LZ
 ; ---------------------------------------------------------------------------
 ; Subroutine to set horizontal scroll flags
 ; ---------------------------------------------------------------------------

@@ -1211,7 +1211,7 @@ Camera_BG2_X_pos_P2:	ds.w	1	; unused (only initialised at beginning of level)?
 				ds.w	1	; $FFFFEE32-$FFFFEE33 ; seems unused
 Camera_BG2_Y_pos_P2:	ds.l	1
 Camera_BG3_X_pos_P2:	ds.w	1	; unused (only initialised at beginning of level)?
-				ds.w	1	; $FFFFEE3A-$FFFFEE3B ; seems unused
+LZ_Deform:				ds.w	1
 Camera_BG3_Y_pos_P2:	ds.l	1
 Horiz_block_crossed_flag:	ds.b	1	; toggles between 0 and $10 when you cross a block boundary horizontally
 Verti_block_crossed_flag:	ds.b	1	; toggles between 0 and $10 when you cross a block boundary vertically

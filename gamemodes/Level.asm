@@ -99,7 +99,7 @@ Level_ClrRam:
 	; Bug: The '+C0' shouldn't be here; CNZ_saucer_data is only $40 bytes large
 	clearRAM CNZ_saucer_data,CNZ_saucer_data_End
 	move.b	#0,(Victory_Pose).w
-	cmpi.w	#chemical_plant_zone_act_2,(Current_ZoneAndAct).w ; CPZ 2
+	cmpi.w	#chemical_plant_zone,(Current_Zone).w ; CPZ 2
 	beq.s	Level_InitWater
 	cmpi.b	#aquatic_ruin_zone,(Current_Zone).w ; ARZ
 	beq.s	Level_InitWater
