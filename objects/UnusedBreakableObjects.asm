@@ -112,48 +112,64 @@ Obj3C_Fragment:
 	bpl.w	DeleteObject
 	jmp	DisplaySprite
 
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-
 ; sub_15E18:
 BreakObjectToPieces:	; splits up one object into its current mapping frame pieces
-	moveq	#0,d0
-	move.b	mapping_frame(a0),d0
-	add.w	d0,d0
-	movea.l	mappings(a0),a3
+	moveq	#0,d0	; Clear d0
+	move.b	mapping_frame(a0),d0; move mappings of the wall into d0
+	add.w	d0,d0	;multiply this by 2
+	movea.l	mappings(a0),a3	;move the mappings (not frame) into a3 so we know how to break the wall tiles
 	adda.w	(a3,d0.w),a3	; put address of appropriate frame to a3
 	move.w	(a3)+,d1	; amount of pieces the frame consists of
-	subq.w	#1,d1
-	bset	#5,render_flags(a0)
-	move.l	(a0),d4
-	move.b	render_flags(a0),d5
-	movea.l	a0,a1
-	bra.s	BreakObjectToPieces_InitObject
+	subq.w	#1,d1	;subtract 1 from the pieces to prevet invalid mappings
+	bset	#5,render_flags(a0)	;Tell the game that the mappings only consiost of 1 sprite peice
+	lea	(a0),a1	;Make a subobject for the particles
+	bra.s	.InitObject	;initialize the particles
 ; ===========================================================================
 ; loc_15E3E:
-BreakObjectToPieces_Loop:
-	jsr	SingleObjLoad2
-	bne.s	loc_15E82
+.Loop:
+	jsr	SingleObjLoad2	;Load a new object
+	bne.s	.BreakSound	;Play the breakable wall smahing sound effect
 	addq.w	#8,a3	; next mapping piece
 ; loc_15E46:
-BreakObjectToPieces_InitObject:
-	move.b	#4,routine(a1)
-	move.l	d4,(a1) ; load object with ID of parent object and routine 4
-	move.l	a3,mappings(a1)
-	move.b	d5,render_flags(a1)
-	move.w	x_pos(a0),x_pos(a1)
-	move.w	y_pos(a0),y_pos(a1)
-	move.w	art_tile(a0),art_tile(a1)
-	move.b	priority(a0),priority(a1)
-	move.b	width_pixels(a0),width_pixels(a1)
-	move.w	(a4)+,x_vel(a1)
-	move.w	(a4)+,y_vel(a1)
-	dbf	d1,BreakObjectToPieces_Loop
-
-loc_15E82:
-	move.w	#SndID_SlowSmash,d0
-	jmp	(PlaySound).l
+.InitObject:
+	move.b	#4,routine(a1)	;Set the rouinte to be fragmenting
+	move.l	(a0),(a1) ; load object with ID of parent object and routine 4
+	move.l	a3,mappings(a1);move a peice of the object as the mappings for this sprite
+	move.b	render_flags(a0),render_flags(a1)	;keep render flags consistent between the parent & child
+	move.w	x_pos(a0),x_pos(a1)	;Go to parent X position
+	move.w	y_pos(a0),y_pos(a1)	;Go to parent Y position
+	move.w	art_tile(a0),art_tile(a1)	;Keep all of the art data the same between parent & child
+	move.w	(a4)+,x_vel(a1)	;Move the fragment x speed into the x velocity of the particle
+	move.w	(a4)+,y_vel(a1)	;same, but for the Y velocity instead of the X velocity
+	dbf	d1,.Loop	;repeat
+.BreakSound:
+	move.w	#SndID_SlowSmash,d0	;Move the smashing sound into d0
+	jmp	(PlaySound).l	;Play the sound in d0
 ; End of function BreakObjectToPieces
 
+; ===========================================================================
+; word_15E8C:
+FragmentSpeeds_LeftToRight:
+	;	x_vel,y_vel
+	dc.w  $400,-$500	; 0
+	dc.w  $600,-$100	; 2
+	dc.w  $600, $100	; 4
+	dc.w  $400, $500	; 6
+	dc.w  $600,-$600	; 8
+	dc.w  $800,-$200	; 10
+	dc.w  $800, $200	; 12
+	dc.w  $600, $600	; 14
+; word_15EAC:
+FragmentSpeeds_RightToLeft:
+	dc.w -$600,-$600	; 0
+	dc.w -$800,-$200	; 2
+	dc.w -$800, $200	; 4
+	dc.w -$600, $600	; 6
+	dc.w -$400,-$500	; 8
+	dc.w -$600,-$100	; 10
+	dc.w -$600, $100	; 12
+	dc.w -$400, $500	; 14
+	even
 ; ===========================================================================
 ; word_15E8C:
 Obj3C_FragmentSpeeds_LeftToRight:
