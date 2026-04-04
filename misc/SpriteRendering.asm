@@ -10,15 +10,12 @@
 ObjectFall:
 MoveSprite:
 ObjectMoveAndFall:
-	    	move.w	x_vel(a0),d0	; load x speed
-		ext.l	d0
-		lsl.l	#8,d0		; shift velocity to line up with the middle 16 bits of the 32-bit position
-		add.l	d0,x_pos(a0)	; add x speed to x position	; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
-		move.w	y_vel(a0),d0	; load y speed
-		addi.w	#$38,y_vel(a0)	; increase vertical speed (apply gravity)
-		ext.l	d0
-		lsl.l	#8,d0		; shift velocity to line up with the middle 16 bits of the 32-bit position
-		add.l	d0,y_pos(a0)	; add old y speed to y position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+	movem.w	x_vel(a0),d0/d2	; load x and y speed to d0/d2
+	asl.l	#8,d0		; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(a0)	; add x speed to x position	; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
+	asl.l	#8,d2		; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d2,y_pos(a0)	; add old y speed to y position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+	add.w	#$38,y_vel(a0)	; increase vertical speed (apply gravity)
 	rts
 ; End of function ObjectMoveAndFall
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -35,16 +32,15 @@ ObjectMoveAndFall:
 SpeedToPos:
 MoveSprite2:
 ObjectMove:
-	move.w	x_vel(a0),d0	; load horizontal speed
-	ext.l	d0
-	lsl.l	#8,d0		; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,x_pos(a0)	; add to x-axis position	; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
-	move.w	y_vel(a0),d0	; load vertical speed
-	ext.l	d0
-	lsl.l	#8,d0		; shift velocity to line up with the middle 16 bits of the 32-bit position
-	add.l	d0,y_pos(a0)	; add to y-axis position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
+	movem.w	x_vel(a0),d0/d2	; load x and y speed to d0/d2
+	asl.l	#8,d0		; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d0,x_pos(a0)	; add x speed to x position	; note this affects the subpixel position x_sub(a0) = 2+x_pos(a0)
+	asl.l	#8,d2		; shift velocity to line up with the middle 16 bits of the 32-bit position
+	add.l	d2,y_pos(a0)	; add old y speed to y position	; note this affects the subpixel position y_sub(a0) = 2+y_pos(a0)
 	rts
+
 ; End of function ObjectMove
+; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 ; ---------------------------------------------------------------------------
