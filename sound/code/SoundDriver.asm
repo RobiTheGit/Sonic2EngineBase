@@ -3445,7 +3445,7 @@ byte_11E5:
 
 ;	END of zPSG_FlutterTbl ---------------------------
 
-   
+
 ; zbyte_11F5h:
 zMasterPlaylist:
 ; note: +20h means uncompressed, here
@@ -3482,7 +3482,7 @@ zMusIDPtr_Continue:	zmakePlaylistEntry	Mus_Continue,0h		; 0
 zMusIDPtr_Emerald:	zmakePlaylistEntry	Mus_Emerald,0h		; BA
 zMusIDPtr_Credits:	zmakePlaylistEntry	Mus_Credits,0h		; BD
 zMusIDPtr_Countdown:	zmakePlaylistEntry	Mus_Drowning,40h	; BC
-zMusIDPtr_SaveScreen:	zmakePlaylistEntry	Mus_SaveScreen,0h	
+zMusIDPtr_SaveScreen:	zmakePlaylistEntry	Mus_SaveScreen,0h
 zMusIDPtr__End:
 
 ; Tempo with speed shoe tempo for each song
@@ -3498,7 +3498,7 @@ zSpedUpTempoTable:
 	db	0D5h,0F0h, 80h
 
 	; DAC sample pointers and lengths
-	ensure1byteoffset 34*4
+	ensure1byteoffset 22*4
 DACSize macro Sample
 	dw	zmake68kPtr(Sample)
 	dw	Sample_End-Sample
@@ -3506,7 +3506,7 @@ DACSize macro Sample
 zDACPtrTbl:
 zDACLenTbl equ zDACPtrTbl+2
 zDACPtr_Kick:		DACSize SndDAC_Kick
-zDACPtr_Snare:		DACSize	SndDAC_Snare	
+zDACPtr_Snare:		DACSize	SndDAC_Snare
 zDACPtr_Clap:		DACSize	SndDAC_Clap
 zDACPtr_Scratch:	DACSize SndDAC_Scratch
 zDACPtr_Timpani:	DACSize SndDAC_Timpani
@@ -3532,71 +3532,7 @@ zDACPtr_Snare3:		DACSize	SndDAC_Snare3
 	; First byte selects one of the DAC samples.  The number that
 	; follows it is a wait time between each nibble written to the DAC
 	; (thus higher = slower)
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	ensure1byteoffset 34*2
+	ensure1byteoffset 22*2
 ; zbyte_124F:
 zDACMasterPlaylist:
 ; DAC samples IDs
@@ -3641,7 +3577,7 @@ dac_sample_metadata macro label,sampleRate
   	dac_sample_metadata zDACPtr_Kick2,	13000	; A0h Kick (2)
 	dac_sample_metadata zDACPtr_Snare1,	13000	; A1h Snare (1)
 	dac_sample_metadata zDACPtr_Snare3,	12500	; A2h Snare (3)
-	ensure1byteoffset 34
+	ensure1byteoffset 22
 zDACBanks:
 	db	zmake68kBank(SndDAC_Kick)
 	db	zmake68kBank(SndDAC_Snare)
