@@ -50,7 +50,11 @@ ObjB0_Init:
 	; this copies the tiles that we want to scale up from ROM to RAM
 ;loc_3A246:
 ;CopySpriteTilesToRAMForSegaScreen:
--	movea.l	(a1)+,a2
+-	lea	(MapRUnc_Sonic).l,a2
+	moveq	#0,d0
+	move.b	(a1)+,d0
+	add.w	d0,d0
+	adda.w	(a2,d0.w),a2
 	move.w	(a2)+,d6 ; get the number of pieces in this mapping frame
 	subq.w	#1,d6
 -	move.w	(a2)+,d0
@@ -102,10 +106,10 @@ ObjB0_Init:
 	; run an external program (fixpointer.exe) to fix it later.
 ; WARNING: the build script needs editing if you rename this label
 off_3A294:
-	dc.l (MapRUnc_Sonic+$33A)	;dc.l word_7181A
-	dc.l (MapRUnc_Sonic+$340)	;dc.l word_71820
-	dc.l (MapRUnc_Sonic+$346)	;dc.l word_71826
-	dc.l (MapRUnc_Sonic+$34C)	;dc.l word_7182C
+	dc.b 45
+	dc.b 46
+	dc.b 47
+	dc.b 48
 
 map_piece macro width,height
 	dc.l copysrc,copydst
