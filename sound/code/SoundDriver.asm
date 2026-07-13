@@ -3532,7 +3532,7 @@ zDACPtr_Snare3:		DACSize	SndDAC_Snare3
 	; First byte selects one of the DAC samples.  The number that
 	; follows it is a wait time between each nibble written to the DAC
 	; (thus higher = slower)
-	ensure1byteoffset 22*2
+	ensure1byteoffset 34*2
 ; zbyte_124F:
 zDACMasterPlaylist:
 ; DAC samples IDs
@@ -3574,10 +3574,10 @@ dac_sample_metadata macro label,sampleRate
 	dac_sample_metadata zDACPtr_Agogo,	13000	; 9Dh Agogo
 	dac_sample_metadata zDACPtr_Agogo,	9050	; 9Eh LowAgogo
 	dac_sample_metadata zDACPtr_Shaker,	13000	; 9Fh Shaker
-  	dac_sample_metadata zDACPtr_Kick2,	13000	; A0h Kick (2)
+	dac_sample_metadata zDACPtr_Kick2,	13000	; A0h Kick (2)
 	dac_sample_metadata zDACPtr_Snare1,	13000	; A1h Snare (1)
-	dac_sample_metadata zDACPtr_Snare3,	12500	; A2h Snare (3)
-	ensure1byteoffset 22
+	dac_sample_metadata zDACPtr_Snare3,	13000	; A2h Snare (3)
+	ensure1byteoffset 34
 zDACBanks:
 	db	zmake68kBank(SndDAC_Kick)
 	db	zmake68kBank(SndDAC_Snare)
@@ -3617,8 +3617,6 @@ zSpindashPlayingCounter:	db 0 ; zbyte_1304
 zSpindashExtraFrequencyIndex:	db 0 ; zbyte_1305
 zSpindashActiveFlag:		db 0 ; zbyte_1306 ; -1 if spindash charge was the last sound that played
 zPaused:	db 0 ; zbyte_1307 ; 0 = normal, -1 = pause all sound and music
-
-
 
 
 ; end of Z80 'ROM'

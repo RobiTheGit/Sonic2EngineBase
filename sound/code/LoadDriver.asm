@@ -148,7 +148,9 @@ Snd_Driver:
 	padding off
 	!org (Snd_Driver+Size_of_Snd_driver_guess) ; don't worry; I know what I'm doing
 
+Snd_Driver_End:
+
+
 
 ; loc_ED04C:
-Snd_Driver_End:
 
