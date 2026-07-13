@@ -3498,13 +3498,12 @@ zSpedUpTempoTable:
 	db	0D5h,0F0h, 80h
 
 	; DAC sample pointers and lengths
-	ensure1byteoffset 22*4
+	ensure1byteoffset 34*4
 DACSize macro Sample
 	dw	zmake68kPtr(Sample)
 	dw	Sample_End-Sample
 	endm
 zDACPtrTbl:
-zDACLenTbl equ zDACPtrTbl+2
 zDACPtr_Kick:		DACSize SndDAC_Kick
 zDACPtr_Snare:		DACSize	SndDAC_Snare
 zDACPtr_Clap:		DACSize	SndDAC_Clap
@@ -3527,12 +3526,14 @@ zDACPtr_Shaker:		DACSize	SndDAC_Shaker
 zDACPtr_Kick2:		DACSize	SndDAC_Kick2
 zDACPtr_Snare1:		DACSize	SndDAC_Snare1
 zDACPtr_Snare3:		DACSize	SndDAC_Snare3
+zDACLenTbl equ zDACPtrTbl+2
 
 	; something else for DAC sounds
 	; First byte selects one of the DAC samples.  The number that
 	; follows it is a wait time between each nibble written to the DAC
 	; (thus higher = slower)
-	ensure1byteoffset 34*2
+	align	1200h
+
 ; zbyte_124F:
 zDACMasterPlaylist:
 ; DAC samples IDs
@@ -3542,8 +3543,9 @@ idstart :=	80h
 
 dac_sample_metadata macro label,sampleRate
 	db	id(label),pcmLoopCounter(sampleRate,178)	; See zWriteToDAC for an explanation of this magic number.
-    endm
-  	dac_sample_metadata zDACPtr_Kick,	13000	; 81h Kick (1)
+	endm
+
+	dac_sample_metadata zDACPtr_Kick,	13000	; 81h Kick (1)
 	dac_sample_metadata zDACPtr_Snare,	13000	; 82h Snare (2)
 	dac_sample_metadata zDACPtr_Clap,	13000	; 83h Clap
 	dac_sample_metadata zDACPtr_Scratch,	15232	; 84h Scratch
