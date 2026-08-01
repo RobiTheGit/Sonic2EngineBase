@@ -23,6 +23,8 @@ ArtNem_SuperSonic_stars:	BINCLUDE	"art/nemesis/Super Sonic stars.bin"
 ;---------------------------------------------------------------------------------------
 	align $8000
 ArtUnc_Sonic:	BINCLUDE	"art/uncompressed/Sonic's art.bin"
+	align $8000
+ArtUnc_SegaSonic:	BINCLUDE	"art/uncompressed/SegaSonic.bin"
 ;---------------------------------------------------------------------------------------
 ; Uncompressed art
 ; Patterns for Tails  ; ArtUnc_64320:
@@ -35,13 +37,16 @@ ArtUnc_Tails:	BINCLUDE	"art/uncompressed/Tails's art.bin"
 ;--------------------------------------------------------------------------------------
 Mapunc_Sonic:	BINCLUDE	"mappings/sprite/Sonic.bin"
         even
+MapUnc_SegaSonic:	BINCLUDE	"mappings/sprite/SegaSonic.bin"
+        even
 ;--------------------------------------------------------------------------------------
 ; Sprite Dynamic Pattern Reloading
 ; Sonic DPLCs   		; MapRUnc_714E0:
 ;--------------------------------------------------------------------------------------
-; WARNING: the build script needs editing if you rename this label
-;          or if you move Sonic's running frame to somewhere else than frame $2D
+
 MapRUnc_Sonic:	BINCLUDE	"mappings/spriteDPLC/Sonic.bin"
+        even
+MapRUnc_SegaSonic:	BINCLUDE	"mappings/spriteDPLC/SegaSonic.bin"
         even
 ;--------------------------------------------------------------------------------------
 ;--------------------------------------------------------------------------------------

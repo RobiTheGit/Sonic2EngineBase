@@ -1,6 +1,4 @@
 
-
-
 ; ===========================================================================
 ; ----------------------------------------------------------------------------
 ; Object B0 - Sonic on the Sega screen
@@ -42,15 +40,15 @@ ObjB0_Init:
 	addq.w	#2 * 2 * 2,a1	; Advance to next streak 2 pixels down
 	dbf	d6,-
 
-	lea	off_3A294(pc),a1 ; pointers to mapping DPLC data
-	lea	(ArtUnc_Sonic).l,a3
+	lea	SegaSonic_FramePointers(pc),a1 ; pointers to mapping DPLC data
+	lea	(ArtUnc_SegaSonic).l,a3
 	lea	(Chunk_Table).l,a5
 	moveq	#4-1,d5 ; there are 4 mapping frames to loop over
 
 	; this copies the tiles that we want to scale up from ROM to RAM
 ;loc_3A246:
 ;CopySpriteTilesToRAMForSegaScreen:
--	lea	(MapRUnc_Sonic).l,a2
+-	lea	(MapRUnc_SegaSonic).l,a2
 	moveq	#0,d0
 	move.b	(a1)+,d0
 	add.w	d0,d0
@@ -62,20 +60,12 @@ ObjB0_Init:
 	; Depending on the exact location (and size) of the art being used,
 	; you may encounter an overflow in the original code which garbles
 	; the enlarged Sonic. The following code fixes this:
-    if 1==0
 	andi.l	#$FFF,d0
 	lsl.l	#5,d0
 	lea	(a3,d0.l),a4 ; source ROM address of tiles to copy
-    else
-	andi.w	#$FFF,d0
-	lsl.w	#5,d0
-	lea	(a3,d0.w),a4 ; source ROM address of tiles to copy
-    endif
 	andi.w	#$F000,d1 ; abcd000000000000
-	rol.w	#4,d1	  ; (this calculation can be done smaller and faster
-	addq.w	#1,d1	  ; by doing rol.w #7,d1 addq.w #7,d1
-	lsl.w	#3,d1	  ; instead of these 4 lines)
-	subq.w	#1,d1	  ; 000000000abcd111 ; number of dwords to copy minus 1
+	rol.w #7,d1
+	addq.w #7,d1
 -	move.l	(a4)+,(a5)+
 	dbf	d1,- ; copy all of the pixels in this piece into the temp buffer
 	dbf	d6,-- ; loop per piece in the frame
@@ -98,14 +88,8 @@ ObjB0_Init:
 
 	rts
 ; ===========================================================================
-	; These next four things are pointers to Sonic's dereferenced
-	; DPLC entries of his "running animation" frames for the SEGA screen.
-	; I want that DPLC data split into a binary file for use with editors,
-	; but unfortunately there's no way to refer to BINCLUDE'd bytes
-	; from within AS, so I put an educated guess (default) here and
-	; run an external program (fixpointer.exe) to fix it later.
-; WARNING: the build script needs editing if you rename this label
-off_3A294:
+
+SegaSonic_FramePointers:
 	dc.b 45
 	dc.b 46
 	dc.b 47
@@ -124,10 +108,11 @@ copydst := Chunk_Table + $B00
 SegaScreenScaledSpriteDataStart = copydst
 	rept 4 ; repeat 4 times since there are 4 frames to scale up
 	; piece 1 of each frame (the smaller top piece):
-	map_piece 3,2
+	map_piece 3,2 ; Width 3, Height 2
 	; piece 2 of each frame (the larger bottom piece):
-	map_piece 4,4
+	map_piece 4,4 ; Width 4, Hieght 4
 	endm
+
 SegaScreenScaledSpriteDataEnd = copydst
 	if copysrc > SegaScreenScaledSpriteDataStart
 	fatal "Scale copy source overran allocated size. Try changing the initial value of copydst to Chunk_Table+$\{copysrc-Chunk_Table}"

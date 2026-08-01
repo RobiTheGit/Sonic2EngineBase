@@ -79,7 +79,7 @@ REM // combine the assembler output into a rom
 "win32/s2p2bin" %s2p2bin_args% Sonic.p RobiEngineBuilt.bin Sonic.h
 
 REM // fix some pointers and things that are impossible to fix from the assembler without un-splitting their data
-IF EXIST RobiEngineBuilt.bin "win32/fixpointer" Sonic.h RobiEngineBuilt.bin   off_3A294 MapRUnc_Sonic $2D 0 4   word_728C_user Obj5F_MapUnc_7240 2 2 1
+IF EXIST RobiEngineBuilt.bin "win32/fixpointer" Sonic.h RobiEngineBuilt.bin  word_728C_user Obj5F_MapUnc_7240 2 2 1
 REM // Import Labels for the error handler (this doesn't work on Raspbian at the moment)
 
 IF EXIST RobiEngineBuilt.bin "misc/ErrorHandler/ConvertSymbol.exe" Sonic.lst RobiEngineBuilt.bin -input as_lst -a

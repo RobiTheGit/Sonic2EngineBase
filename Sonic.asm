@@ -607,7 +607,7 @@ paddingSoFar	:= paddingSoFar+1
 		message "ROM size is $\{*} bytes (\{*/1024.0} kb). About $\{paddingSoFar} bytes are padding. "
 	endif
 	; share these symbols externally (WARNING: don't rename, move or remove these labels!)
-	shared word_728C_user,Obj5F_MapUnc_7240,off_3A294,movewZ80CompSize
+	shared word_728C_user,Obj5F_MapUnc_7240,movewZ80CompSize
 	include	"misc/ErrorHandler/ErrorHandler.asm"
 	;NO MORE DATA AFTER THIS
 
