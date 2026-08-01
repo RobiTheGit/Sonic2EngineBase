@@ -33,9 +33,9 @@ useFullWaterTables = 1
 ;	| If 1, zone offset tables for water levels cover all level slots instead of only slots 8-$F
 ;	| Set to 1 if you've shifted level IDs around or you want water in levels with a level slot below 8
 Lagometer = 0
-;	| If 1, show the lagomter (may break special stages, I have not tested it)
+;	| If 1, show the lagomter (Uses Window plane)
 ;
-Ripple_Type = 1
+Ripple_Type = 2
 ;	| If 1, S1 LZ scroll, If 2, S3K looking, If 0, none
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ; AS-specific macros and assembler settings
