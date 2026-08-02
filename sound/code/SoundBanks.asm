@@ -82,8 +82,6 @@ Mus_Options:	INCLUDE	"sound/music/Options.asm"
 Mus_Ending:	INCLUDE	"sound/music/Ending.asm"
 Mus_EndBoss:	INCLUDE	"sound/music/End_Boss.asm"
 	finishBank
-   align  $8000
-soundBankStart := *
 
 MusicPoint3:	startBank
 Mus_CPZ:	INCLUDE	"sound/music/CPZ.asm"
